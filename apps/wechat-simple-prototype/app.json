@@ -1,11 +1,10 @@
 {
   "pages": [
     "pages/home/home",
-    "pages/shops/shops",
-    "pages/mall/mall",
-    "pages/mall-detail/mall-detail",
-    "pages/mall-product-edit/mall-product-edit",
-    "pages/mall-product-form/mall-product-form",
+    "pages/hardware/hardware",
+    "pages/hardware-detail/hardware-detail",
+    "pages/hardware-product-edit/hardware-product-edit",
+    "pages/hardware-product-form/hardware-product-form",
     "pages/vehicle-manage/vehicle-manage",
     "pages/add-bind/add-bind",
     "pages/location/location",
@@ -17,37 +16,21 @@
     "pages/fence-setting/fence-setting",
     "pages/tracks/tracks",
     "pages/auth/auth",
-    "pages/invite-bind/invite-bind",
-    "pages/invite-system/invite-system",
-    "pages/share-app/share-app",
-    "pages/vip-center/vip-center",
-    "pages/partner-apply/partner-apply",
-    "pages/merchant-apply/merchant-apply",
     "pages/mgmt-portal/mgmt-portal",
-    "pages/partner-admin/partner-admin",
-    "pages/partner-wallet/partner-wallet",
-    "pages/partner-payout-bind/partner-payout-bind",
-    "pages/platform-withdraw-review/platform-withdraw-review",
-    "pages/partner-staff-admin/partner-staff-admin",
-    "pages/partner-user-lookup/partner-user-lookup",
-    "pages/partner-l1-detail/partner-l1-detail",
-    "pages/merchant-admin/merchant-admin",
-    "pages/merchant-backend-demo/merchant-backend-demo",
-    "pages/merchant-wallet/merchant-wallet",
     "pages/super-binding/super-binding",
     "pages/account/account",
     "pages/notify/notify"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarTitleText": "电动车智控",
+    "navigationBarTitleText": "电动车安全守护",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f3f4f8"
   },
   "sitemapLocation": "sitemap.json",
   "permission": {
     "scope.userLocation": {
-      "desc": "用于查找附近智控升级网点、导航、以及车辆与地图相关功能"
+      "desc": "用于查找电动车实时位置、电子围栏、轨迹追踪等安全功能"
     }
   }
 }

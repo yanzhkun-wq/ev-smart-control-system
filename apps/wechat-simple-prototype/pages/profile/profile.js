@@ -1,12 +1,9 @@
 const auth = require("../../utils/auth-store.js");
 const org = require("../../utils/org-store.js");
-const partnerStore = require("../../utils/partner-store.js");
-const userVipStore = require("../../utils/user-vip-store.js");
 
 const STORAGE_ALARMS = "ev_alarms";
 const PROFILE_ROUTE = "pages/profile/profile";
 
-/** 图标区：取前 2 个 Unicode 字符（支持多数表情） */
 function clipIcon(s) {
   const t = String(s ?? "").trim();
   if (!t) return "";
@@ -14,29 +11,18 @@ function clipIcon(s) {
 }
 
 const PROFILE_UI_DEFAULT = {
-  sectionServices: "常用服务",
+  sectionServices: "安全服务",
   tracksIcon: "行",
-  tracksName: "行车记录",
+  tracksName: "行车轨迹",
   alarmIcon: "警",
   alarmName: "防盗报警",
   fenceIcon: "围",
   fenceName: "电子围栏",
   authIcon: "权",
   authName: "授权管理",
-  sectionMall: "智控商城与升级",
-  mallIcon: "商",
-  mallName: "智控商城",
-  shopsIcon: "网",
-  shopsName: "智控升级网点",
-  sectionPartner: "合作与拓展",
-  inviteIcon: "邀",
-  inviteName: "邀请好友",
-  applyIcon: "渠",
-  applyName: "合作商申请",
-  mgmtIcon: "管",
-  mgmtName: "后台管理",
-  superIcon: "绑",
-  superName: "绑定管理",
+  sectionHardware: "兼容硬件",
+  hardwareIcon: "硬",
+  hardwareName: "兼容硬件参考",
   sectionSystem: "系统",
   sysLoginIcon: "登",
   sysLoginTitle: "登录账号",
@@ -67,20 +53,9 @@ function readProfileUi() {
     fenceName: rs("profileSvcFenceName", d.fenceName),
     authIcon: clipIcon(rs("profileSvcAuthIcon", d.authIcon)),
     authName: rs("profileSvcAuthName", d.authName),
-    sectionMall: rs("profileSectionMallTitle", d.sectionMall),
-    mallIcon: clipIcon(rs("profileMallEntryIcon", d.mallIcon)),
-    mallName: rs("profileMallEntryName", d.mallName),
-    shopsIcon: clipIcon(rs("profileShopsEntryIcon", d.shopsIcon)),
-    shopsName: rs("profileShopsEntryName", d.shopsName),
-    sectionPartner: rs("profileSectionPartnerTitle", d.sectionPartner),
-    inviteIcon: clipIcon(rs("profilePartnerInviteIcon", d.inviteIcon)),
-    inviteName: rs("profilePartnerInviteName", d.inviteName),
-    applyIcon: clipIcon(rs("profilePartnerApplyIcon", d.applyIcon)),
-    applyName: rs("profilePartnerApplyName", d.applyName),
-    mgmtIcon: clipIcon(rs("profilePartnerMgmtIcon", d.mgmtIcon)),
-    mgmtName: rs("profilePartnerMgmtName", d.mgmtName),
-    superIcon: clipIcon(rs("profilePartnerSuperIcon", d.superIcon)),
-    superName: rs("profilePartnerSuperName", d.superName),
+    sectionHardware: rs("profileSectionHardwareTitle", d.sectionHardware),
+    hardwareIcon: clipIcon(rs("profileHardwareEntryIcon", d.hardwareIcon)),
+    hardwareName: rs("profileHardwareEntryName", d.hardwareName),
     sectionSystem: rs("profileSectionSystemTitle", d.sectionSystem),
     sysLoginIcon: clipIcon(rs("profileSysLoginIcon", d.sysLoginIcon)),
     sysLoginTitle: rs("profileSysLoginTitle", d.sysLoginTitle),
@@ -93,10 +68,6 @@ function readProfileUi() {
   };
 }
 
-function emptyVipInline() {
-  return { active: false };
-}
-
 Page({
   data: {
     navPadTop: 88,
@@ -104,9 +75,7 @@ Page({
     user: { name: "游客", id: "—", avatarText: "游", role: "未登录" },
     bindLine: "",
     alarmPending: 0,
-    showMgmtPortal: false,
     showSuper: false,
-    vipInline: emptyVipInline(),
     ui: readProfileUi(),
   },
 
@@ -158,9 +127,7 @@ Page({
         user: { name: "游客", id: "—", avatarText: "游", role: "未登录" },
         bindLine: "",
         alarmPending,
-        showMgmtPortal: false,
         showSuper: false,
-        vipInline: emptyVipInline(),
       });
       return;
     }
@@ -174,19 +141,13 @@ Page({
     const bits = [];
     if (s.role === "main") bits.push("主账号");
     else bits.push("授权用户");
-    if (r.partner) bits.push("合作商");
-    else if (partnerStore.isPartnerStaff(p)) bits.push(partnerStore.getStaffTierLabel(p));
-    if (r.merchant) bits.push("商家");
-    if (org.isSuperAdmin(p)) bits.push("超管");
+    if (org.isSuperAdmin(p)) bits.push("管理员");
 
     let bindLine = "";
     if (up && up.inviterPhone) {
       const m = up.inviterPhone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2");
-      bindLine = `邀请关系：上级 ${m} · 绑定车牌 ${up.plate || "—"}`;
+      bindLine = `关联：${m} · 绑定车牌 ${up.plate || "—"}`;
     }
-
-    const summary = p ? userVipStore.getUserVipSummary(p) : userVipStore.getUserVipSummary("");
-    const vipInline = { active: !!summary.vipActive };
 
     this.setData({
       isLoggedIn: true,
@@ -198,9 +159,7 @@ Page({
       },
       bindLine,
       alarmPending,
-      showMgmtPortal: partnerStore.canAccessMgmtPortal(p),
       showSuper: org.isSuperAdmin(p),
-      vipInline,
     });
   },
 
@@ -213,18 +172,10 @@ Page({
     wx.reLaunch({ url: "/pages/home/home" });
   },
 
-  goVipCenter() {
-    wx.navigateTo({ url: "/pages/vip-center/vip-center" });
-  },
-
-  openMgmtPortal() {
-    wx.navigateTo({ url: "/pages/mgmt-portal/mgmt-portal" });
-  },
-
   logoutDemo() {
     wx.showModal({
       title: "退出登录",
-      content: "演示版将清除本机登录态并返回首页登录界面。",
+      content: "演示版将清除本机登录态并返回首页。",
       confirmText: "退出",
       success: (res) => {
         if (!res.confirm) return;

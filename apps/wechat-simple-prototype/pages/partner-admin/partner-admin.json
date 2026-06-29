@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "合作商工作台",
-  "navigationBarBackgroundColor": "#0f172a",
-  "navigationBarTextStyle": "white",
-  "backgroundColor": "#e8edf3",
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

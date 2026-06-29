@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "升级网点工作台",
-  "navigationBarBackgroundColor": "#0f172a",
-  "navigationBarTextStyle": "white",
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "智控升级网点",
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

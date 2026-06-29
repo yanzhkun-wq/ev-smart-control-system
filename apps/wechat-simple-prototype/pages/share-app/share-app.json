@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "邀请好友",
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "系统邀请",
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

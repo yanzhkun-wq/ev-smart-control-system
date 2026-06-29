@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "平台·提现审核",
-  "usingComponents": {},
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

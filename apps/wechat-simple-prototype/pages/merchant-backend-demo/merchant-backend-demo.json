@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "演示·网点工作台",
-  "navigationBarBackgroundColor": "#0f172a",
-  "navigationBarTextStyle": "white",
-  "usingComponents": {},
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}
