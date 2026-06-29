@@ -1,0 +1,35 @@
+<scroll-view scroll-y class="page">
+  <view class="head card">
+    <text class="model">{{model}}</text>
+    <text class="plate">{{plate}}</text>
+  </view>
+
+  <view class="remote">
+    <view class="btn unlock" bindtap="unlock">
+      <text class="ico">🔓</text>
+      <text class="txt">解锁</text>
+    </view>
+    <view class="btn lock" bindtap="lock">
+      <text class="ico">🔒</text>
+      <text class="txt">上锁</text>
+    </view>
+  </view>
+
+  <view class="card sec">
+    <text class="st">设备状态</text>
+    <view class="line">
+      <text>在线状态</text>
+      <text class="ok">{{online ? '在线' : '离线'}}</text>
+    </view>
+    <view class="line">
+      <text>电池电量</text>
+      <text>{{battery}}</text>
+    </view>
+    <view class="line">
+      <text>锁车状态</text>
+      <text>{{locked ? '已锁' : '已解锁'}}</text>
+    </view>
+  </view>
+
+  <view class="hint">操作记录对接后端后展示。</view>
+</scroll-view>

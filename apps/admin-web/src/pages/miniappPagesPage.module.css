@@ -1,0 +1,39 @@
+.titleBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.simWrap {
+  flex: 0 0 auto;
+  transform: scale(0.8);
+  transform-origin: top center;
+  max-width: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+.toolbar {
+  margin-bottom: 10px;
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.editorStack {
+  flex: 1 1 320px;
+  min-width: 300px;
+  max-width: 560px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}

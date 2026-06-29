@@ -1,0 +1,52 @@
+<view class="page">
+  <view class="card bad" wx:if="{{!ok}}">
+    <text class="bad-t">仅超管可访问。演示超管手机号为 19900000000（见账号设置说明）。</text>
+  </view>
+
+  <block wx:else>
+    <view class="card card-neutral">
+      <text class="t-neutral">运营工具</text>
+      <text class="s-neutral">商城商品、主图与价格仅在超管后台维护，用户端不展示编辑入口。</text>
+      <view class="tool-row" bindtap="goMallProductEdit">
+        <view class="tool-ico">商</view>
+        <view class="tool-body">
+          <text class="tool-title">商城商品编辑</text>
+          <text class="tool-sub">维护商品主图、价格、简介与详情</text>
+        </view>
+        <text class="tool-arr">›</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <text class="t">修改上下级绑定</text>
+      <text class="s">可更改任意用户的邀请上级与绑定车牌（正式环境审计留痕）。</text>
+    </view>
+
+    <view class="card">
+      <text class="lab">被邀请人手机</text>
+      <input class="inp" type="number" maxlength="11" placeholder="11 位" value="{{editPhone}}" bindinput="onEditPhone" />
+      <text class="lab lab-mt">新上级手机</text>
+      <input class="inp" type="number" maxlength="11" value="{{newInviter}}" bindinput="onNewInv" />
+      <text class="lab lab-mt">绑定车牌</text>
+      <input class="inp" value="{{newPlate}}" bindinput="onNewPl" />
+      <button class="btn" bindtap="onSave">保存</button>
+    </view>
+
+    <view class="card">
+      <text class="subt">当前记录（点击填入）</text>
+      <block wx:for="{{list}}" wx:key="phone">
+        <view
+          class="row"
+          data-phone="{{item.phone}}"
+          data-inv="{{item.inviterPhone}}"
+          data-plate="{{item.plate}}"
+          bindtap="onPick"
+        >
+          <text class="rp">{{item.phone}}</text>
+          <text class="ri">上级 {{item.inviterPhone}} · {{item.plate}}</text>
+        </view>
+      </block>
+      <text class="empty" wx:if="{{!list.length}}">暂无</text>
+    </view>
+  </block>
+</view>

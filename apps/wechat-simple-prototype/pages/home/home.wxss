@@ -1,0 +1,650 @@
+@import "../../styles/bind-sheet.wxss";
+
+.scroll {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 24rpx;
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+}
+
+.scroll.with-tab {
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+}
+
+/* 已登录且已绑定：浅灰底 + 白卡片（与车辆状态同一套） */
+.scroll-dashboard,
+.scroll-bind {
+  background: linear-gradient(165deg, #b8c5d9 0%, #c8d4e4 38%, #d5deeb 100%);
+}
+
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 12rpx 40rpx rgba(15, 23, 42, 0.1);
+  margin-bottom: 24rpx;
+}
+
+/* 登录页：全屏层次背景 + 品牌区 + 浮层卡片 */
+.scroll.scroll-login {
+  padding: 0;
+  background: #0b1220;
+}
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(24rpx + env(safe-area-inset-top)) 36rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  overflow: hidden;
+  background: linear-gradient(168deg, #0f172a 0%, #1e1b4b 22%, #312e81 52%, #1e293b 100%);
+}
+
+.login-bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80rpx);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.login-bg-blob-1 {
+  width: 420rpx;
+  height: 420rpx;
+  top: -120rpx;
+  right: -100rpx;
+  background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+}
+
+.login-bg-blob-2 {
+  width: 360rpx;
+  height: 360rpx;
+  bottom: 20%;
+  left: -140rpx;
+  background: radial-gradient(circle, #4f46e5 0%, transparent 65%);
+  opacity: 0.35;
+}
+
+.login-top-tag {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 36rpx;
+}
+
+.login-top-tag-t {
+  font-size: 22rpx;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(226, 232, 240, 0.75);
+  padding: 10rpx 28rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1rpx solid rgba(255, 255, 255, 0.12);
+}
+
+.login-brand {
+  text-align: center;
+  margin-bottom: 48rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.login-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28rpx;
+}
+
+.login-logo-ring {
+  width: 144rpx;
+  height: 144rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%);
+  border: 2rpx solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 24rpx 48rpx rgba(0, 0, 0, 0.35),
+    0 0 0 1rpx rgba(255, 255, 255, 0.08) inset;
+}
+
+.login-logo-ico {
+  font-size: 64rpx;
+  line-height: 1;
+}
+
+.login-brand-name {
+  display: block;
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 0.06em;
+}
+
+.login-brand-en {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: rgba(196, 181, 253, 0.9);
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  max-width: 680rpx;
+  padding: 44rpx 40rpx 40rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, #f8fafc 100%);
+  border: 1rpx solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 4rpx 8rpx rgba(15, 23, 42, 0.04),
+    0 32rpx 64rpx rgba(15, 23, 42, 0.18),
+    0 0 0 1rpx rgba(148, 163, 184, 0.12) inset;
+  text-align: center;
+}
+
+.login-kicker {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #6366f1;
+  letter-spacing: 0.08em;
+  margin-bottom: 16rpx;
+}
+
+.login-title {
+  font-size: 38rpx;
+  font-weight: 800;
+  color: #0f172a;
+  display: block;
+  letter-spacing: 0.02em;
+}
+
+.login-sub {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  color: #64748b;
+  line-height: 1.65;
+  display: block;
+  text-align: left;
+}
+
+.login-btn {
+  margin-top: 40rpx;
+  height: auto;
+  min-height: 112rpx;
+  padding: 24rpx 32rpx;
+  line-height: 1.35;
+  border-radius: 24rpx;
+  font-size: 0;
+  font-weight: 600;
+  background: linear-gradient(135deg, #7c6cf7 0%, #6366f1 38%, #4f46e5 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 12rpx 32rpx rgba(79, 70, 229, 0.45);
+}
+
+.login-btn-main {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.login-btn-hint {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.login-skip {
+  margin-top: 24rpx;
+  height: auto;
+  min-height: 88rpx;
+  padding: 22rpx 28rpx;
+  line-height: 1.4;
+  border-radius: 24rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.92);
+  color: #475569;
+  border: 2rpx solid #e2e8f0;
+  box-shadow: 0 4rpx 16rpx rgba(15, 23, 42, 0.06);
+}
+
+.login-legal {
+  margin-top: 32rpx;
+  font-size: 22rpx;
+  color: #94a3b8;
+  line-height: 1.5;
+  display: block;
+}
+
+/* 首页 · 提示条（板块 welcome_tip） */
+.home-tip-banner {
+  margin: 0 24rpx 20rpx;
+  padding: 20rpx 24rpx;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16rpx;
+  border: 2rpx solid rgba(148, 163, 184, 0.45);
+}
+.home-tip-text {
+  font-size: 24rpx;
+  color: #334155;
+  line-height: 1.45;
+}
+
+/* 首页 · 运营区（轮播 / 广告位，由后台配置） */
+.decor-section {
+  margin: 0 24rpx 20rpx;
+}
+
+.decor-carousel {
+  height: 280rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 28rpx rgba(15, 23, 42, 0.08);
+}
+
+.decor-slide-img {
+  width: 100%;
+  height: 280rpx;
+  background: #e2e8f0;
+}
+
+.decor-ad-section {
+  margin-top: 20rpx;
+}
+
+.decor-ad-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 12rpx;
+}
+
+.decor-ad-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 18rpx;
+  padding: 16rpx;
+  margin-bottom: 12rpx;
+  border: 2rpx solid #e2e8f0;
+  box-shadow: 0 4rpx 16rpx rgba(15, 23, 42, 0.04);
+}
+
+.decor-ad-card:last-child {
+  margin-bottom: 0;
+}
+
+.decor-ad-img {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+
+.decor-ad-body {
+  flex: 1;
+  margin-left: 16rpx;
+  min-width: 0;
+}
+
+.decor-ad-line {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.decor-ad-sub {
+  font-size: 22rpx;
+  color: #64748b;
+  margin-top: 6rpx;
+}
+
+/* 主界面 · 控车卡片：白底，与下方「车辆状态」同一套卡片 */
+.hero {
+  padding: 28rpx 24rpx 24rpx;
+  color: #0f172a;
+}
+
+.hero-head {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+  padding-bottom: 12rpx;
+  border-bottom: none;
+}
+
+.hero-plate {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #334155;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.tb-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14rpx;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.tb-btn {
+  font-size: 24rpx;
+  font-weight: 700;
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+  background: #fff;
+  color: #3730a3;
+  border: 2rpx solid #a5b4fc;
+  white-space: nowrap;
+}
+
+.tb-btn.primary {
+  background: linear-gradient(145deg, #3730a3 0%, #4f46e5 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.lock-banner {
+  margin-top: 20rpx;
+  padding: 22rpx 24rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(180deg, #f1f5f9 0%, #e8edf3 100%);
+  border: 1rpx solid #cbd5e1;
+}
+
+.lock-banner.open {
+  background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
+  border-color: #86efac;
+}
+
+.lb-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.lb-main {
+  font-size: 38rpx;
+  font-weight: 700;
+  display: block;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.device-pill {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+  margin-top: 6rpx;
+}
+
+.device-pill.device-on {
+  background: #f0fdf4;
+  color: #15803d;
+  box-shadow: none;
+}
+
+.device-pill.device-off {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.device-dot {
+  font-size: 16rpx;
+  line-height: 1;
+}
+
+.device-txt {
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.lb-sub {
+  margin-top: 14rpx;
+  font-size: 24rpx;
+  color: #475569;
+  font-weight: 500;
+  display: block;
+}
+
+.lb-device-hint {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #64748b;
+  line-height: 1.45;
+  display: block;
+}
+
+.remote {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.rbtn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+}
+
+/* 当前可执行的一侧：主色实心 */
+.rbtn-active {
+  background: linear-gradient(145deg, #3730a3 0%, #4f46e5 100%);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 12rpx 32rpx rgba(55, 48, 163, 0.32);
+}
+
+/* 另一侧：浅灰底 */
+.rbtn-idle {
+  background: #e2e8f0;
+  color: #475569;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.rbtn-dis {
+  opacity: 0.45;
+}
+
+.ride-block {
+  margin-bottom: 20rpx;
+  padding: 22rpx 24rpx;
+  background: #fff7ed;
+  border: 1rpx solid #fdba74;
+  border-radius: 20rpx;
+}
+
+.ride-block-t {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #9a3412;
+  display: block;
+}
+
+.ride-block-s {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #c2410c;
+  line-height: 1.45;
+  display: block;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.mi-t {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #111827;
+  display: block;
+}
+
+.mi-s {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+  display: block;
+}
+
+.mi-arr {
+  font-size: 40rpx;
+  color: #d1d5db;
+  margin-left: 16rpx;
+}
+
+/* 车辆状态：与上方控车卡片一致 */
+.vstatus.card {
+  padding: 28rpx 24rpx 24rpx;
+  border: 1rpx solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 12rpx 40rpx rgba(15, 23, 42, 0.1);
+}
+
+.vstatus-title {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #0f172a;
+  display: block;
+  margin-bottom: 4rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #e2e8f0;
+  letter-spacing: 0;
+}
+
+.vstatus-map-box {
+  margin-top: 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: #f1f5f9;
+  border: 1rpx solid rgba(148, 163, 184, 0.35);
+}
+
+/* 可视区域固定高度，地图略高以裁掉底部平台版权条，视觉上更干净 */
+.vstatus-map-clip {
+  height: 280rpx;
+  overflow: hidden;
+  border-radius: 15rpx 15rpx 0 0;
+  background: #e8eef5;
+}
+
+.vstatus-map {
+  width: 100%;
+  height: 348rpx;
+  display: block;
+}
+
+.vstatus-map-cap {
+  display: block;
+  font-size: 22rpx;
+  color: #64748b;
+  font-weight: 500;
+  text-align: center;
+  padding: 14rpx 20rpx 16rpx;
+  background: #f8fafc;
+  border-top: 1rpx solid rgba(148, 163, 184, 0.25);
+}
+
+.vstatus-list {
+  margin-top: 8rpx;
+}
+
+.vstatus-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 28rpx 0;
+  gap: 20rpx;
+  border-bottom: 1rpx solid #f1f5f9;
+}
+
+.vstatus-item:last-child {
+  border-bottom: none;
+}
+
+.vstatus-item-k {
+  flex-shrink: 0;
+  width: 136rpx;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #475569;
+}
+
+.vstatus-item-mid {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.vstatus-item-t {
+  font-size: 28rpx;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.vstatus-item-s {
+  font-size: 24rpx;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+.vstatus-item-tag {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #15803d;
+  background: #f0fdf4;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+}
+
+.vstatus-item-arr {
+  flex-shrink: 0;
+  font-size: 36rpx;
+  color: #cbd5e1;
+  line-height: 1;
+  font-weight: 300;
+}
+
+button::after {
+  border: none;
+}

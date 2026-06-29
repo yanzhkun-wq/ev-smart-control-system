@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "佣金与提现",
+  "navigationBarBackgroundColor": "#0f172a",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

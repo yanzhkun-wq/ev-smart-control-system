@@ -1,0 +1,113 @@
+<scroll-view scroll-y class="page safe-bottom">
+  <view class="intro card">
+    <text class="intro-t">防盗报警</text>
+    <text class="intro-s">以下类型覆盖关锁设防后常见的盗车、偷电瓶、拆设备、信号被断等风险（不含骑行超速类提示）。每条都写清：平台为何判断要提醒、您该怎么应对。</text>
+  </view>
+
+  <view class="smart card">
+    <text class="smart-t">智能研判说明</text>
+    <text class="smart-p">· 只在您关锁、车辆设防时做防盗分析，正常骑车、开锁用车不会用这套规则打扰您。</text>
+    <text class="smart-p">· 会合并短暂抖动、路过颠簸等毛刺，减少误报；持续异常才会升级为待处理报警。</text>
+    <text class="smart-p">· 列表按风险从高到低排序，「高」优先查看；核实完毕可标记已处理。</text>
+  </view>
+
+  <view class="push-bar" bindtap="openSubscribe">
+    <view class="push-inner">
+      <text class="push-t">微信提醒</text>
+      <text class="push-s">重要报警可同步推送到微信，避免漏看（需您授权）</text>
+    </view>
+    <text class="push-arr">›</text>
+  </view>
+
+  <view class="stats">
+    <block wx:for="{{stats}}" wx:key="filterKey">
+      <view
+        class="stat card {{item.active ? 'stat-active' : ''}}"
+        bindtap="onStatTap"
+        data-filter="{{item.filterKey}}"
+        hover-class="stat-press"
+        hover-stay-time="80"
+      >
+        <text class="sv">{{item.value}}</text>
+        <text class="sl">{{item.label}}</text>
+      </view>
+    </block>
+  </view>
+  <view wx:if="{{filterBarText}}" class="filter-hint">{{filterBarText}}</view>
+
+  <block wx:if="{{listFilter !== 'done'}}">
+  <view class="sec-head">
+    <view class="sec-l">
+      <text class="sec-title">{{listFilter === 'high' ? '待处理 · 高风险' : '待处理'}}</text>
+      <text class="sec-sub" wx:if="{{urgentPending > 0 && listFilter !== 'high'}}">其中 {{urgentPending}} 条为高风险，建议立即查看</text>
+    </view>
+    <text class="sec-count">{{pendingList.length}} 条</text>
+  </view>
+  <view wx:if="{{!pendingList.length}}" class="empty card">
+    <text class="empty-t">暂无待处理报警</text>
+    <text class="empty-s">关锁设防后若车辆异常，会按上面类型智能提醒</text>
+  </view>
+  <block wx:for="{{pendingList}}" wx:key="id">
+    <view class="item card item-pending">
+      <view class="item-top">
+        <view class="type-row">
+          <view class="type-ico {{item.tone}}">!</view>
+          <view class="type-mid">
+            <text class="type-name">{{item.type}}</text>
+            <text class="type-tag">{{item.typeTag}}</text>
+          </view>
+        </view>
+        <view class="item-badges">
+          <text class="risk-pill {{item.riskClass}}">{{item.riskLabel}}风险</text>
+          <text class="pill pill-warn">{{item.statusText}}</text>
+        </view>
+      </view>
+      <text class="smart-why"><text class="sw-lab">研判：</text>{{item.smartWhy}}</text>
+      <text class="item-desc">{{item.desc}}</text>
+      <text class="suggest" wx:if="{{item.suggest}}"><text class="sg-lab">建议：</text>{{item.suggest}}</text>
+      <view class="item-foot">
+        <text class="item-time">{{item.time}}</text>
+        <text class="item-addr" wx:if="{{item.address}}">{{item.address}}</text>
+      </view>
+      <view class="handle-row">
+        <view class="btn-handle" data-id="{{item.id}}" catchtap="markHandled">标记已处理</view>
+      </view>
+    </view>
+  </block>
+  </block>
+
+  <block wx:if="{{listFilter !== 'pending' && listFilter !== 'high'}}">
+  <view class="sec-head sec-head-done">
+    <text class="sec-title">已处理</text>
+    <text class="sec-count">{{doneList.length}} 条</text>
+  </view>
+  <view wx:if="{{!doneList.length}}" class="empty card">
+    <text class="empty-t">暂无已处理记录</text>
+  </view>
+  <block wx:for="{{doneList}}" wx:key="id">
+    <view class="item card item-done">
+      <view class="item-top">
+        <view class="type-row">
+          <view class="type-ico {{item.tone}}">!</view>
+          <view class="type-mid">
+            <text class="type-name">{{item.type}}</text>
+            <text class="type-tag">{{item.typeTag}}</text>
+          </view>
+        </view>
+        <view class="item-badges">
+          <text class="risk-pill {{item.riskClass}}">{{item.riskLabel}}风险</text>
+          <text class="pill pill-ok">{{item.statusText}}</text>
+        </view>
+      </view>
+      <text class="smart-why smart-why-done"><text class="sw-lab">研判：</text>{{item.smartWhy}}</text>
+      <text class="item-desc">{{item.desc}}</text>
+      <text class="suggest suggest-done" wx:if="{{item.suggest}}"><text class="sg-lab">建议：</text>{{item.suggest}}</text>
+      <view class="item-foot">
+        <text class="item-time">报警 {{item.time}}</text>
+        <text class="item-handled" wx:if="{{item.handledAt}}">处理于 {{item.handledAt}}</text>
+      </view>
+      <text class="item-addr item-addr-done" wx:if="{{item.address}}">{{item.address}}</text>
+    </view>
+  </block>
+  </block>
+</scroll-view>

@@ -1,0 +1,15 @@
+<scroll-view scroll-y class="page">
+  <text class="hint">点击一辆车设为「当前车辆」，首页开关锁与围栏均针对当前车。</text>
+
+  <block wx:for="{{list}}" wx:key="id">
+    <view class="card item {{item.id === currentId ? 'on' : ''}}" data-id="{{item.id}}" bindtap="onPick">
+      <view class="row">
+        <text class="plate">{{item.plate}}</text>
+        <text class="tag" wx:if="{{item.id === currentId}}">当前</text>
+      </view>
+      <text class="meta">{{item.code}}</text>
+    </view>
+  </block>
+
+  <button class="add" bindtap="onAdd">+ 绑定新车辆</button>
+</scroll-view>

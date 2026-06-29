@@ -1,0 +1,63 @@
+/** 全局主题（贴近参考稿：紫蓝渐变 + 白卡片） */
+page {
+  background: #f3f4f8;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Helvetica, sans-serif;
+  color: #1f2937;
+}
+
+/**
+ * 设计基线（B 端 / 工具类小程序）：新页面优先复用，避免各处随意调色
+ * — 页面底：#f3f4f8 ；主文字：#0f172a / #1f2937 ；次要：#64748b
+ * — 卡片：白底 + 细边框 + 轻阴影（与个人中心 / 首页大卡片一致）
+ */
+.ds-page {
+  background: #f3f4f8;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.ds-card {
+  background: #fff;
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 12rpx 40rpx rgba(15, 23, 42, 0.06);
+}
+.ds-section-title {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #0f172a;
+}
+.ds-caption {
+  font-size: 24rpx;
+  color: #64748b;
+  line-height: 1.45;
+}
+.ds-primary-btn {
+  background: linear-gradient(135deg, #7c6cf7 0%, #6366f1 45%, #4f46e5 100%);
+  color: #fff;
+  border-radius: 999rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.safe-bottom {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}
+
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0 12rpx 40rpx rgba(99, 102, 241, 0.08);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #7c6cf7 0%, #6366f1 45%, #4f46e5 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999rpx;
+  font-weight: 600;
+}
+
+.text-muted {
+  color: #6b7280;
+  font-size: 24rpx;
+}

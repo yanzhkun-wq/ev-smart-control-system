@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "员工工作台",
+  "navigationBarBackgroundColor": "#0f172a",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#e8edf3",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

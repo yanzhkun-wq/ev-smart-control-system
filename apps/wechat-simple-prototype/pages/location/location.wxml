@@ -1,0 +1,27 @@
+<scroll-view scroll-y class="wrap">
+  <view class="head">
+    <text class="title">实时定位</text>
+    <text class="sub">{{plate}} · {{time}}</text>
+  </view>
+
+  <map class="map" latitude="{{lat}}" longitude="{{lng}}" scale="16" show-location markers="{{markers}}" />
+
+  <view class="card block">
+    <text class="addr">{{address}}</text>
+    <view class="coord">
+      <text>经度 {{lngText}}</text>
+      <text>纬度 {{latText}}</text>
+    </view>
+    <view class="row2">
+      <text>速度 {{speed}} km/h</text>
+      <text>方向 {{dir}}°</text>
+    </view>
+    <text class="banner">生产环境可对接高德/腾讯逆地理，显示门牌与 POI</text>
+  </view>
+
+  <view class="row-btns">
+    <button class="b" bindtap="refresh">刷新位置</button>
+    <button class="b primary" bindtap="goNav">导航到车</button>
+  </view>
+  <button class="share" open-type="share">分享实时位置给好友</button>
+</scroll-view>

@@ -1,0 +1,58 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "电动车智控"
+      }
+    },
+    {
+      "path": "pages/map/map",
+      "style": {
+        "navigationBarTitleText": "实时地图"
+      }
+    },
+    {
+      "path": "pages/alerts/alerts",
+      "style": {
+        "navigationBarTitleText": "告警"
+      }
+    },
+    {
+      "path": "pages/tracks/tracks",
+      "style": {
+        "navigationBarTitleText": "轨迹回放"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/vehicle/detail",
+      "style": {
+        "navigationBarTitleText": "车辆详情"
+      }
+    },
+    {
+      "path": "pages/remote/remote",
+      "style": {
+        "navigationBarTitleText": "远程控制"
+      }
+    },
+    {
+      "path": "pages/fence/fence",
+      "style": {
+        "navigationBarTitleText": "电子围栏"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "电动车智控",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f2f4f7"
+  }
+}

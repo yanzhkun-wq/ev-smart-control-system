@@ -1,0 +1,14 @@
+<scroll-view scroll-y class="page">
+  <view class="card box">
+    <text class="label">围栏半径（米）</text>
+    <slider min="100" max="2000" step="50" value="{{radius}}" show-value bindchange="onRadius" />
+    <text class="hint">演示：拖动滑块；正式环境对接地图圈选与下发。</text>
+  </view>
+  <view class="card box">
+    <view class="row">
+      <text>启用围栏告警</text>
+      <switch checked="{{enabled}}" bindchange="onSwitch" />
+    </view>
+  </view>
+  <button class="save" bindtap="save">保存设置</button>
+</scroll-view>

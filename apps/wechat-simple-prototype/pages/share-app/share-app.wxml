@@ -1,0 +1,62 @@
+<view class="page">
+  <block wx:if="{{needLogin}}">
+    <view class="card login-card">
+      <text class="t">请先登录</text>
+      <button class="btn" bindtap="goHome">去登录</button>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="card rewards">
+      <view class="rewards-head">
+        <text class="rewards-title">邀请奖励</text>
+        <text class="rewards-sub">好友完成绑定并入网后记数</text>
+      </view>
+      <view class="tier-row">
+        <view class="tier-cell">
+          <view class="tier-top"><text class="tier-num">5</text><text class="tier-unit">人</text></view>
+          <text class="tier-line">主机免单</text>
+          <text class="tier-note">×1</text>
+        </view>
+        <view class="tier-v"></view>
+        <view class="tier-cell">
+          <view class="tier-top"><text class="tier-num">8</text><text class="tier-unit">人</text></view>
+          <text class="tier-line">VIP</text>
+          <text class="tier-note">1 年</text>
+        </view>
+        <view class="tier-v"></view>
+        <view class="tier-cell">
+          <view class="tier-top"><text class="tier-num">10</text><text class="tier-unit">人</text></view>
+          <text class="tier-line">VIP</text>
+          <text class="tier-note">3 年</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card prog" wx:if="{{vipFull}}">
+      <view class="prog-head">
+        <text class="prog-label">当前进度</text>
+        <text class="prog-cta">{{vipFull.joinedCount}}/10</text>
+      </view>
+      <view class="prog-bar-bg">
+        <view class="prog-bar-in" style="width: {{vipFull.vipOrderProgressPct}}%;"></view>
+      </view>
+      <text class="prog-foot">免单剩余 {{vipFull.freeSlotsAvail}} 次</text>
+    </view>
+
+    <view class="invite-hero-box">
+      <image class="invite-hero-img" src="/images/invite-hero.png" mode="widthFix" />
+    </view>
+
+    <view class="card share-panel">
+      <view class="share-grid">
+        <image wx:if="{{qrSrc}}" class="qr" src="{{qrSrc}}" mode="aspectFit" show-menu-by-longpress />
+        <view class="share-col">
+          <text class="acct">{{masked}}</text>
+          <button class="share-btn" open-type="share">分享给好友</button>
+          <view class="copy" bindtap="onCopy"><text>复制链接</text></view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

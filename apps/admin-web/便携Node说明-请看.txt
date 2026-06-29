@@ -1,0 +1,25 @@
+便携版 Node（无需安装 .msi，适合装不上 Node 的环境）
+===============================================
+
+如果你 .msi 一直装不上：请只用下面的 zip，不要再用 .msi。
+
+步骤：
+
+1. 浏览器地址栏粘贴并回车（直接下载 zip，不用找网页）：
+   https://nodejs.org/dist/v24.15.0/node-v24.15.0-win-x64.zip
+
+   备选（打不开时再试）：https://nodejs.org/dist/latest-v22.x/
+   进入目录后下载带 win-x64.zip 的那一个。
+
+2. 解压 zip，把里面的 node.exe、npm.cmd 等【全部文件】
+   放进本目录下的子文件夹：
+
+   apps\admin-web\nodejs-portable\
+
+   要求：nodejs-portable 里直接能看到 node.exe（不要多套一层文件夹）。
+
+3. 双击运行：用便携Node启动管理端.bat
+
+4. 浏览器打开：http://127.0.0.1:5173/
+
+详细说明也可打开：nodejs-portable\README-把Node解压到这里.txt

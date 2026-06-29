@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "VIP 会员",
+  "navigationBarBackgroundColor": "#ffffff",
+  "backgroundColor": "#eef2f6",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

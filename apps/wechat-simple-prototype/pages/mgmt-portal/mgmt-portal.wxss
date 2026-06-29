@@ -1,0 +1,128 @@
+.page {
+  min-height: 100vh;
+  padding: 24rpx;
+  background: #f1f5f9;
+}
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  border: 1rpx solid #e2e8f0;
+}
+.t {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #0f172a;
+  display: block;
+}
+.s {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  color: #64748b;
+  line-height: 1.5;
+  display: block;
+}
+.btn {
+  margin-top: 28rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 14rpx;
+  font-weight: 800;
+  color: #fff;
+  background: #0f172a;
+}
+.btn.ghost {
+  background: #fff;
+  color: #0f172a;
+  border: 2rpx solid #cbd5e1;
+}
+
+.hub-hero {
+  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 20rpx;
+  padding: 32rpx 28rpx;
+  margin-bottom: 20rpx;
+}
+.hub-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #fff;
+  display: block;
+}
+.hub-sub {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: rgba(226, 232, 240, 0.9);
+  display: block;
+}
+.hub-tip {
+  margin-top: 14rpx;
+  font-size: 22rpx;
+  color: rgba(148, 163, 184, 0.95);
+  line-height: 1.45;
+  display: block;
+}
+.hub-card {
+  margin-bottom: 20rpx;
+}
+.hub-h {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #0f172a;
+  display: block;
+}
+.hub-d {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #64748b;
+  line-height: 1.45;
+  display: block;
+}
+.hub-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-top: 18rpx;
+  padding: 20rpx 18rpx;
+  background: #f8fafc;
+  border-radius: 14rpx;
+  border: 1rpx solid #e2e8f0;
+}
+.hub-row:active {
+  opacity: 0.9;
+  background: #f1f5f9;
+}
+.hub-name {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #0f172a;
+  flex: 1;
+  min-width: 120rpx;
+}
+.hub-ph {
+  font-size: 22rpx;
+  color: #64748b;
+  flex: 1.2;
+  min-width: 200rpx;
+}
+.hub-go {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #0284c7;
+}
+.hub-empty {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #94a3b8;
+  display: block;
+}
+.btn.pri {
+  margin-top: 20rpx;
+  background: #0f172a;
+}
+.btn.staff {
+  margin-top: 20rpx;
+  background: #0d9488;
+}

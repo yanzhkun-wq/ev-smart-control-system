@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "客户装机查询",
+  "navigationBarBackgroundColor": "#0f172a",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

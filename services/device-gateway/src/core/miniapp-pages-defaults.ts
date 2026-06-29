@@ -1,0 +1,57 @@
+/**
+ * wechat-simple-prototype 全页面清单（与 app.json 顺序、各页 json 默认标题对齐）
+ * 供管理端编辑 + GET /api/miniapp-ui 下发
+ */
+export type MiniappPageConfig = {
+  /** 如 pages/home/home */
+  route: string;
+  navigationBarTitle: string;
+  /** false 时端上仍进入页面，仅提示（可按需扩展为拦截） */
+  enabled?: boolean;
+  /** 键值文案；各页可在代码里 remoteUi.getString(route, key, 本地默认) 读取 */
+  strings?: Record<string, string>;
+  /** 运营备注，不下发小程序 */
+  adminNote?: string;
+};
+
+export function defaultMiniappPages(): MiniappPageConfig[] {
+  return [
+    { route: "pages/home/home", navigationBarTitle: "电动车智控" },
+    { route: "pages/shops/shops", navigationBarTitle: "智控升级网点" },
+    { route: "pages/mall/mall", navigationBarTitle: "智控商城" },
+    { route: "pages/mall-detail/mall-detail", navigationBarTitle: "商品详情" },
+    { route: "pages/mall-product-edit/mall-product-edit", navigationBarTitle: "商品编辑" },
+    { route: "pages/mall-product-form/mall-product-form", navigationBarTitle: "编辑商品" },
+    { route: "pages/vehicle-manage/vehicle-manage", navigationBarTitle: "车辆管理" },
+    { route: "pages/add-bind/add-bind", navigationBarTitle: "绑定车辆" },
+    { route: "pages/location/location", navigationBarTitle: "实时定位" },
+    { route: "pages/fence-edit/fence-edit", navigationBarTitle: "电子围栏" },
+    { route: "pages/profile/profile", navigationBarTitle: "我的" },
+    { route: "pages/control/control", navigationBarTitle: "车辆控制" },
+    { route: "pages/alarm/alarm", navigationBarTitle: "防盗报警" },
+    { route: "pages/records-lock/records-lock", navigationBarTitle: "行车记录" },
+    { route: "pages/fence-setting/fence-setting", navigationBarTitle: "电子围栏" },
+    { route: "pages/tracks/tracks", navigationBarTitle: "行车记录" },
+    { route: "pages/auth/auth", navigationBarTitle: "授权管理" },
+    { route: "pages/invite-bind/invite-bind", navigationBarTitle: "用车邀请" },
+    { route: "pages/invite-system/invite-system", navigationBarTitle: "系统邀请" },
+    { route: "pages/share-app/share-app", navigationBarTitle: "邀请好友" },
+    { route: "pages/vip-center/vip-center", navigationBarTitle: "VIP 会员" },
+    { route: "pages/partner-apply/partner-apply", navigationBarTitle: "申请合作商" },
+    { route: "pages/merchant-apply/merchant-apply", navigationBarTitle: "商户入驻申请" },
+    { route: "pages/mgmt-portal/mgmt-portal", navigationBarTitle: "后台管理" },
+    { route: "pages/partner-admin/partner-admin", navigationBarTitle: "合作商工作台" },
+    { route: "pages/partner-wallet/partner-wallet", navigationBarTitle: "佣金与提现" },
+    { route: "pages/partner-payout-bind/partner-payout-bind", navigationBarTitle: "绑定收款账户" },
+    { route: "pages/platform-withdraw-review/platform-withdraw-review", navigationBarTitle: "平台·提现审核" },
+    { route: "pages/partner-staff-admin/partner-staff-admin", navigationBarTitle: "员工工作台" },
+    { route: "pages/partner-user-lookup/partner-user-lookup", navigationBarTitle: "客户装机查询" },
+    { route: "pages/partner-l1-detail/partner-l1-detail", navigationBarTitle: "业绩明细" },
+    { route: "pages/merchant-admin/merchant-admin", navigationBarTitle: "升级网点工作台" },
+    { route: "pages/merchant-backend-demo/merchant-backend-demo", navigationBarTitle: "演示·网点工作台" },
+    { route: "pages/merchant-wallet/merchant-wallet", navigationBarTitle: "资金中心" },
+    { route: "pages/super-binding/super-binding", navigationBarTitle: "绑定管理（超管）" },
+    { route: "pages/account/account", navigationBarTitle: "账号设置" },
+    { route: "pages/notify/notify", navigationBarTitle: "通知设置" },
+  ];
+}

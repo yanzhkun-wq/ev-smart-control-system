@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  # ============================================
+  # 1. 设备网关 —— 接收硬件 JT/T808 数据
+  # ============================================
+  gateway:
+    build:
+      context: ./services/device-gateway
+      dockerfile: Dockerfile
+    container_name: ev-gateway
+    restart: always
+    ports:
+      - "7611:7611"  # 硬件 TCP 连接端口（公网暴露）
+      - "7612:7612"  # HTTP API（仅供内网 admin 调用）
+    environment:
+      - DATA_DIR=/data
+      - GATEWAY_PORT=7611
+      - HTTP_PORT=7612
+      - REGISTER_AUTH_CODE=${REGISTER_AUTH_CODE:-请替换为高强度鉴权码}
+      # 下面两项填你的微信小程序 AppID 和 AppSecret（注册小程后填写）
+      - WECHAT_MP_APPID=
+      - WECHAT_MP_SECRET=
+    volumes:
+      - gateway_data:/data
+    networks:
+      - ev-net
+
+  # ============================================
+  # 2. 管理端 —— Web 后台（Nginx 静态站点）
+  # ============================================
+  admin:
+    build:
+      context: ./apps/admin-web
+      dockerfile: Dockerfile
+    container_name: ev-admin
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - gateway
+    networks:
+      - ev-net
+
+volumes:
+  gateway_data:
+
+networks:
+  ev-net:
+    driver: bridge

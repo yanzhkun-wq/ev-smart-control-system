@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "行车记录",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

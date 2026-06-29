@@ -1,0 +1,3 @@
+.redirect {
+  min-height: 100vh;
+}

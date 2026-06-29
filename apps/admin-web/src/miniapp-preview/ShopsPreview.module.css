@@ -1,0 +1,80 @@
+.page {
+  min-height: 520px;
+  padding: 12px;
+  padding-bottom: 24px;
+  box-sizing: border-box;
+  background: #f8fafc;
+}
+
+.head {
+  margin-bottom: 12px;
+}
+
+.headTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  display: block;
+}
+
+.locRow {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.locTxt {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.locBtn {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+.tipCard {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.tipT {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e40af;
+  display: block;
+}
+
+.tipS {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #1d4ed8;
+  line-height: 1.45;
+  display: block;
+  white-space: pre-wrap;
+}
+
+.shopCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 10px;
+}
+
+.shopName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.shopAddr {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #64748b;
+}

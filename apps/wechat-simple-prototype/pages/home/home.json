@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "电动车智控",
+  "usingComponents": {
+    "main-tabbar": "/components/main-tabbar/main-tabbar"
+  },
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

@@ -1,0 +1,11 @@
+var toM = function (cm) {
+  var n = parseFloat(cm);
+  if (n !== n) {
+    n = 0;
+  }
+  return (n / 100).toFixed(1);
+};
+
+module.exports = {
+  toM: toM,
+};

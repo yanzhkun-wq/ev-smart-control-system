@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "通知设置",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

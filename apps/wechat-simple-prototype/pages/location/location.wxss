@@ -1,0 +1,102 @@
+.wrap {
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+.head {
+  padding: 24rpx 24rpx 16rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: 700;
+  display: block;
+}
+
+.sub {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+  display: block;
+}
+
+.map {
+  width: 100%;
+  height: 520rpx;
+}
+
+.card {
+  background: #fff;
+  margin: 20rpx 24rpx;
+  padding: 28rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 12rpx 40rpx rgba(15, 23, 42, 0.06);
+}
+
+.addr {
+  font-size: 30rpx;
+  font-weight: 600;
+  line-height: 1.45;
+  display: block;
+}
+
+.coord {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.row2 {
+  margin-top: 16rpx;
+  display: flex;
+  gap: 32rpx;
+  font-size: 26rpx;
+  color: #374151;
+}
+
+.banner {
+  margin-top: 20rpx;
+  font-size: 22rpx;
+  color: #2563eb;
+  line-height: 1.4;
+  display: block;
+}
+
+.row-btns {
+  display: flex;
+  gap: 16rpx;
+  padding: 0 24rpx;
+}
+
+.b {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.b.primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #fff;
+}
+
+.share {
+  margin: 20rpx 24rpx 0;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #fff;
+}
+
+button::after {
+  border: none;
+}

@@ -1,0 +1,114 @@
+.shell {
+  min-height: 520px;
+  padding: 0 0 60px;
+  box-sizing: border-box;
+  background: #f0f2f5;
+}
+
+.hero {
+  padding: 16px 12px 12px;
+  background: linear-gradient(
+    165deg,
+    #c7d2fe 0%,
+    #e0e7ff 18%,
+    #eef2ff 42%,
+    #f0f2f5 72%,
+    #f0f2f5 100%
+  );
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 11px;
+  padding: 14px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.slogan {
+  margin-top: 12px;
+  padding: 10px;
+  font-size: 12px;
+  color: #334155;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+  white-space: pre-wrap;
+}
+
+.panel {
+  margin: 10px 12px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.panelTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.cell {
+  text-align: center;
+}
+
+.ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  margin: 0 auto 4px;
+  background: #6366f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.cellName {
+  font-size: 11px;
+  color: #334155;
+}

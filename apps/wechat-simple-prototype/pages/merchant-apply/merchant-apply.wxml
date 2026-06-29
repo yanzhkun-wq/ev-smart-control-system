@@ -1,0 +1,96 @@
+<view class="mpa-page">
+  <view class="card mpa-done" wx:if="{{done}}">
+    <text class="mpa-h">入驻已完成</text>
+    <text class="mpa-p">门店档案已保存。您可从「我的」相关入口进入工作台管理业务。</text>
+    <button class="mpa-btn" bindtap="goAdmin">进入工作台</button>
+    <button class="mpa-btn mpa-btn-ghost" bindtap="openEdit">修改门店资料</button>
+  </view>
+
+  <view class="card mpa-warn" wx:elif="{{needInviteLink}}">
+    <text class="mpa-h">暂不可提交</text>
+    <text class="mpa-p">{{inviteLinkMsg}}</text>
+  </view>
+
+  <view class="card" wx:elif="{{applicationPendingPlatform}}">
+    <text class="mpa-h">平台审核中</text>
+    <text class="mpa-p">合作商已通过您的资料，平台运营正在终审。通过后系统将自动开通门店身份与工作台。</text>
+    <text class="mpa-sub" wx:if="{{inviteHint}}">{{inviteHint}}</text>
+  </view>
+
+  <view class="card mpa-warn" wx:elif="{{applicationRejected}}">
+    <text class="mpa-h">申请未通过</text>
+    <text class="mpa-p">{{rejectHint}}</text>
+    <text class="mpa-p" wx:if="{{inviteLinkMsg}}">{{inviteLinkMsg}}</text>
+  </view>
+
+  <view class="card" wx:elif="{{applicationPending}}">
+    <text class="mpa-h">资料审核中</text>
+    <text class="mpa-p">您已提交申请，合作商正在审核门店信息。</text>
+    <text class="mpa-sub" wx:if="{{inviteHint}}">{{inviteHint}}</text>
+  </view>
+
+  <block wx:else>
+    <view class="card mpa-intro">
+      <text class="mpa-kicker">商户入驻申请</text>
+      <text class="mpa-h">填写门店资料</text>
+      <text class="mpa-p" wx:if="{{inviteHint}}">{{inviteHint}}</text>
+      <text class="mpa-p" wx:else>请如实填写门头照与门店信息，提交后由合作商审核开通。</text>
+      <view class="mpa-session" wx:if="{{sessionPhoneMask}}">
+        <text class="mpa-session-k">经营者登录手机</text>
+        <text class="mpa-session-v">{{sessionPhoneMask}}</text>
+        <text class="mpa-session-h">与当前微信登录账号一致，用于接收通知与门店绑定</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <text class="mpa-sec">门店形象</text>
+      <text class="lab">门头照片</text>
+      <view class="img-row">
+        <view class="img-add" bindtap="pickImage" wx:if="{{!storefrontImage}}">
+          <text class="img-add-t">上传门头照</text>
+        </view>
+        <view class="img-wrap" wx:else>
+          <image class="img" src="{{storefrontImage}}" mode="aspectFill" bindtap="pickImage" />
+          <text class="img-re">点击更换</text>
+        </view>
+      </view>
+
+      <text class="lab lab-mt">门店名称</text>
+      <input class="inp" placeholder="对外展示名称" value="{{shopName}}" bindinput="onShopName" />
+
+      <text class="lab lab-mt">负责人姓名</text>
+      <input class="inp" placeholder="负责人真实姓名" value="{{bossName}}" bindinput="onBossName" />
+
+      <text class="lab lab-mt">门店联系电话</text>
+      <input class="inp" type="number" maxlength="11" placeholder="默认与登录手机号一致，可改为前台电话" value="{{contactPhone}}" bindinput="onContactPhone" />
+
+      <text class="lab lab-mt">门店位置</text>
+      <view class="loc-pick" bindtap="pickLocation">
+        <text class="loc-pick-t">{{locSummary}}</text>
+        <text class="loc-pick-a">地图选址</text>
+      </view>
+
+      <text class="lab lab-mt">位置补充</text>
+      <textarea
+        class="inp ta"
+        placeholder="门牌号、楼层、找店说明（选填）"
+        value="{{addressExtra}}"
+        bindinput="onAddressExtra"
+        maxlength="200"
+        auto-height
+      />
+
+      <text class="lab lab-mt">补充说明</text>
+      <textarea
+        class="inp ta"
+        placeholder="主营业务与改装说明（选填）"
+        value="{{applyNote}}"
+        bindinput="onApplyNote"
+        maxlength="500"
+        auto-height
+      />
+
+      <button class="mpa-btn" bindtap="onSubmit">提交审核</button>
+    </view>
+  </block>
+</view>

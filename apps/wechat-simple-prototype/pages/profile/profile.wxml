@@ -1,0 +1,276 @@
+<view class="shell safe-bottom">
+
+  <view class="profile-hero" style="padding-top: {{navPadTop}}px;">
+
+    <view class="profile-card">
+
+      <view class="profile-main">
+
+        <view class="avatar-wrap">
+
+          <view class="avatar {{vipInline.active ? 'avatar-vip' : ''}}">{{user.avatarText}}</view>
+
+        </view>
+
+        <view class="profile-info">
+
+          <view class="profile-name-row">
+
+            <text class="display-name">{{user.name}}</text>
+
+            <view wx:if="{{isLoggedIn}}" class="vip-chip {{vipInline.active ? 'vip-chip-active' : ''}}" catchtap="goVipCenter">
+              <text class="vip-chip-brand">VIP</text>
+              <text class="vip-chip-state">{{vipInline.active ? '已开通' : '未开通'}}</text>
+            </view>
+
+          </view>
+
+          <text class="account-id">账号 {{user.id}}</text>
+
+          <view class="tag-row">
+
+            <text class="tag tag-primary">{{user.role}}</text>
+
+          </view>
+
+        </view>
+
+      </view>
+
+
+
+      <view class="invite-strip" wx:if="{{bindLine}}">
+
+        <view class="invite-strip-dot"></view>
+
+        <text class="invite-strip-t">{{bindLine}}</text>
+
+      </view>
+
+      <view class="login-banner" wx:if="{{!isLoggedIn}}" bindtap="goLogin">
+
+        <text class="login-banner-t">登录后可同步车辆、订单与网点服务</text>
+
+        <text class="login-banner-a">去首页登录 ›</text>
+
+      </view>
+
+    </view>
+
+  </view>
+
+
+
+  <view class="panel panel-compact">
+
+    <view class="panel-head panel-head-min">
+
+      <text class="panel-title">{{ui.sectionServices}}</text>
+
+    </view>
+
+    <view class="grid-4">
+
+      <view class="gcell" bindtap="go" data-url="/pages/tracks/tracks">
+
+        <view class="gcell-ico gcell-indigo"><text class="gcell-char">{{ui.tracksIcon}}</text></view>
+
+        <text class="gcell-name">{{ui.tracksName}}</text>
+
+      </view>
+
+      <view class="gcell gcell-dot-wrap" bindtap="go" data-url="/pages/alarm/alarm">
+
+        <view class="gcell-ico gcell-amber"><text class="gcell-char">{{ui.alarmIcon}}</text></view>
+
+        <text class="gcell-name">{{ui.alarmName}}</text>
+
+        <view class="dot" wx:if="{{alarmPending > 0}}">{{alarmPending}}</view>
+
+      </view>
+
+      <view class="gcell" bindtap="go" data-url="/pages/fence-edit/fence-edit">
+
+        <view class="gcell-ico gcell-teal"><text class="gcell-char">{{ui.fenceIcon}}</text></view>
+
+        <text class="gcell-name">{{ui.fenceName}}</text>
+
+      </view>
+
+      <view class="gcell" bindtap="go" data-url="/pages/auth/auth">
+
+        <view class="gcell-ico gcell-sky"><text class="gcell-char">{{ui.authIcon}}</text></view>
+
+        <text class="gcell-name">{{ui.authName}}</text>
+
+      </view>
+
+    </view>
+
+  </view>
+
+
+
+  <view class="panel panel-compact panel-mall-pair">
+
+    <view class="panel-head panel-head-min">
+
+      <text class="panel-title">{{ui.sectionMall}}</text>
+
+    </view>
+
+    <view class="mall-pair">
+
+      <view class="pair-item" bindtap="go" data-url="/pages/mall/mall">
+
+        <view class="pair-ico pair-ico-emerald"><text class="pair-char">{{ui.mallIcon}}</text></view>
+
+        <text class="pair-name">{{ui.mallName}}</text>
+
+      </view>
+
+      <view class="pair-item" bindtap="go" data-url="/pages/shops/shops">
+
+        <view class="pair-ico pair-ico-slate"><text class="pair-char">{{ui.shopsIcon}}</text></view>
+
+        <text class="pair-name">{{ui.shopsName}}</text>
+
+      </view>
+
+    </view>
+
+  </view>
+
+
+
+  <view class="panel panel-compact">
+
+    <view class="panel-head panel-head-min">
+
+      <text class="panel-title">{{ui.sectionPartner}}</text>
+
+    </view>
+
+    <view class="grid-4 grid-flow">
+
+      <view class="gcell" bindtap="go" data-url="/pages/share-app/share-app">
+
+        <view class="gcell-ico gcell-violet"><text class="gcell-char">{{ui.inviteIcon}}</text></view>
+
+        <text class="gcell-name">{{ui.inviteName}}</text>
+
+      </view>
+
+      <view class="gcell" bindtap="go" data-url="/pages/partner-apply/partner-apply">
+
+        <view class="gcell-ico gcell-cyan"><text class="gcell-char">{{ui.applyIcon}}</text></view>
+
+        <text class="gcell-name">{{ui.applyName}}</text>
+
+      </view>
+
+      <view class="gcell" wx:if="{{showMgmtPortal}}" bindtap="openMgmtPortal">
+
+        <view class="gcell-ico gcell-slate"><text class="gcell-char">{{ui.mgmtIcon}}</text></view>
+
+        <text class="gcell-name">{{ui.mgmtName}}</text>
+
+      </view>
+
+      <view class="gcell" wx:if="{{showSuper}}" bindtap="go" data-url="/pages/super-binding/super-binding">
+
+        <view class="gcell-ico gcell-red"><text class="gcell-char">{{ui.superIcon}}</text></view>
+
+        <text class="gcell-name">{{ui.superName}}</text>
+
+      </view>
+
+    </view>
+
+  </view>
+
+
+
+  <view class="panel panel-compact panel-tight">
+
+    <view class="panel-head panel-head-min">
+
+      <text class="panel-title">{{ui.sectionSystem}}</text>
+
+    </view>
+
+    <view class="list list-compact">
+
+      <view class="litem" wx:if="{{!isLoggedIn}}" bindtap="goLogin">
+
+        <view class="litem-ico litem-indigo"><text>{{ui.sysLoginIcon}}</text></view>
+
+        <view class="litem-body">
+
+          <text class="litem-title">{{ui.sysLoginTitle}}</text>
+
+        </view>
+
+        <text class="litem-arr">›</text>
+
+      </view>
+
+      <view class="litem" bindtap="go" data-url="/pages/account/account">
+
+        <view class="litem-ico litem-slate"><text>{{ui.sysAccountIcon}}</text></view>
+
+        <view class="litem-body">
+
+          <text class="litem-title">{{ui.sysAccountTitle}}</text>
+
+        </view>
+
+        <text class="litem-arr">›</text>
+
+      </view>
+
+      <view class="litem" bindtap="go" data-url="/pages/notify/notify">
+
+        <view class="litem-ico litem-rose"><text>{{ui.sysNotifyIcon}}</text></view>
+
+        <view class="litem-body">
+
+          <text class="litem-title">{{ui.sysNotifyTitle}}</text>
+
+        </view>
+
+        <text class="litem-arr">›</text>
+
+      </view>
+
+      <view class="litem" wx:if="{{isLoggedIn}}" bindtap="logoutDemo">
+
+        <view class="litem-ico litem-mute"><text>{{ui.sysLogoutIcon}}</text></view>
+
+        <view class="litem-body">
+
+          <text class="litem-title litem-warn">{{ui.sysLogoutTitle}}</text>
+
+        </view>
+
+        <text class="litem-arr">›</text>
+
+      </view>
+
+    </view>
+
+  </view>
+
+
+
+  <view class="footer-meta">
+
+    <text class="footer-line">智控系统 · 演示原型</text>
+
+  </view>
+
+</view>
+
+
+
+<main-tabbar active="{{1}}" />

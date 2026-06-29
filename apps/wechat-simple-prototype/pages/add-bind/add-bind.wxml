@@ -1,0 +1,42 @@
+<scroll-view scroll-y class="bind-page">
+  <text class="bind-lead">将车载终端与车牌关联后，即可远程控车、查轨迹与围栏。</text>
+  <view class="bind-sheet card">
+    <view class="bind-scan-hero" bindtap="onScan">
+      <view class="bind-scan-orbit">
+        <view class="bind-scan-frame">
+          <view class="bind-scan-corn tl"></view>
+          <view class="bind-scan-corn tr"></view>
+          <view class="bind-scan-corn bl"></view>
+          <view class="bind-scan-corn br"></view>
+        </view>
+      </view>
+      <text class="bind-scan-hero-title">扫码绑定设备</text>
+      <text class="bind-scan-hero-hint">识别设备或包装上的二维码，自动填入编码</text>
+    </view>
+    <view class="bind-or"><text>手动填写</text></view>
+    <view class="bind-fields">
+      <view class="bind-field-row">
+        <text class="bind-field-key">设备编码</text>
+        <input
+          class="bind-field-inp"
+          placeholder="如 EV20240001"
+          placeholder-style="color:#94a3b8"
+          value="{{bindCode}}"
+          bindinput="onBindCode"
+        />
+      </view>
+      <view class="bind-field-line"></view>
+      <view class="bind-field-row">
+        <text class="bind-field-key">车牌号</text>
+        <input
+          class="bind-field-inp"
+          placeholder="如 京A12345"
+          placeholder-style="color:#94a3b8"
+          value="{{bindPlate}}"
+          bindinput="onBindPlate"
+        />
+      </view>
+    </view>
+    <button class="bind-submit" bindtap="onConfirm">确认绑定</button>
+  </view>
+</scroll-view>

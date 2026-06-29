@@ -1,0 +1,10 @@
+<view class="bar">
+  <navigator class="item {{active === 0 ? 'on' : ''}}" open-type="reLaunch" url="/pages/home/home">
+    <text class="ico">🏠</text>
+    <text class="txt">首页</text>
+  </navigator>
+  <navigator class="item {{active === 1 ? 'on' : ''}}" open-type="reLaunch" url="/pages/profile/profile">
+    <text class="ico">👤</text>
+    <text class="txt">我的</text>
+  </navigator>
+</view>

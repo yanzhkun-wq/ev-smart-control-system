@@ -1,0 +1,102 @@
+<view class="page">
+  <block wx:if="{{state === 'loading'}}">
+    <view class="card">
+      <text class="t">正在进入后台…</text>
+      <text class="s" wx:if="{{routeErr}}">{{routeErr}}</text>
+      <text class="s">若长时间白屏，请检查 app.json 是否已注册对应后台页，或重新编译小程序。</text>
+    </view>
+  </block>
+
+  <block wx:if="{{state === 'hub'}}">
+    <view class="hub-hero">
+      <text class="hub-title">后台管理</text>
+      <text class="hub-sub">演示入口 · 当前 {{sessionMask}} · {{tierLabel}}</text>
+      <text class="hub-tip">正式上架（release）后，此处将自动进入对应后台，不再展示本页。</text>
+    </view>
+
+    <view class="card hub-card" wx:if="{{isPrincipal}}">
+      <text class="hub-h">合作商主管</text>
+      <text class="hub-d">团队、分佣、商家审核、流水与台账（不含提现打款权限）</text>
+      <button class="btn pri" bindtap="openPrincipalAdmin">进入主管后台</button>
+    </view>
+
+    <view class="card hub-card" wx:if="{{isPrincipal}}">
+      <text class="hub-h">演示商家后台</text>
+      <text class="hub-d">查看改装入库、补贴单等界面样式；非商家账号展示示例数据，商家账号展示真实门店</text>
+      <button class="btn ghost" bindtap="openMerchantBackendDemo">打开演示商家后台</button>
+    </view>
+
+    <view class="card hub-card" wx:if="{{isPrincipal}}">
+      <text class="hub-h">一级员工工作台（预览）</text>
+      <text class="hub-d">不切换登录，以该员工视角查看演示数据</text>
+      <block wx:if="{{staffL1.length}}">
+        <view
+          class="hub-row"
+          wx:for="{{staffL1}}"
+          wx:key="phone"
+          data-phone="{{item.phone}}"
+          bindtap="previewStaffWorkbench"
+        >
+          <text class="hub-name">{{item.displayName}}</text>
+          <text class="hub-ph">{{item.phoneMask}}</text>
+          <text class="hub-go">进入 ›</text>
+        </view>
+      </block>
+      <text class="hub-empty" wx:else>暂无一级员工，请在主管后台「团队」中添加</text>
+    </view>
+
+    <view class="card hub-card" wx:if="{{isPrincipal}}">
+      <text class="hub-h">二级员工工作台（预览）</text>
+      <text class="hub-d">不切换登录，以该员工视角查看演示数据</text>
+      <block wx:if="{{staffL2.length}}">
+        <view
+          class="hub-row"
+          wx:for="{{staffL2}}"
+          wx:key="phone"
+          data-phone="{{item.phone}}"
+          bindtap="previewStaffWorkbench"
+        >
+          <text class="hub-name">{{item.displayName}}</text>
+          <text class="hub-ph">{{item.phoneMask}} · {{item.parentHint}}</text>
+          <text class="hub-go">进入 ›</text>
+        </view>
+      </block>
+      <text class="hub-empty" wx:else>暂无二级员工，请在主管后台「团队」中添加</text>
+    </view>
+
+    <view class="card hub-card" wx:if="{{!isPrincipal}}">
+      <text class="hub-h">我的工作台</text>
+      <text class="hub-d">您当前为 {{tierLabel}}，与实际上线一致：登录后自动进员工后台</text>
+      <button class="btn staff" bindtap="openMyStaffWorkbench">进入员工工作台</button>
+    </view>
+
+    <view class="card">
+      <button class="btn ghost" bindtap="goProfile">返回我的</button>
+    </view>
+  </block>
+
+  <block wx:if="{{state === 'need_login'}}">
+    <view class="card">
+      <text class="t">请先登录</text>
+      <text class="s">管理后台需使用商家或合作商体系账号登录。请先在首页完成登录。</text>
+      <button class="btn" bindtap="goHome">去首页登录</button>
+    </view>
+  </block>
+
+  <block wx:if="{{state === 'denied'}}">
+    <view class="card">
+      <text class="t">无管理权限</text>
+      <text class="s">当前账号为普通用户，无法进入后台管理。商家账号须由合作商或平台邀请开通；合作商请完成「合作商申请」或由主管开通员工账号。</text>
+      <button class="btn ghost" bindtap="goProfile">返回我的</button>
+    </view>
+  </block>
+
+  <block wx:if="{{state === 'route_fail'}}">
+    <view class="card">
+      <text class="t">无法进入后台</text>
+      <text class="s">{{routeErr}}</text>
+      <button class="btn" bindtap="retryPortal">重试</button>
+      <button class="btn ghost" bindtap="goHome">回首页</button>
+    </view>
+  </block>
+</view>

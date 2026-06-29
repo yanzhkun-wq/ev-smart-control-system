@@ -1,0 +1,246 @@
+<wxs src="./fence-edit.wxs" module="f" />
+
+
+
+<view class="page-root">
+
+  <view wx:if="{{vipBlocked}}" class="vip-gate">
+
+    <text class="vip-gate-t">电子围栏</text>
+
+    <text class="vip-gate-s">该功能需 VIP：电子围栏与多账号授权。可先查看权益说明与开通方式。</text>
+
+    <button class="vip-gate-btn pri" bindtap="goVipCenter">查看 VIP 权益</button>
+
+    <button class="vip-gate-btn ghost" bindtap="goBackFromVipGate">返回</button>
+
+  </view>
+
+
+
+  <scroll-view wx:else scroll-y class="page">
+
+    <text class="tip">当前车辆 {{plate}} · {{mapTip}}</text>
+
+
+
+    <view class="seg">
+
+      <view
+
+        class="seg-i {{fenceShape === 'circle' ? 'on' : ''}}"
+
+        data-shape="circle"
+
+        bindtap="onPickShape"
+
+      >圆圈围栏</view>
+
+      <view
+
+        class="seg-i {{fenceShape === 'rect' ? 'on' : ''}}"
+
+        data-shape="rect"
+
+        bindtap="onPickShape"
+
+      >方形围栏</view>
+
+    </view>
+
+
+
+    <view class="subseg" wx:if="{{fenceShape === 'circle'}}">
+
+      <view
+
+        class="pill {{circleInputMode === 'draw' ? 'on' : ''}}"
+
+        data-mode="draw"
+
+        bindtap="onPickCircleMode"
+
+      >手绘圈</view>
+
+      <view
+
+        class="pill {{circleInputMode === 'twotap' ? 'on' : ''}}"
+
+        data-mode="twotap"
+
+        bindtap="onPickCircleMode"
+
+      >两点定圆</view>
+
+    </view>
+
+
+
+    <view class="subseg" wx:if="{{fenceShape === 'rect'}}">
+
+      <view
+
+        class="pill {{rectInputMode === 'draw' ? 'on' : ''}}"
+
+        data-mode="draw"
+
+        bindtap="onPickRectMode"
+
+      >手绘框</view>
+
+      <view
+
+        class="pill {{rectInputMode === 'twotap' ? 'on' : ''}}"
+
+        data-mode="twotap"
+
+        bindtap="onPickRectMode"
+
+      >两点对角</view>
+
+    </view>
+
+
+
+    <map
+
+      id="fenceMap"
+
+      class="map"
+
+      latitude="{{vlat}}"
+
+      longitude="{{vlng}}"
+
+      scale="{{mapScale}}"
+
+      markers="{{markers}}"
+
+      circles="{{circles}}"
+
+      polygons="{{polygons}}"
+
+      polyline="{{handPolylines}}"
+
+      show-location
+
+      enable-scroll="{{!drawCapturing}}"
+
+      bindtap="onMapTap"
+
+    >
+
+      <cover-view wx:if="{{drawCapturing}}" class="draw-mask" catchtouchstart="onHandStart" catchtouchmove="onHandMove" catchtouchend="onHandEnd" catchtouchcancel="onHandEnd">
+
+        <cover-view class="draw-hint-inner">{{drawHint}}</cover-view>
+
+      </cover-view>
+
+    </map>
+
+
+
+    <view class="card" wx:if="{{fenceShape === 'circle'}}">
+
+      <block wx:if="{{circleInputMode === 'draw'}}">
+
+        <text class="lab">手绘圆圈</text>
+
+        <text class="sub">点「开始画圈」后，在地图上用手指绕停车区域拖一圈，松手自动生成圆形围栏。</text>
+
+        <button class="mini-ghost" wx:if="{{!drawCapturing}}" bindtap="startHandDraw">开始画圈</button>
+
+        <button class="mini-ghost mini-disabled" wx:else disabled>画圈中…</button>
+
+        <button class="mini-ghost" bindtap="resetHandDraw">清空重画</button>
+
+      </block>
+
+      <block wx:else>
+
+        <text class="lab">两点定圆</text>
+
+        <text class="sub">先点圆心，再点圆周上一点。第三次点击地图可重新选圆心。</text>
+
+        <button class="mini-ghost" bindtap="resetCircleDraw">重新两点画圆</button>
+
+      </block>
+
+      <block wx:if="{{circleStep === 2}}">
+
+        <text class="lab lab-sp">围栏半径（厘米，步进 1 cm）</text>
+
+        <text class="sub">手绘或两点完成后，可用滑块微调。</text>
+
+        <text class="val">{{fenceRadiusCm}} cm（约 {{f.toM(fenceRadiusCm)}} m）</text>
+
+        <slider min="50" max="5000" step="1" value="{{fenceRadiusCm}}" activeColor="#6366f1" bindchanging="onRadius" />
+
+      </block>
+
+    </view>
+
+
+
+    <view class="card" wx:if="{{fenceShape === 'rect'}}">
+
+      <block wx:if="{{rectInputMode === 'draw'}}">
+
+        <text class="lab">手绘方框</text>
+
+        <text class="sub">点「开始画框」后，沿停车范围描一圈（不必闭合），松手后按轨迹包络生成轴对齐矩形。</text>
+
+        <button class="mini-ghost" wx:if="{{!drawCapturing}}" bindtap="startHandDraw">开始画框</button>
+
+        <button class="mini-ghost mini-disabled" wx:else disabled>画框中…</button>
+
+        <button class="mini-ghost" bindtap="resetHandDraw">清空重画</button>
+
+      </block>
+
+      <block wx:else>
+
+        <text class="lab">两点对角</text>
+
+        <text class="sub">在地图上点两个对角点；紫色区域为围栏内。可「清空角点」重新框选。</text>
+
+        <button class="mini-ghost" bindtap="resetRectCorners">清空角点</button>
+
+      </block>
+
+    </view>
+
+
+
+    <view class="card">
+
+      <text class="lab">超距告警（厘米，步进 1 cm）</text>
+
+      <text class="sub">离开围栏边线后再超出此距离告警；最大 10 m（1000 cm）。</text>
+
+      <text class="val">{{alarmMarginCm}} cm（约 {{f.toM(alarmMarginCm)}} m）</text>
+
+      <slider min="0" max="1000" step="1" value="{{alarmMarginCm}}" activeColor="#ef4444" bindchanging="onMargin" />
+
+    </view>
+
+
+
+    <view class="btns">
+
+      <button class="ghost" bindtap="alignVehicle" wx:if="{{fenceShape === 'circle'}}">圆心对齐车辆</button>
+
+      <button class="primary" bindtap="onSave">保存围栏设置</button>
+
+    </view>
+
+    <view class="fence-legacy-row" bindtap="goFenceSettingLegacy">
+
+      <text class="fence-legacy-row-t">简易围栏（旧版演示页）</text>
+
+    </view>
+
+  </scroll-view>
+
+</view>
+

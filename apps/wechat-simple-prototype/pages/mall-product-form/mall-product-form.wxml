@@ -1,0 +1,37 @@
+<view class="page" wx:if="{{loaded}}">
+  <view class="card">
+    <text class="lab">主图</text>
+    <view class="img-row">
+      <image wx:if="{{mainImage}}" class="main-img" src="{{mainImage}}" mode="aspectFill" bindtap="pickMain" />
+      <view wx:else class="main-add" bindtap="pickMain">
+        <text>+ 上传主图</text>
+      </view>
+    </view>
+    <text class="img-tip">建议 1:1 或 4:3，清晰展示设备外观（演示存本地）</text>
+  </view>
+
+  <view class="card">
+    <text class="lab">商品名称</text>
+    <input class="inp" value="{{name}}" bindinput="onName" placeholder="标题，30 字内为佳" />
+    <text class="lab lab-mt">卖点副标题</text>
+    <input class="inp" value="{{subtitle}}" bindinput="onSubtitle" placeholder="一句话卖点" />
+    <text class="lab lab-mt">价格（元）</text>
+    <input class="inp" type="digit" value="{{price}}" bindinput="onPrice" placeholder="如 399" />
+    <text class="lab lab-mt">单位</text>
+    <input class="inp" value="{{unit}}" bindinput="onUnit" placeholder="套 / 台" />
+    <text class="lab lab-mt">标签（英文逗号分隔）</text>
+    <input class="inp" value="{{tagsStr}}" bindinput="onTags" placeholder="官方,热销" />
+  </view>
+
+  <view class="card">
+    <text class="lab">列表短描述</text>
+    <textarea class="ta" value="{{desc}}" bindinput="onDesc" placeholder="商城列表卡片摘要" auto-height maxlength="200" />
+  </view>
+
+  <view class="card">
+    <text class="lab">详情页图文（支持换行）</text>
+    <textarea class="ta ta-lg" value="{{detail}}" bindinput="onDetail" placeholder="规格、清单、安装与售后说明等" maxlength="4000" />
+  </view>
+
+  <button class="save" bindtap="save">保存</button>
+</view>

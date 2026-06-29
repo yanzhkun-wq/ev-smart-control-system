@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "业绩明细",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

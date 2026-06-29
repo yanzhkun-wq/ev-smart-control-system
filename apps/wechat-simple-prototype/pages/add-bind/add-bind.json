@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "绑定车辆",
+  "navigationBarBackgroundColor": "#c8d4e4",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

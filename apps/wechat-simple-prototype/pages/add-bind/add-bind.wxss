@@ -1,0 +1,8 @@
+@import "../../styles/bind-sheet.wxss";
+
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 12rpx 40rpx rgba(15, 23, 42, 0.1);
+}

@@ -1,0 +1,179 @@
+.pageRoot {
+  padding: 0;
+  max-width: 100%;
+}
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 6px 10px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+}
+
+.filterField {
+  flex: 1 1 140px;
+  min-width: 120px;
+}
+
+.filterFieldWide {
+  flex: 2 1 220px;
+  min-width: 200px;
+}
+
+.filterMeta {
+  flex: 1 1 100%;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.45);
+  line-height: 1.35;
+}
+
+.tableWrap :global(.ant-table-thead > tr > th) {
+  font-size: 11px;
+  padding: 3px 5px !important;
+  line-height: 1.25 !important;
+}
+
+.tableWrap :global(.ant-table-tbody > tr > td) {
+  font-size: 12px;
+  padding: 3px 5px !important;
+  line-height: 1.3 !important;
+}
+
+/* 台账表：固定布局，列宽即占位，避免宽屏下被均分拉宽 */
+.tableLedger :global(table) {
+  table-layout: fixed;
+}
+
+.tableWrap :global(.ant-tag) {
+  margin: 0 !important;
+  padding: 0 4px !important;
+  font-size: 11px !important;
+  line-height: 18px !important;
+  border-radius: 3px;
+}
+
+.tableWrap :global(.ant-btn-link.ant-btn-sm) {
+  padding: 0 2px !important;
+  height: auto !important;
+  line-height: 1.35 !important;
+}
+
+.tableWrap :global(.ant-table-tbody .ant-input),
+.tableWrap :global(.ant-table-tbody .ant-input-affix-wrapper),
+.tableWrap :global(.ant-table-tbody .ant-input-number-input),
+.tableWrap :global(.ant-table-tbody .ant-select .ant-select-selector) {
+  font-size: 12px !important;
+}
+
+.tableWrap :global(.ant-pagination) {
+  margin: 6px 0 0 !important;
+}
+
+.summaryStrip {
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.labelMini {
+  display: block;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 2px;
+}
+
+.pageTop {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.toolbarNote {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.45);
+  line-height: 1.35;
+  margin: 0 0 6px;
+}
+
+.ledgerHost {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ledgerToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0;
+}
+
+.ledgerSegmented {
+  width: fit-content;
+  max-width: 100%;
+  align-self: flex-start;
+}
+
+.ledgerSegmented :global(.ant-segmented-item) {
+  padding: 1px 10px !important;
+  font-size: 12px !important;
+}
+
+.ledgerSegmented :global(.ant-segmented-item-label) {
+  min-height: 22px;
+  line-height: 22px;
+}
+
+.ledgerTabsNoBar :global(.ant-tabs-nav) {
+  display: none !important;
+  margin: 0 !important;
+}
+
+.ledgerTabsNoBar :global(.ant-tabs-content-holder) {
+  border-top: none;
+}
+
+.mainTabs :global(.ant-tabs-tab) {
+  padding: 3px 8px !important;
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+}
+
+.mainTabs :global(.ant-tabs-nav) {
+  margin-bottom: 2px !important;
+}
+
+.mainTabs :global(.ant-tabs-content-holder) {
+  padding-top: 2px;
+}
+
+.queryInnerTabs :global(.ant-tabs-nav) {
+  margin-bottom: 4px !important;
+}
+
+.queryInnerTabs :global(.ant-tabs-tab) {
+  padding: 3px 10px !important;
+  font-size: 12px !important;
+}
+
+.overviewCollapse :global(.ant-collapse-header) {
+  padding: 4px 8px !important;
+  align-items: center !important;
+  min-height: 32px !important;
+}
+
+.overviewCollapse :global(.ant-collapse-content-box) {
+  padding: 6px 8px 8px !important;
+}

@@ -1,0 +1,68 @@
+<view class="page">
+
+  <view class="card" wx:if="{{done}}">
+
+    <text class="t">您已是合作商</text>
+
+    <text class="s">可进入合作商后台管理业务，或随时切换到普通用户端。</text>
+
+    <button class="btn" bindtap="goAdmin">进入合作商后台</button>
+
+  </view>
+
+
+
+  <block wx:else>
+
+    <view class="card" wx:if="{{hasPartnerInvite && !done}}">
+
+      <text class="t">受邀开通合作商</text>
+
+      <text class="s">邀请方主管 {{inviterMask}}。演示规则：您上缴公司的代理费按 ¥100 计 — 平台另向邀请方补贴其中 10%；若双方档位不同，邀请方还可获得「档位差 × 代理费」的级差补贴（与您上门补贴档位一致）。</text>
+
+    </view>
+
+    <view class="card">
+
+      <text class="t">申请合作商</text>
+
+      <text class="s">提交后演示版立即开通（正式环境需合同与资质审核）。开通后您为一级主管：可开通二级员工账号；员工分享商家入驻并共同审核资质；商家每笔结算收入，平台向您的体系奖励 {{partnerRateLabel}}（演示）；一级/二级分成仅从这笔合作商佣金中再切分，比例由您自定。</text>
+
+    </view>
+
+    <view class="card">
+
+      <text class="lab">姓名</text>
+
+      <input class="inp" placeholder="请输入真实姓名" value="{{realName}}" bindinput="onName" />
+
+      <text class="lab lab-mt">手机号</text>
+
+      <input class="inp" type="number" maxlength="11" placeholder="11 位手机号码" value="{{formPhone}}" bindinput="onPhone" />
+
+      <text class="lab lab-mt">申请理由</text>
+
+      <textarea
+
+        class="inp ta"
+
+        placeholder="请简要说明合作意向、渠道或资源"
+
+        value="{{reason}}"
+
+        bindinput="onReason"
+
+        maxlength="500"
+
+        auto-height
+
+      />
+
+      <button class="btn" bindtap="onSubmit">提交申请</button>
+
+    </view>
+
+  </block>
+
+</view>
+

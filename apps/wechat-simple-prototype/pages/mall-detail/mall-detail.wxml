@@ -1,0 +1,56 @@
+<view class="page" wx:if="{{product}}">
+  <swiper
+    class="hero-swiper"
+    indicator-dots="{{heroSlides.length > 1}}"
+    indicator-color="rgba(255,255,255,.45)"
+    indicator-active-color="#fff"
+    circular="{{heroSlides.length > 1}}"
+    autoplay="{{heroSlides.length > 1}}"
+    interval="4000"
+  >
+    <swiper-item wx:for="{{heroSlides}}" wx:for-item="slide" wx:for-index="sx" wx:key="sx">
+      <image wx:if="{{slide}}" class="hero-img" src="{{slide}}" mode="aspectFill" />
+      <view wx:else class="hero-ph {{thumbClass}}">
+        <text class="hero-ph-t">智控硬件</text>
+        <text class="hero-ph-s">主图待完善 · 以实物与详情说明为准</text>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <view class="panel price-panel">
+    <view class="price-row">
+      <text class="price-y">¥</text>
+      <text class="price-n">{{product.price}}</text>
+      <text class="price-unit">/{{product.unit}}</text>
+    </view>
+    <text class="title">{{product.name}}</text>
+    <text class="subtitle">{{product.subtitle}}</text>
+    <view class="tags" wx:if="{{product.tags && product.tags.length}}">
+      <text class="tag" wx:for="{{product.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="panel">
+    <text class="sec-title">商品简介</text>
+    <text class="intro">{{product.desc}}</text>
+  </view>
+
+  <view class="panel detail-panel">
+    <text class="sec-title">图文详情</text>
+    <text class="detail-body">{{product.detail}}</text>
+  </view>
+
+  <view class="bottom-safe"></view>
+</view>
+
+<view class="bottom-bar" wx:if="{{product}}">
+  <view class="qty-box">
+    <text class="qty-lab">数量</text>
+    <view class="qty-ctl">
+      <view class="qty-btn" bindtap="minusQty">−</view>
+      <text class="qty-val">{{qty}}</text>
+      <view class="qty-btn" bindtap="plusQty">+</view>
+    </view>
+  </view>
+  <button class="bar-buy" bindtap="buy">立即购买</button>
+</view>

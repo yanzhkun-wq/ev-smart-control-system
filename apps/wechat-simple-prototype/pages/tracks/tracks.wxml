@@ -1,0 +1,99 @@
+<view class="page">
+  <view class="head card">
+    <text class="head-t">行车记录</text>
+    <text class="head-s">默认只保留近 30 个自然日的行程。可点选单日，或在下框输入「几月几日」区间（年份用当前年）。每条卡片含开锁/关锁人与轨迹。</text>
+  </view>
+
+  <view class="query card">
+    <text class="query-h">轨迹查询</text>
+    <text class="filter-summary">{{filterSummary}}</text>
+    <view class="query-row">
+      <picker mode="date" start="{{minDate}}" end="{{maxDate}}" value="{{filterDate || maxDate}}" bindchange="onPickDate">
+        <view class="picker-fake">
+          <text class="picker-lab">按日期</text>
+          <text class="picker-val">{{filterDate || '全部日期'}}</text>
+        </view>
+      </picker>
+      <view class="query-clear" bindtap="clearDate">清除日期</view>
+    </view>
+    <text class="md-hint">按月日筛选（年份默认 {{defaultYear}} 年，与手机当前日期同年）</text>
+    <view class="query-row query-time">
+      <input class="time-in" type="text" placeholder="开始 如 4-27" value="{{mdStart}}" bindinput="onMdStartInput" />
+      <text class="time-sep">—</text>
+      <input class="time-in" type="text" placeholder="结束 如 4-28" value="{{mdEnd}}" bindinput="onMdEndInput" />
+    </view>
+    <view class="query-btns">
+      <view class="btn-q" bindtap="runQuery">查询</view>
+      <view class="btn-r" bindtap="resetQuery">重置</view>
+    </view>
+  </view>
+
+  <scroll-view wx:if="{{rideCards.length}}" scroll-y class="list" enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{rideCards}}" wx:key="id" class="ride-card card">
+      <view class="ride-head">
+        <view class="ride-head-l">
+          <text class="ride-title">{{item.title}}</text>
+          <text class="ride-meta">{{item.plate}} · {{item.dateLine}}</text>
+        </view>
+        <text class="pill pill-riding" wx:if="{{item.status === 'riding'}}">{{item.statusText}}</text>
+        <text class="pill pill-done" wx:else>{{item.statusText}}</text>
+      </view>
+
+      <view class="ride-lock-row">
+        <view class="ride-lock-cell">
+          <text class="ride-lock-k">开锁</text>
+          <text class="ride-lock-name">{{item.unlockWho}}</text>
+          <text class="ride-lock-time">{{item.unlockTime}}</text>
+        </view>
+        <view class="ride-lock-mid" />
+        <view class="ride-lock-cell ride-lock-right">
+          <text class="ride-lock-k">关锁</text>
+          <text class="ride-lock-name">{{item.lockWho}}</text>
+          <text class="ride-lock-time ride-lock-pend" wx:if="{{item.status === 'riding'}}">{{item.lockTime}}</text>
+          <text class="ride-lock-time" wx:else>{{item.lockTime}}</text>
+        </view>
+      </view>
+
+      <view class="ride-loc">
+        <text class="dot dot-a" />
+        <view class="ride-loc-txt">
+          <text class="ride-loc-label">起点</text>
+          <text class="ride-loc-val">{{item.startName}}</text>
+        </view>
+      </view>
+      <view class="ride-loc">
+        <text class="dot dot-b" />
+        <view class="ride-loc-txt">
+          <text class="ride-loc-label">终点</text>
+          <text class="ride-loc-val">{{item.endName}}</text>
+        </view>
+      </view>
+
+      <text class="ride-stats">{{item.statsLine}}</text>
+
+      <map
+        wx:if="{{item.hasTrack}}"
+        class="map-mini"
+        latitude="{{item.mapLat}}"
+        longitude="{{item.mapLng}}"
+        scale="{{item.mapScale}}"
+        markers="{{item.markers}}"
+        polyline="{{item.polyline}}"
+        show-location="{{false}}"
+      />
+      <view wx:else class="map-fallback">
+        <text class="map-fallback-t">{{item.mapHint}}</text>
+      </view>
+
+      <text wx:if="{{item.waypointsLine}}" class="ride-wp">途经 {{item.waypointsLine}}</text>
+    </view>
+
+    <view class="tail-hint card sec-muted">
+      <text class="hint">正式环境轨迹由平台按 JT/T808 位置汇报（0x0200 等）落库，可配置保留更长；小程序端可继续只做近几日查询以省流量。</text>
+    </view>
+  </scroll-view>
+
+  <view wx:else class="card sec sec-muted empty">
+    <text class="hint">近 3 日内暂无符合筛选条件的记录。可点击「重置」或调整日期/时段。</text>
+  </view>
+</view>

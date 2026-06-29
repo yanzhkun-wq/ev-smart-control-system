@@ -1,0 +1,4 @@
+<view class="page card">
+  <text class="t">通知设置</text>
+  <text class="s">演示页：告警推送、订阅消息等后续配置。</text>
+</view>

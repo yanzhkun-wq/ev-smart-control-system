@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "车辆管理",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

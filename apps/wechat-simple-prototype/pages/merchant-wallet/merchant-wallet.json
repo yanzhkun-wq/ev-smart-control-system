@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "资金中心",
+  "usingComponents": {},
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

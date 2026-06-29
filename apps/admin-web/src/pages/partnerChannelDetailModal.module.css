@@ -1,0 +1,20 @@
+.body {
+  max-height: min(72vh, 520px);
+  overflow-y: auto;
+  padding: 4px 2px 0;
+}
+
+.form :global(.ant-form-item) {
+  margin-bottom: 10px;
+}
+
+.form :global(.ant-form-item-label > label) {
+  font-size: 12px;
+}
+
+.hint {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0 0 8px;
+  line-height: 1.45;
+}

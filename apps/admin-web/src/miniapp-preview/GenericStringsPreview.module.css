@@ -1,0 +1,43 @@
+.root {
+  min-height: 400px;
+  padding: 12px;
+  background: #eef2f6;
+  box-sizing: border-box;
+}
+
+.note {
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.k {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.v {
+  font-size: 13px;
+  color: #0f172a;
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
+.empty {
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+  padding: 24px;
+}

@@ -1,0 +1,150 @@
+<view class="page">
+  <view class="tabs">
+    <view class="tab {{tab === 0 ? 'on' : ''}}" bindtap="setTab" data-i="0">选购设备</view>
+    <view class="tab {{tab === 1 ? 'on' : ''}}" bindtap="setTab" data-i="1">我的订单</view>
+  </view>
+
+  <block wx:if="{{tab === 0}}">
+    <view class="mall-hero">
+      <view class="mall-hero-top">
+        <view class="mall-brand">
+          <text class="mall-brand-t">智控商城</text>
+          <text class="mall-brand-s">官方硬件 · 正品溯源</text>
+        </view>
+        <view class="mall-manage" wx:if="{{showMallManage}}" bindtap="goProductManage">商品编辑</view>
+      </view>
+      <text class="mall-hero-tip">下单后可在「我的订单」查看快递公司、运单号与物流进度。收到货请至「智控升级网点」安装。</text>
+    </view>
+
+    <block wx:for="{{products}}" wx:key="id">
+      <view class="feed-card">
+        <view class="feed-cover-wrap" bindtap="goDetail" data-id="{{item.id}}">
+          <image wx:if="{{item.mainImage}}" class="feed-cover" src="{{item.mainImage}}" mode="aspectFill" />
+          <view wx:else class="feed-cover feed-ph {{item.thumbClass}}">
+            <text class="feed-ph-t">智控</text>
+            <text class="feed-ph-s">示意图 · 以实物为准</text>
+          </view>
+        </view>
+        <view class="feed-body">
+          <view class="feed-tags" wx:if="{{item.tags && item.tags.length}}">
+            <text class="feed-tag" wx:for="{{item.tags}}" wx:for-item="tg" wx:key="*this">{{tg}}</text>
+          </view>
+          <text class="feed-title" bindtap="goDetail" data-id="{{item.id}}">{{item.name}}</text>
+          <text class="feed-sub" bindtap="goDetail" data-id="{{item.id}}">{{item.subtitle}}</text>
+          <text class="feed-desc">{{item.desc}}</text>
+          <view class="feed-foot">
+            <view class="feed-price-box">
+              <text class="feed-price-y">¥</text>
+              <text class="feed-price-n">{{item.price}}</text>
+              <text class="feed-price-u">/{{item.unit}}</text>
+            </view>
+            <view class="feed-btns">
+              <view class="feed-btn ghost" catchtap="goDetail" data-id="{{item.id}}">查看详情</view>
+              <view class="feed-btn primary" catchtap="buy" data-id="{{item.id}}">立即购买</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </block>
+
+  <block wx:else>
+    <view class="ord-list-hint" wx:if="{{orders.length > 0}}">
+      <text class="ord-list-hint-t">订单与物流</text>
+      <text class="ord-list-hint-s">订单号由下单时间生成 · 发货后可复制运单号</text>
+    </view>
+
+    <view class="empty-ord card" wx:if="{{orders.length === 0}}">
+      <view class="empty-ord-ico">📦</view>
+      <text class="empty-ord-t">暂无订单</text>
+      <text class="empty-ord-s">在「选购设备」下单后，将展示订单编号、快递公司、运单号及物流节点。</text>
+    </view>
+
+    <block wx:for="{{orders}}" wx:for-item="order" wx:key="id">
+      <view class="ord-card">
+        <view class="ord-card-top">
+          <view class="ord-card-top-l">
+            <text class="ord-label">订单编号</text>
+            <view class="ord-no-row">
+              <text class="ord-no-main">{{order.id}}</text>
+              <view class="ord-chip-copy" bindtap="copyOrderNo" data-no="{{order.id}}">复制</view>
+            </view>
+          </view>
+          <view class="ord-st-pill st-{{order.status}}">{{order.statusLabel}}</view>
+        </view>
+
+        <view class="ord-meta-bar">
+          <text class="ord-meta-i">下单 {{order.timeStr}}</text>
+          <text class="ord-meta-dot">·</text>
+          <text class="ord-meta-i">{{order.payLine}}</text>
+        </view>
+
+        <view class="express-card">
+          <text class="express-h">快递信息</text>
+          <view class="express-line">
+            <text class="express-k">快递公司</text>
+            <text class="express-v">{{order.expressName}}</text>
+          </view>
+          <view class="express-line express-line-no">
+            <text class="express-k">运单号</text>
+            <text class="express-v express-mono">{{order.expressNo}}</text>
+            <view class="express-copy" wx:if="{{order.trackingNo}}" bindtap="copyTracking" data-tracking="{{order.trackingNo}}">复制</view>
+          </view>
+        </view>
+
+        <view class="ord-goods">
+          <image wx:if="{{order.orderImage}}" class="ord-thumb-img" src="{{order.orderImage}}" mode="aspectFill" />
+          <view wx:else class="ord-thumb {{order.thumbClass}}">
+            <text class="ord-thumb-t">智控</text>
+          </view>
+          <view class="ord-goods-info">
+            <text class="ord-goods-name">{{order.productName}}</text>
+            <text class="ord-goods-sub">{{order.productSubtitle}}</text>
+            <text class="ord-goods-spec">{{order.specLine}}</text>
+          </view>
+          <view class="ord-goods-qty">
+            <text class="ord-goods-qty-n">×{{order.qty}}</text>
+          </view>
+        </view>
+
+        <view class="ord-track-wrap">
+          <view class="ord-track-head">
+            <text class="ord-track-title">物流跟踪</text>
+          </view>
+
+          <view class="tl">
+            <block wx:for="{{order.timeline}}" wx:for-item="step" wx:for-index="si" wx:key="key">
+              <view class="tl-row">
+                <view class="tl-axis">
+                  <view class="tl-dot tl-{{step.state}}"></view>
+                  <view class="tl-vline" wx:if="{{si < order.timeline.length - 1}}"></view>
+                </view>
+                <view class="tl-body">
+                  <text class="tl-label">{{step.label}}</text>
+                  <text class="tl-sub">{{step.sub}}</text>
+                  <text class="tl-time" wx:if="{{step.time}}">{{step.time}}</text>
+                </view>
+              </view>
+            </block>
+          </view>
+        </view>
+
+        <view class="ord-upgrade-tip">
+          <text class="ord-upgrade-ico">◎</text>
+          <text class="ord-upgrade-txt">收到货后请携带全套设备，前往「智控升级网点」由合作商家协助改装与绑定终端。</text>
+        </view>
+
+        <view class="ord-foot-btns">
+          <button class="obtn obtn-ghost" bindtap="contactService">联系客服</button>
+          <button class="obtn obtn-primary" bindtap="goShops">预约升级网点</button>
+        </view>
+
+        <view class="ord-demo-bar" wx:if="{{order.status === 'pending_ship' || order.status === 'shipping'}}">
+          <text class="ord-demo-lab">演示环境</text>
+          <text class="ord-demo-btn" wx:if="{{order.status === 'pending_ship'}}" bindtap="demoShip" data-id="{{order.id}}">模拟发货</text>
+          <text class="ord-demo-btn" wx:if="{{order.status === 'shipping'}}" bindtap="demoReceive" data-id="{{order.id}}">模拟签收</text>
+        </view>
+      </view>
+    </block>
+  </block>
+</view>

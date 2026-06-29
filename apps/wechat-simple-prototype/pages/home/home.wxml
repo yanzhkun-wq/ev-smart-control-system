@@ -1,0 +1,214 @@
+<scroll-view
+  scroll-y
+  style="height: 100vh;"
+  class="scroll {{!loggedIn ? 'scroll-login' : ''}} {{loggedIn ? 'with-tab' : ''}} {{loggedIn && bound ? 'scroll-dashboard' : ''}} {{loggedIn && !bound ? 'scroll-bind' : ''}}"
+>  <block wx:if="{{!loggedIn}}">
+    <view class="login-page">
+      <view class="login-bg-blob login-bg-blob-1"></view>
+      <view class="login-bg-blob login-bg-blob-2"></view>
+      <view class="login-top-tag">
+        <text class="login-top-tag-t">部标 808 · 多车管理</text>
+      </view>
+      <view class="login-brand">
+        <view class="login-logo-wrap">
+          <view class="login-logo-ring">
+            <text class="login-logo-ico">⚡</text>
+          </view>
+        </view>
+        <text class="login-brand-name">电动车智控</text>
+        <text class="login-brand-en">EV INTELLIGENCE</text>
+      </view>
+      <view class="login-card">
+        <text class="login-kicker">安全出行 · 智联随行</text>
+        <text class="login-title">欢迎使用</text>
+        <text class="login-sub">使用微信授权登录后，即可绑定车载定位终端，远程掌握车辆状态、轨迹与电子围栏。</text>
+        <button class="login-btn" bindtap="onWxLogin">
+          <text class="login-btn-main">微信授权登录</text>
+          <text class="login-btn-hint">推荐 · 与微信账号安全关联</text>
+        </button>
+        <button class="login-skip" bindtap="onSkipLoginDemo">暂不授权，演示体验</button>
+        <text class="login-legal">演示版数据仅保存在本机 · 正式环境以平台协议为准</text>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{!bound}}">
+    <text class="bind-lead">将车载终端与车牌关联后，即可远程控车、查轨迹与围栏。</text>
+    <view class="bind-sheet card">
+      <view class="bind-scan-hero" bindtap="onScan">
+        <view class="bind-scan-orbit">
+          <view class="bind-scan-frame">
+            <view class="bind-scan-corn tl"></view>
+            <view class="bind-scan-corn tr"></view>
+            <view class="bind-scan-corn bl"></view>
+            <view class="bind-scan-corn br"></view>
+          </view>
+        </view>
+        <text class="bind-scan-hero-title">扫码绑定设备</text>
+        <text class="bind-scan-hero-hint">识别设备或包装上的二维码，自动填入编码</text>
+      </view>
+      <view class="bind-or"><text>手动填写</text></view>
+      <view class="bind-fields">
+        <view class="bind-field-row">
+          <text class="bind-field-key">设备编码</text>
+          <input
+            class="bind-field-inp"
+            placeholder="如 EV20240001"
+            placeholder-style="color:#94a3b8"
+            value="{{bindCode}}"
+            bindinput="onBindCode"
+          />
+        </view>
+        <view class="bind-field-line"></view>
+        <view class="bind-field-row">
+          <text class="bind-field-key">车牌号</text>
+          <input
+            class="bind-field-inp"
+            placeholder="如 京A12345"
+            placeholder-style="color:#94a3b8"
+            value="{{bindPlate}}"
+            bindinput="onBindPlate"
+          />
+        </view>
+        <view class="bind-field-line"></view>
+        <view class="bind-field-row">
+          <text class="bind-field-key">终端号</text>
+          <input
+            class="bind-field-inp"
+            placeholder="与设备 808 头一致的 11 位手机号（联平台时填）"
+            placeholder-style="color:#94a3b8"
+            type="number"
+            maxlength="11"
+            value="{{bindTerminalPhone}}"
+            bindinput="onBindTerminalPhone"
+          />
+        </view>
+      </view>
+      <button class="bind-submit" bindtap="onBindConfirm">确认绑定</button>
+      <text class="bind-foot-tip">绑定后可继续添加多辆车：请打开「车辆管理」</text>
+    </view>
+  </block>
+
+  <block wx:else>
+    <block wx:for="{{dashboardBlocks}}" wx:for-item="blk" wx:key="id">
+      <view wx:if="{{blk.type == 'welcome_tip'}}" class="home-tip-banner">
+        <text class="home-tip-text">{{welcomeTipText}}</text>
+      </view>
+
+      <view wx:elif="{{blk.type == 'carousel'}}" class="decor-section">
+        <swiper
+          class="decor-carousel"
+          indicator-dots="{{true}}"
+          autoplay="{{true}}"
+          circular="{{blk.items.length > 1}}"
+          interval="4000"
+          duration="400"
+        >
+          <swiper-item
+            wx:for="{{blk.items}}"
+            wx:for-item="slide"
+            wx:key="id"
+            bindtap="onDecorTap"
+            data-link="{{slide.link}}"
+          >
+            <image class="decor-slide-img" src="{{slide.imageUrl}}" mode="aspectFill" />
+          </swiper-item>
+        </swiper>
+      </view>
+
+      <view wx:elif="{{blk.type == 'ad'}}" class="decor-section decor-ad-section">
+        <view class="decor-ad-card" bindtap="onDecorTap" data-link="{{blk.link}}">
+          <image wx:if="{{blk.imageUrl}}" class="decor-ad-img" src="{{blk.imageUrl}}" mode="aspectFill" />
+          <view class="decor-ad-body">
+            <text class="decor-ad-line">{{blk.title || '广告位'}}</text>
+            <text wx:if="{{blk.variant}}" class="decor-ad-sub">{{blk.variant == 'banner' ? '横幅' : '卡片'}} · 点此跳转</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:elif="{{blk.type == 'hero'}}" class="hero card">
+        <view class="hero-head">
+          <text class="hero-plate">当前车辆 · {{bindPlate}}</text>
+          <view class="tb-actions">
+            <view class="tb-btn" bindtap="goVehicleManage">车辆管理</view>
+          </view>
+        </view>
+
+        <view wx:if="{{bound && !rideAllowed}}" class="ride-block card">
+          <text class="ride-block-t">暂无用车权限</text>
+          <text class="ride-block-s">请联系车主在「我的 → 授权管理」中添加您的手机号，或重新接受邀请链接。演示版撤销授权在本机立即生效。</text>
+        </view>
+
+        <view class="lock-banner {{locked ? 'locked' : 'open'}}">
+          <view class="lb-row">
+            <text class="lb-main">{{locked ? '已关锁' : '已开锁'}}</text>
+            <view class="device-pill {{deviceOnline ? 'device-on' : 'device-off'}}">
+              <text class="device-dot">{{deviceOnline ? '●' : '○'}}</text>
+              <text class="device-txt">{{deviceOnline ? '设备在线' : '设备离线'}}</text>
+            </view>
+          </view>
+          <text class="lb-sub">上次操作 {{lastUpdate || '—'}}</text>
+          <text class="lb-device-hint">{{deviceOnline ? '定位终端在线 · 对接网关后将按 808 心跳实时更新' : '定位终端离线 · 请检查供电、天线与 4G 网络'}}</text>
+        </view>
+        <view class="remote" wx:if="{{homeShowRemote}}">
+          <button
+            class="rbtn {{locked ? 'rbtn-idle' : 'rbtn-active'}} {{bound && !rideAllowed ? 'rbtn-dis' : ''}}"
+            disabled="{{bound && !rideAllowed}}"
+            bindtap="onUnlock"
+          >解锁</button>
+          <button
+            class="rbtn {{locked ? 'rbtn-active' : 'rbtn-idle'}} {{bound && !rideAllowed ? 'rbtn-dis' : ''}}"
+            disabled="{{bound && !rideAllowed}}"
+            bindtap="onLock"
+          >上锁</button>
+        </view>
+      </view>
+
+      <view wx:elif="{{blk.type == 'vehicle_status'}}" class="vstatus card">
+        <text class="vstatus-title">车辆状态</text>
+
+        <view class="vstatus-map-box" bindtap="goLocation">
+          <view class="vstatus-map-clip">
+            <map
+              class="vstatus-map"
+              latitude="{{previewLat}}"
+              longitude="{{previewLng}}"
+              scale="{{previewScale}}"
+              markers="{{previewMarkers}}"
+              circles="{{previewCircles}}"
+              polygons="{{previewPolygons}}"
+              enable-zoom="{{false}}"
+              enable-scroll="{{false}}"
+              enable-rotate="{{false}}"
+              show-compass="{{false}}"
+              bindtap="goLocation"
+            />
+          </view>
+          <text class="vstatus-map-cap">地图含围栏范围 · 点此查看详情</text>
+        </view>
+
+        <view class="vstatus-list">
+          <view class="vstatus-item" bindtap="goLocation">
+            <text class="vstatus-item-k">实时位置</text>
+            <view class="vstatus-item-mid">
+              <text class="vstatus-item-t">{{address || '暂无地址'}}</text>
+              <text class="vstatus-item-s">{{coordText}}</text>
+            </view>
+            <text class="vstatus-item-arr">›</text>
+          </view>
+          <view class="vstatus-item" bindtap="goFenceEdit">
+            <text class="vstatus-item-k">电子围栏</text>
+            <view class="vstatus-item-mid">
+              <text class="vstatus-item-t">{{fenceLine1}}</text>
+              <text class="vstatus-item-s">{{fenceLine2}}</text>
+            </view>
+            <text class="vstatus-item-tag">{{fenceBadge}}</text>
+            <text class="vstatus-item-arr">›</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </block>
+</scroll-view>
+
+<main-tabbar wx:if="{{loggedIn}}" active="{{0}}" />

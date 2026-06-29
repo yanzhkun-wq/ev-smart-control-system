@@ -1,0 +1,63 @@
+<view class="vip-root">
+  <block wx:if="{{needLogin}}">
+    <view class="vip-card login-card">
+      <text class="login-t">请先登录后查看 VIP 权益</text>
+      <button class="login-btn" bindtap="goHome">去首页登录</button>
+    </view>
+  </block>
+
+  <block wx:elif="{{loadErr}}">
+    <view class="vip-card err-card">
+      <text class="err-t">页面加载异常</text>
+      <text class="err-s">{{loadErr}}</text>
+      <button class="login-btn" bindtap="goHome">返回首页</button>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="vip-card status-card">
+      <text class="status-k">会员状态</text>
+      <text class="status-title">{{statusTitle}}</text>
+      <text class="status-sub">{{statusSub}}</text>
+    </view>
+
+    <text class="sec-label">包含权益</text>
+
+    <view class="vip-card benefit" bindtap="goFence">
+      <view class="benefit-ico benefit-ico-teal"><text class="benefit-char">围</text></view>
+      <view class="benefit-body">
+        <text class="benefit-name">电子围栏</text>
+        <text class="benefit-desc">设置车辆活动区域，驶出或驶入可告警提醒（演示）。</text>
+      </view>
+      <text class="benefit-arr">›</text>
+    </view>
+
+    <view class="vip-card benefit" bindtap="goAuth">
+      <view class="benefit-ico benefit-ico-sky"><text class="benefit-char">权</text></view>
+      <view class="benefit-body">
+        <text class="benefit-name">授权管理 · 多账号用车</text>
+        <text class="benefit-desc">主账号授权亲友手机号用车；支持多名用车人协同（演示）。</text>
+      </view>
+      <text class="benefit-arr">›</text>
+    </view>
+
+    <view class="vip-card cta pay-cta" wx:if="{{!isSuper}}">
+      <text class="cta-title">付费开通 / 续费</text>
+      <text class="cta-desc">¥{{payPriceStr}} / 年，支付后立即生效；可与邀请达标权益叠加。</text>
+      <text class="cta-more">演示版点击确认即视为支付成功；正式环境需接入微信支付回调后再写入会员。</text>
+      <button class="cta-btn cta-btn-pay" bindtap="onPayYear">{{gateOk ? '续费一年' : '立即支付'}} ¥{{payPriceStr}} / 年</button>
+    </view>
+
+    <view class="vip-card cta" wx:if="{{!gateOk}}">
+      <text class="cta-title">邀请好友开通</text>
+      <text class="cta-desc">{{inviteHint}}</text>
+      <text class="cta-more">邀请好友达标后，系统自动延长 VIP 有效期（演示数据仅存本机）。</text>
+      <button class="cta-btn" bindtap="goInvite">邀请好友 · 查看进度</button>
+    </view>
+
+    <view class="vip-card cta cta-soft" wx:if="{{gateOk}}">
+      <text class="cta-soft-t">邀请更多好友，可升级更长 VIP 权益。</text>
+      <button class="cta-btn cta-btn-outline" bindtap="goInvite">邀请好友</button>
+    </view>
+  </block>
+</view>

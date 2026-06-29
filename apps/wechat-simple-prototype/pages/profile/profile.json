@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "main-tabbar": "/components/main-tabbar/main-tabbar"
+  },
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

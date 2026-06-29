@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+*.tsbuildinfo
+
+# Logs / env
+logs/
+*.log
+.env
+.env.*.local
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Device gateway: product images uploaded from admin mall page
+services/device-gateway/data/mall-uploads/
+

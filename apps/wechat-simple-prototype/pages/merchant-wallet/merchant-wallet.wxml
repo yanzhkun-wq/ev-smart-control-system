@@ -1,0 +1,101 @@
+<view class="gate" wx:if="{{!ok}}">
+  <view class="gate-inner">
+    <block wx:if="{{loadError}}">
+      <text class="gate-t">资金中心</text>
+      <text class="gate-s">{{loadError}}</text>
+      <button class="gate-btn" bindtap="retryRefresh">重试</button>
+      <button class="gate-btn ghost" bindtap="toMerchantHome">返回商家工作台</button>
+    </block>
+    <block wx:else>
+      <text class="gate-t">加载中…</text>
+    </block>
+  </view>
+</view>
+
+<scroll-view scroll-y class="page" wx:if="{{ok}}">
+  <view class="hero">
+    <text class="hero-k">可提现余额（元）</text>
+    <text class="hero-v">¥{{wallet.availableYuan}}</text>
+    <text class="hero-meta">{{shopLine || phone}}</text>
+  </view>
+
+  <view class="panel bind-panel" bindtap="openPayoutBind">
+    <view class="bind-row">
+      <text class="ph">收款账户</text>
+      <text class="bind-go">{{payoutBound ? '修改 ›' : '去设置 ›'}}</text>
+    </view>
+    <block wx:if="{{payoutBound}}">
+      <text class="bind-title">{{bindTitle}}</text>
+      <text class="bind-sub">{{bindSubtitle}}</text>
+    </block>
+    <block wx:else>
+      <text class="bind-muted">尚未绑定，与合作商共用收款资料填写流程（微信零钱 / 支付宝 / 银行卡）</text>
+    </block>
+  </view>
+
+  <view class="panel">
+    <view class="stat-line">
+      <text class="sk">累计补贴（已完成结算）</text>
+      <text class="sv">¥{{wallet.accruedLifetimeYuan}}</text>
+    </view>
+    <view class="stat-line">
+      <text class="sk">已打款</text>
+      <text class="sv">¥{{wallet.withdrawnPaidYuan}}</text>
+    </view>
+    <view class="stat-line">
+      <text class="sk">处理中申请</text>
+      <text class="sv">¥{{wallet.pendingOutYuan}}</text>
+    </view>
+    <text class="hint">「累计补贴」=下方入账明细中含金额的合计（上门单）；提现扣减已申请处理中与已打款。</text>
+  </view>
+
+  <view class="panel ledger-panel">
+    <text class="ph">补贴入账明细</text>
+    <text class="ps">在网点工作台确认补贴结算（演示）后记入本条；到店改装可申请定额补贴，本店邀约客户不产生平台补贴。</text>
+    <block wx:if="{{incomeLedger.length}}">
+      <view class="inc {{item.creditsWallet ? '' : 'inc-muted'}}" wx:for="{{incomeLedger}}" wx:key="id">
+        <view class="inc-top">
+          <text class="inc-plate">{{item.plate}}</text>
+          <text class="inc-amt {{item.creditsWallet ? 'inc-plus' : ''}}">{{item.creditsWallet ? '+' : ''}}¥{{item.subsidyYuanStr}}</text>
+        </view>
+        <text class="inc-sub">{{item.kindLabel}} · 用户 {{item.userPhoneMask}}</text>
+        <text class="inc-detail">{{item.detailLine}}</text>
+        <text class="inc-time">结算 {{item.settledAt}}</text>
+      </view>
+    </block>
+    <text class="empty" wx:else>暂无入账。请先在网点工作台对符合条件的记录确认补贴结算（演示）。</text>
+  </view>
+
+  <view class="panel">
+    <text class="ph">申请提现</text>
+    <text class="ps">单笔最低 ¥{{minWithdraw}}，请先完成收款账户设置。</text>
+    <block wx:if="{{payoutBound}}">
+      <view class="row-input">
+        <input class="inp" type="digit" placeholder="输入金额" value="{{amountInput}}" bindinput="onAmountInput" />
+        <view class="btn-ghost" bindtap="fillAll">全部</view>
+      </view>
+      <button class="btn-pri" bindtap="submitWithdraw">提交申请</button>
+    </block>
+    <button wx:else class="btn-pri" bindtap="openPayoutBind">去绑定收款账户</button>
+  </view>
+
+  <view class="panel">
+    <text class="ph">提现记录</text>
+    <block wx:if="{{myList.length}}">
+      <view class="wd wd-done" wx:for="{{myList}}" wx:key="id">
+        <view class="wd-top">
+          <text class="wd-amt">¥{{item.amountYuanStr}}</text>
+          <text class="wd-pill paid" wx:if="{{item.status === 'paid'}}">已打款</text>
+          <text class="wd-pill pend" wx:elif="{{item.status === 'pending'}}">处理中</text>
+          <text class="wd-pill rej" wx:else>已驳回</text>
+        </view>
+        <text class="wd-payto" wx:if="{{item.payoutSummary}}">收款：{{item.payoutSummary}}</text>
+        <text class="wd-time">{{item.createdAt}}</text>
+        <text class="wd-note" wx:if="{{item.status === 'rejected' && item.note}}">原因：{{item.note}}</text>
+      </view>
+    </block>
+    <text class="empty" wx:else>暂无记录</text>
+  </view>
+
+  <view class="foot-spacer"></view>
+</scroll-view>

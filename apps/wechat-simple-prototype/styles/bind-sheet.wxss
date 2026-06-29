@@ -1,0 +1,189 @@
+/* 绑定车辆：居中扫码 + 表单（add-bind / 首页未绑定态共用） */
+
+.bind-page {
+  min-height: 100vh;
+  padding: 28rpx 24rpx 48rpx;
+  box-sizing: border-box;
+  background: linear-gradient(165deg, #b8c5d9 0%, #c8d4e4 38%, #d5deeb 100%);
+}
+
+.bind-lead {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.5;
+  margin: 8rpx 16rpx 32rpx;
+  display: block;
+}
+
+.bind-sheet {
+  padding-bottom: 8rpx;
+}
+
+/* 居中扫码主入口 */
+.bind-scan-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 28rpx 36rpx;
+}
+
+.bind-scan-orbit {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #312e81 0%, #4338ca 38%, #4f46e5 100%);
+  box-shadow:
+    0 16rpx 40rpx rgba(49, 46, 129, 0.45),
+    0 2rpx 0 rgba(255, 255, 255, 0.18) inset;
+  border: 5rpx solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28rpx;
+}
+
+.bind-scan-frame {
+  width: 48rpx;
+  height: 48rpx;
+  position: relative;
+}
+
+.bind-scan-orbit .bind-scan-corn {
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+.bind-scan-corn {
+  position: absolute;
+  width: 14rpx;
+  height: 14rpx;
+  border-style: solid;
+  border-width: 0;
+  box-sizing: border-box;
+}
+
+.bind-scan-corn.tl {
+  top: 0;
+  left: 0;
+  border-top-width: 4rpx;
+  border-left-width: 4rpx;
+  border-radius: 3rpx 0 0 0;
+}
+
+.bind-scan-corn.tr {
+  top: 0;
+  right: 0;
+  border-top-width: 4rpx;
+  border-right-width: 4rpx;
+  border-radius: 0 3rpx 0 0;
+}
+
+.bind-scan-corn.bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 4rpx;
+  border-left-width: 4rpx;
+  border-radius: 0 0 0 3rpx;
+}
+
+.bind-scan-corn.br {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 4rpx;
+  border-right-width: 4rpx;
+  border-radius: 0 0 3rpx 0;
+}
+
+.bind-scan-hero-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+.bind-scan-hero-hint {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  color: #475569;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 20rpx;
+}
+
+.bind-or {
+  padding: 8rpx 28rpx 22rpx;
+}
+
+.bind-or text {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.12em;
+}
+
+.bind-fields {
+  margin: 0 22rpx 32rpx;
+  background: #fff;
+  border-radius: 18rpx;
+  border: 1rpx solid #cbd5e1;
+  box-shadow: 0 4rpx 20rpx rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.bind-field-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 28rpx 22rpx;
+  gap: 20rpx;
+}
+
+.bind-field-line {
+  height: 1rpx;
+  background: #e2e8f0;
+  margin: 0 22rpx;
+}
+
+.bind-field-key {
+  flex-shrink: 0;
+  width: 140rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #334155;
+}
+
+.bind-field-inp {
+  flex: 1;
+  min-width: 0;
+  font-size: 28rpx;
+  color: #0f172a;
+  font-weight: 500;
+  height: 44rpx;
+  line-height: 44rpx;
+}
+
+.bind-submit {
+  margin: 0 26rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  border-radius: 18rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  background: linear-gradient(145deg, #3730a3 0%, #4f46e5 55%, #6366f1 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 14rpx 36rpx rgba(55, 48, 163, 0.35);
+}
+
+.bind-foot-tip {
+  margin: 28rpx 26rpx 12rpx;
+  font-size: 22rpx;
+  color: #64748b;
+  line-height: 1.55;
+  display: block;
+  text-align: center;
+}
+
+button::after {
+  border: none;
+}

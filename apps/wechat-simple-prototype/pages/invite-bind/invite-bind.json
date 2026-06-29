@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "用车邀请",
+  "behaviors": [
+    "../../behaviors/remote-page-ui"
+  ]
+}

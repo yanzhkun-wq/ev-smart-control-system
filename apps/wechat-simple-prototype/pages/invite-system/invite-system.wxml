@@ -1,0 +1,26 @@
+<view class="page">
+  <block wx:if="{{err && !inviterPhone}}">
+    <view class="card bad"><text class="bad-t">{{err}}</text></view>
+  </block>
+
+  <block wx:else>
+    <view class="card">
+      <text class="t">您由用户邀请使用本系统</text>
+      <text class="s">确认后，您的手机号与车牌将与上级永久绑定（演示存本机；正式环境以平台为准）。</text>
+      <view class="row">
+        <text class="lab">邀请人</text>
+        <text class="val">{{inviterMasked}}</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <text class="lab">您的手机号</text>
+      <input class="inp" type="number" maxlength="11" placeholder="11 位手机号" value="{{myPhone}}" bindinput="onPhone" />
+      <text class="lab lab-mt">绑定车牌</text>
+      <input class="inp" placeholder="如 京A12345" value="{{plate}}" bindinput="onPlate" />
+      <text class="warn" wx:if="{{hint}}">{{hint}}</text>
+      <text class="err" wx:if="{{err}}">{{err}}</text>
+      <button class="btn" bindtap="onSubmit" disabled="{{!!hint}}">确认绑定</button>
+    </view>
+  </block>
+</view>

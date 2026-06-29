@@ -1,0 +1,71 @@
+.page {
+  min-height: 100vh;
+  padding: 24rpx;
+  box-sizing: border-box;
+  padding-bottom: 48rpx;
+}
+
+.hint {
+  font-size: 24rpx;
+  color: #6b7280;
+  line-height: 1.5;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 28rpx rgba(15, 23, 42, 0.06);
+}
+
+.item {
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  border: 2rpx solid transparent;
+}
+
+.item.on {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.plate {
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.tag {
+  font-size: 22rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  background: #6366f1;
+  color: #fff;
+}
+
+.meta {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+  display: block;
+}
+
+.add {
+  margin-top: 24rpx;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 999rpx;
+  font-weight: 600;
+  background: linear-gradient(135deg, #7c6cf7 0%, #6366f1 100%);
+  color: #fff;
+}
+
+button::after {
+  border: none;
+}

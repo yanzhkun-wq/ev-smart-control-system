@@ -1,0 +1,83 @@
+<scroll-view scroll-y class="page safe-bottom">
+  <block wx:if="{{!isMain}}">
+    <view class="card rider-card">
+      <text class="rider-t">授权用车人</text>
+      <text class="rider-one">车主 {{riderMainMasked}} · 本机 {{riderPhone}}</text>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="card vip-lock-card" wx:if="{{!vipOk}}">
+      <text class="vip-lock-t">授权管理</text>
+      <text class="vip-lock-s">需 VIP：电子围栏与多账号授权。请先查看权益与开通方式。</text>
+      <button class="vip-lock-btn" bindtap="goVipCenter">查看 VIP 权益</button>
+    </view>
+
+    <block wx:else>
+      <view class="intro card">
+        <text class="intro-t">授权管理</text>
+        <view class="owner-chip-row">
+          <text class="owner-chip-lab">本机车主手机号</text>
+          <text class="owner-chip-val">{{mainMasked}}</text>
+        </view>
+        <view class="link-account" bindtap="goAccount">
+          <text class="link-account-t">修改手机号 · 账号设置</text>
+          <text class="link-account-arr">›</text>
+        </view>
+      </view>
+
+      <view class="card add-card">
+        <text class="block-t">添加用车人</text>
+        <input
+          class="add-inp"
+          placeholder="用车人姓名"
+          value="{{addName}}"
+          maxlength="20"
+          bindinput="onAddNameInput"
+        />
+        <input
+          class="add-inp add-inp-mt"
+          type="number"
+          maxlength="11"
+          placeholder="手机号"
+          value="{{addPhone}}"
+          bindinput="onAddInput"
+        />
+        <button class="add-btn" bindtap="onAddRider">添加授权</button>
+      </view>
+
+      <view class="card share-compact" wx:if="{{invitePath}}">
+        <text class="block-t">分享邀请</text>
+        <view class="share-row">
+          <image class="share-qr" src="{{qrSrc}}" mode="aspectFit" show-menu-by-longpress />
+          <view class="share-side">
+            <button class="share-btn-sm" open-type="share">微信分享</button>
+            <view class="copy-inline" bindtap="onCopyPath">
+              <text class="copy-inline-t">复制链接</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="card">
+        <text class="block-t">已授权</text>
+        <view class="empty-list" wx:if="{{!list.length}}">暂无</view>
+        <block wx:for="{{list}}" wx:key="phone">
+          <view class="row">
+            <view class="row-mid">
+              <text class="row-name">{{item.riderName || '未备注'}}</text>
+              <text class="row-phone">{{item.phone}}</text>
+              <text class="row-meta">{{item.createdAt}} · {{item.source === 'invite' ? '邀请' : '手动'}}</text>
+            </view>
+            <view
+              class="row-del"
+              data-phone="{{item.phone}}"
+              data-label="{{item.riderName || item.phone}}"
+              bindtap="onRemove"
+            >删除</view>
+          </view>
+        </block>
+      </view>
+    </block>
+  </block>
+</scroll-view>
