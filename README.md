@@ -10,13 +10,17 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
   <a href="#"><img src="https://img.shields.io/badge/protocol-JT%2FT808-green.svg" alt="JT/T808"></a>
   <a href="#"><img src="https://img.shields.io/badge/status-active-success.svg" alt="Status: Active"></a>
+  <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/issues"><img src="https://img.shields.io/badge/issues-welcome-orange" alt="Issues Welcome"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/CHANGELOG-active-brightgreen" alt="CHANGELOG"></a>
+  <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/stargazers"><img src="https://img.shields.io/github/stars/yanzhkun-wq/ev-smart-control-system?style=flat" alt="GitHub Stars"></a>
+  <img src="https://img.shields.io/github/languages/code-size/yanzhkun-wq/ev-smart-control-system" alt="Code Size">
 </p>
 
 ---
 
 ## 🌍 项目使命
 
-在中国，每年有数十万辆电动车被盗，而市面上的定位防盗方案几乎全是商业闭源产品——价格高昂、数据不透明、用户被锁定在特定品牌。
+在中国，每年有数十万辆电动车被盗，电池被盗更是高频事件。而市面上的定位防盗方案几乎全是商业闭源产品——价格高昂、数据不透明、用户被锁定在特定品牌。
 
 **EV Smart Control System** 旨在改变这一现状。我们提供一个**完全开源、自由使用**的电动车智能安全平台，让任何开发者、社区、甚至个人都能为自己的电动车搭建安全防护系统。
 
@@ -41,6 +45,15 @@
 - ⚠️ **异常告警** — 超速、震动、主电断开、非法拆除等实时通知
 - 👥 **车队管理** — 支持多设备、多用户灵活绑定
 
+## 🛠️ 技术栈
+
+| 层 | 技术 |
+|------|--------|
+| **协议网关** | Node.js + TypeScript，JT/T808 TCP 长连接 |
+| **管理后台** | React + Ant Design + Leaflet |
+| **移动端** | 微信小程序（可扩展 uni-app）|
+| **部署** | Docker Compose |
+
 ## 📁 项目结构
 
 ```
@@ -55,6 +68,9 @@
 │   ├── hardware-capabilities.md    # 硬件能力说明
 │   └── protocol/                   # 厂家协议文档与样例报文
 ├── docker-compose.yml              # 一键部署配置
+├── CHANGELOG.md                    # 更新日志
+├── ROADMAP.md                      # 项目路线图
+├── CONTRIBUTING.md                 # 贡献指南
 └── LICENSE                         # MIT 开源许可证
 ```
 
@@ -86,6 +102,17 @@ npm run dev
 docker-compose up -d
 # 网关 :7611 | 管理端 :80
 ```
+
+## 📚 了解更多
+
+| 文档 | 说明 |
+|------|------|
+| [CHANGELOG.md](CHANGELOG.md) | 版本更新记录 |
+| [ROADMAP.md](ROADMAP.md) | 项目开发路线图 |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 参与贡献指南 |
+| [docs/全量功能规格.md](docs/全量功能规格.md) | 完整功能清单与协议对照 |
+| [docs/hardware-capabilities.md](docs/hardware-capabilities.md) | 兼容硬件能力说明 |
+| [Issues](https://github.com/yanzhkun-wq/ev-smart-control-system/issues) | 问题追踪与讨论 |
 
 ## 🤝 参与贡献
 
