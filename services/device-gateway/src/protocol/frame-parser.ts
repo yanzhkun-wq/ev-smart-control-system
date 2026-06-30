@@ -1,3 +1,11 @@
+/**
+ * JT/T 808 帧解析器
+ * 处理 TCP 收到的完整报文（已拆帧、已转义还原），
+ * 解析消息头、消息体，并校验校验码。
+ *
+ * 协议参考：WZ 标准版 808 协议 V2.8
+ */
+
 export type Parsed808Header = {
   messageId: number;
   bodyLength: number;

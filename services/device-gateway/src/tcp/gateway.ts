@@ -1,3 +1,16 @@
+/**
+ * JT/T 808 TCP 网关服务器
+ *
+ * 职责：
+ * 1. 监听 TCP 端口，接收终端设备的 808 长连接
+ * 2. 按 0x7e 帧定界符拆帧
+ * 3. 对每帧做转义还原（0x7d 0x01/02）
+ * 4. 调用 parseFrame 解析消息头/体
+ * 5. 交由 Jt808App 处理业务逻辑与应答
+ *
+ * 每个 socket 独立维护接收缓冲区，支持粘包/半包处理。
+ */
+
 import net from "node:net";
 import { unescape808 } from "../protocol/escape.js";
 import { parseFrame } from "../protocol/frame-parser.js";
