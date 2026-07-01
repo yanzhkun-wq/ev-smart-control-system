@@ -18,6 +18,7 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 
-# Device gateway: product images uploaded from admin mall page
+# Device gateway: hardware device images
+services/device-gateway/data/hardware-uploads/
 services/device-gateway/data/mall-uploads/
 
