@@ -1,0 +1,40 @@
+<view class="page">
+
+  <view class="mall-hero">
+    <view class="mall-brand">
+      <text class="mall-brand-t">兼容硬件参考</text>
+      <text class="mall-brand-s">本软件免费开源 · 硬件需自行选购</text>
+    </view>
+  </view>
+
+  <view class="hardware-tip">
+    <text class="hardware-tip-t">💡 说明</text>
+    <text class="hardware-tip-d">以下为经过测试的兼容设备参考信息。本平台不销售任何硬件，请自行在电商平台选购。</text>
+  </view>
+
+  <block wx:for="{{hardwareList}}" wx:key="id">
+    <view class="feed-card">
+      <view class="feed-cover-wrap" bindtap="goDetail" data-id="{{item.id}}">
+        <image wx:if="{{item.mainImage}}" class="feed-cover" src="{{item.mainImage}}" mode="aspectFill" />
+        <view wx:else class="feed-cover feed-ph {{item.thumbClass}}">
+          <text class="feed-ph-t">兼容</text>
+          <text class="feed-ph-s">示意图 · 以实物为准</text>
+        </view>
+      </view>
+      <view class="feed-body">
+        <view class="feed-tags" wx:if="{{item.tags && item.tags.length}}">
+          <text class="feed-tag" wx:for="{{item.tags}}" wx:for-item="tg" wx:key="*this">{{tg}}</text>
+        </view>
+        <text class="feed-title" bindtap="goDetail" data-id="{{item.id}}">{{item.name}}</text>
+        <text class="feed-sub" bindtap="goDetail" data-id="{{item.id}}">{{item.subtitle}}</text>
+        <text class="feed-desc">{{item.desc}}</text>
+        <view class="feed-foot">
+          <view class="feed-btns">
+            <view class="feed-btn primary" catchtap="goDetail" data-id="{{item.id}}">查看详情</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+</view>
