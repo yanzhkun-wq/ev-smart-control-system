@@ -12,6 +12,7 @@
   <a href="#"><img src="https://img.shields.io/badge/status-active-success.svg" alt="Status: Active"></a>
   <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/issues"><img src="https://img.shields.io/badge/issues-welcome-orange" alt="Issues Welcome"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/CHANGELOG-active-brightgreen" alt="CHANGELOG"></a>
+  <a href="CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg" alt="Code of Conduct"></a>
   <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/stargazers"><img src="https://img.shields.io/github/stars/yanzhkun-wq/ev-smart-control-system?style=flat" alt="GitHub Stars"></a>
   <img src="https://img.shields.io/github/languages/code-size/yanzhkun-wq/ev-smart-control-system" alt="Code Size">
   <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/actions"><img src="https://img.shields.io/github/actions/workflow/status/yanzhkun-wq/ev-smart-control-system/ci.yml?branch=master&label=CI" alt="CI"></a>
