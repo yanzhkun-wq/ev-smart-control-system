@@ -14,6 +14,8 @@
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/CHANGELOG-active-brightgreen" alt="CHANGELOG"></a>
   <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/stargazers"><img src="https://img.shields.io/github/stars/yanzhkun-wq/ev-smart-control-system?style=flat" alt="GitHub Stars"></a>
   <img src="https://img.shields.io/github/languages/code-size/yanzhkun-wq/ev-smart-control-system" alt="Code Size">
+  <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/actions"><img src="https://img.shields.io/github/actions/workflow/status/yanzhkun-wq/ev-smart-control-system/ci.yml?branch=master&label=CI" alt="CI"></a>
+  <img src="https://img.shields.io/badge/tests-79%20passing-brightgreen" alt="Tests: 79 passing"></a>
 </p>
 
 ---

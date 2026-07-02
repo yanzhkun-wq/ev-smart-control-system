@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: services/device-gateway
+          working-directory: services/device-gateway
 
     steps:
       - uses: actions/checkout@v4
@@ -26,9 +26,15 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: services/device-gateway
+
+      - name: Run unit tests
+        run: npm test
+        working-directory: services/device-gateway
 
       - name: Type check & build
         run: npm run build
+        working-directory: services/device-gateway
 
   admin-web:
     name: Admin Web (React / Vite)
