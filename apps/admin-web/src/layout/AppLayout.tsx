@@ -1,14 +1,9 @@
 import {
-  AppstoreOutlined,
   CloudOutlined,
   DashboardOutlined,
-  IdcardOutlined,
-  LineChartOutlined,
   MobileOutlined,
   SecurityScanOutlined,
   SettingOutlined,
-  ShopOutlined,
-  TeamOutlined,
 } from "@ant-design/icons";
 import { Badge, Button, Layout, Menu, Space, Typography, theme } from "antd";
 import type { MenuProps } from "antd";
@@ -16,18 +11,12 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { useAdminGateway } from "../context/AdminGatewayContext";
 import { FALLBACK_SIDEBAR_MENU, mergeSidebarMenuWithTemplate } from "../constants/sidebarDefaults";
-import { readOperationsDraft } from "../constants/operationsDefaults";
 
 const { Header, Sider, Content } = Layout;
 
 const MENU_ICONS: Record<string, React.ReactNode> = {
   "/": <DashboardOutlined />,
   "/vehicle-risk": <SecurityScanOutlined />,
-  "/mall-manage": <AppstoreOutlined />,
-  "/portal-permissions": <IdcardOutlined />,
-  "/miniapp-ecology": <TeamOutlined />,
-  "/operations": <ShopOutlined />,
-  "/partner-channel": <LineChartOutlined />,
   "/miniapp-pages": <MobileOutlined />,
   "/settings": <SettingOutlined />,
 };

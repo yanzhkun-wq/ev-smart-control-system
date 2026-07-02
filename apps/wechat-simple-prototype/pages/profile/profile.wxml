@@ -26,12 +26,6 @@
 
       </view>
 
-
-      <view class="invite-strip" wx:if="{{bindLine}}">
-        <view class="invite-strip-dot"></view>
-        <text class="invite-strip-t">{{bindLine}}</text>
-      </view>
-
       <view class="login-banner" wx:if="{{!isLoggedIn}}" bindtap="goLogin">
         <text class="login-banner-t">登录后可管理车辆、查看告警与轨迹</text>
         <text class="login-banner-a">去首页登录 ›</text>

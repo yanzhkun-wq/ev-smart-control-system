@@ -2,7 +2,6 @@ const { buildDefaultAlarms } = require("./utils/alarms-seed.js");
 const remoteUi = require("./utils/remote-ui-config.js");
 const auth = require("./utils/auth-store.js");
 const org = require("./utils/org-store.js");
-const partnerStore = require("./utils/partner-store.js");
 
 /** 多车演示：车辆列表存本地缓存 ev_vehicles，当前车 ev_current_vid */
 App({

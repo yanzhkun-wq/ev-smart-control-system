@@ -3,8 +3,6 @@
     "pages/home/home",
     "pages/hardware/hardware",
     "pages/hardware-detail/hardware-detail",
-    "pages/hardware-product-edit/hardware-product-edit",
-    "pages/hardware-product-form/hardware-product-form",
     "pages/vehicle-manage/vehicle-manage",
     "pages/add-bind/add-bind",
     "pages/location/location",
@@ -16,8 +14,6 @@
     "pages/fence-setting/fence-setting",
     "pages/tracks/tracks",
     "pages/auth/auth",
-    "pages/mgmt-portal/mgmt-portal",
-    "pages/super-binding/super-binding",
     "pages/account/account",
     "pages/notify/notify"
   ],

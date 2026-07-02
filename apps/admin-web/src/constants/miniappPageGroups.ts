@@ -16,8 +16,6 @@ export const MINIAPP_ROUTE_GROUP: Record<string, MiniappGroupId> = {
   "pages/profile/profile": "home",
   "pages/hardware/hardware": "hardware",
   "pages/hardware-detail/hardware-detail": "hardware",
-  "pages/hardware-product-edit/hardware-product-edit": "hardware",
-  "pages/hardware-product-form/hardware-product-form": "hardware",
   "pages/vehicle-manage/vehicle-manage": "vehicle",
   "pages/add-bind/add-bind": "vehicle",
   "pages/location/location": "vehicle",
