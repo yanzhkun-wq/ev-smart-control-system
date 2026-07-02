@@ -4,7 +4,6 @@ import { AppLayout } from "./layout/AppLayout";
 import DashboardPage from "./pages/DashboardPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { MiniappPagesPage } from "./pages/MiniappPagesPage";
-import MallManagePage from "./pages/MallManagePage";
 import { VehicleRiskPage } from "./pages/VehicleRiskPage";
 
 const routeFallback = (
@@ -26,8 +25,6 @@ export default function App() {
           <Route path="geofences" element={<Navigate to="/vehicle-risk?hub=geofences" replace />} />
           <Route path="fleet" element={<Navigate to="/vehicle-risk?hub=fleet" replace />} />
           <Route path="remote" element={<Navigate to="/vehicle-risk?hub=remote" replace />} />
-          <Route path="hardware" element={<MallManagePage />} />
-          <Route path="mall-manage" element={<Navigate to="/hardware" replace />} />
           <Route path="miniapp-pages" element={<MiniappPagesPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>

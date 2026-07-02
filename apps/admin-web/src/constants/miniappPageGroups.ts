@@ -28,8 +28,6 @@ export const MINIAPP_ROUTE_GROUP: Record<string, MiniappGroupId> = {
   "pages/records-lock/records-lock": "vehicle",
   "pages/tracks/tracks": "vehicle",
   "pages/auth/auth": "system",
-  "pages/mgmt-portal/mgmt-portal": "system",
-  "pages/super-binding/super-binding": "system",
   "pages/account/account": "system",
   "pages/notify/notify": "system",
 };

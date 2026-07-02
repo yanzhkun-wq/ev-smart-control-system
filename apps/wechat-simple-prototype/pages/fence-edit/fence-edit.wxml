@@ -4,21 +4,7 @@
 
 <view class="page-root">
 
-  <view wx:if="{{vipBlocked}}" class="vip-gate">
-
-    <text class="vip-gate-t">电子围栏</text>
-
-    <text class="vip-gate-s">该功能需 VIP：电子围栏与多账号授权。可先查看权益说明与开通方式。</text>
-
-    <button class="vip-gate-btn pri" bindtap="goVipCenter">查看 VIP 权益</button>
-
-    <button class="vip-gate-btn ghost" bindtap="goBackFromVipGate">返回</button>
-
-  </view>
-
-
-
-  <scroll-view wx:else scroll-y class="page">
+  <scroll-view scroll-y class="page">
 
     <text class="tip">当前车辆 {{plate}} · {{mapTip}}</text>
 

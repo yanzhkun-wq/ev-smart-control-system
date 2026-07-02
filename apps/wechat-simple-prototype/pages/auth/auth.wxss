@@ -242,34 +242,3 @@
   color: #64748b;
   display: block;
 }
-
-.vip-lock-card {
-  border-left: 6rpx solid #f59e0b;
-  background: linear-gradient(165deg, #fffbeb 0%, #fff 55%);
-}
-
-.vip-lock-t {
-  font-size: 32rpx;
-  font-weight: 800;
-  color: #92400e;
-  display: block;
-}
-
-.vip-lock-s {
-  margin-top: 14rpx;
-  font-size: 26rpx;
-  color: #78350f;
-  line-height: 1.5;
-  display: block;
-}
-
-.vip-lock-btn {
-  margin-top: 28rpx;
-  height: 88rpx;
-  line-height: 88rpx;
-  border-radius: 14rpx;
-  font-weight: 800;
-  font-size: 28rpx;
-  color: #fff;
-  background: linear-gradient(135deg, #ea580c, #f59e0b);
-}

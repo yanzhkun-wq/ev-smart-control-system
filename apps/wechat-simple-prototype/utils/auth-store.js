@@ -167,12 +167,6 @@ function ensureMainSession(profile) {
   return setSessionMain("13800001001", { name: (profile && profile.name) || "张三" });
 }
 
-function buildInvitePath(mainPhone) {
-  const m = normalizePhone(mainPhone);
-  if (!m) return "";
-  return `/pages/invite-bind/invite-bind?mp=${encodeURIComponent(m)}`;
-}
-
 /** 主账号修改绑定手机号时迁移授权名单（演示） */
 function setMainPhone(newPhone) {
   const s = getSession();
@@ -208,6 +202,5 @@ module.exports = {
   isPhoneAuthorized,
   isRideAllowed,
   ensureMainSession,
-  buildInvitePath,
   setMainPhone,
 };

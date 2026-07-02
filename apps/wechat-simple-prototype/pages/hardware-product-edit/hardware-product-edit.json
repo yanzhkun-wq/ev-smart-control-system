@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "商品编辑",
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

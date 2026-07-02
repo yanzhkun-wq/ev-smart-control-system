@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "绑定管理（超管）",
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

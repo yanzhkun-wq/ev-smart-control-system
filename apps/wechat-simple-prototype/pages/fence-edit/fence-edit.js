@@ -1,6 +1,5 @@
 const auth = require("../../utils/auth-store.js");
 const org = require("../../utils/org-store.js");
-const userVipStore = require("../../utils/user-vip-store.js");
 const vehicleStore = require("../../utils/vehicle-store.js");
 
 function getCurrentVehicle() {
@@ -121,11 +120,6 @@ Page({
   onShow() {
     const s = auth.getSession();
     const p = s && s.phone ? org.normalizePhone(s.phone) : "";
-    if (!userVipStore.canUseVipGatedFeatures(p)) {
-      this.setData({ vipBlocked: true });
-      return;
-    }
-    this.setData({ vipBlocked: false });
 
     const v = getCurrentVehicle();
     if (!v) {
@@ -730,17 +724,5 @@ Page({
 
   goFenceSettingLegacy() {
     wx.navigateTo({ url: "/pages/fence-setting/fence-setting" });
-  },
-
-  goVipCenter() {
-    wx.navigateTo({ url: "/pages/vip-center/vip-center" });
-  },
-
-  goBackFromVipGate() {
-    wx.navigateBack({
-      fail: () => {
-        wx.reLaunch({ url: "/pages/profile/profile" });
-      },
-    });
   },
 });

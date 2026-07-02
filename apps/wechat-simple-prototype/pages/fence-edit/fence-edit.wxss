@@ -3,52 +3,6 @@
   box-sizing: border-box;
 }
 
-.vip-gate {
-  min-height: 100vh;
-  padding: 80rpx 40rpx 48rpx;
-  box-sizing: border-box;
-  background: #f8fafc;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.vip-gate-t {
-  font-size: 34rpx;
-  font-weight: 800;
-  color: #0f172a;
-  text-align: center;
-}
-
-.vip-gate-s {
-  margin-top: 20rpx;
-  font-size: 26rpx;
-  color: #475569;
-  line-height: 1.55;
-  text-align: center;
-}
-
-.vip-gate-btn {
-  margin-top: 36rpx;
-  height: 88rpx;
-  line-height: 88rpx;
-  border-radius: 14rpx;
-  font-weight: 800;
-  font-size: 28rpx;
-}
-
-.vip-gate-btn.pri {
-  color: #fff;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-}
-
-.vip-gate-btn.ghost {
-  margin-top: 20rpx;
-  background: #fff;
-  color: #475569;
-  border: 1rpx solid #e2e8f0;
-}
-
 .page {
   min-height: 100vh;
   padding: 20rpx 24rpx 40rpx;

@@ -136,18 +136,12 @@ Page({
     const id = s.phone || "—";
     const name = s.name || (s.phone ? `用户${s.phone.slice(-4)}` : "用户");
     const p = org.normalizePhone(s.phone);
-    const r = p ? org.getRoles(p) : {};
-    const up = p ? org.getUpline(p) : null;
     const bits = [];
     if (s.role === "main") bits.push("主账号");
     else bits.push("授权用户");
     if (org.isSuperAdmin(p)) bits.push("管理员");
 
     let bindLine = "";
-    if (up && up.inviterPhone) {
-      const m = up.inviterPhone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2");
-      bindLine = `关联：${m} · 绑定车牌 ${up.plate || "—"}`;
-    }
 
     this.setData({
       isLoggedIn: true,

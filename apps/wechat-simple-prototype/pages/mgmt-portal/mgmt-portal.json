@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "后台管理",
-  "behaviors": [
-    "../../behaviors/remote-page-ui"
-  ]
-}

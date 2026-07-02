@@ -30,7 +30,7 @@ export async function gatewayFetch<T>(path: string, init?: RequestInit): Promise
   return res.json() as Promise<T>;
 }
 
-/** 本机图片 → Data URL，供 POST /api/upload-image */
+/** 本机图片 → Data URL */
 export function readFileAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const fr = new FileReader();
@@ -38,21 +38,4 @@ export function readFileAsDataUrl(file: File): Promise<string> {
     fr.onerror = () => reject(fr.error ?? new Error("read file failed"));
     fr.readAsDataURL(file);
   });
-}
-
-/** 上传到设备网关 mall-uploads，返回可给小程序、管理端共用的 http 直链 */
-export async function gatewayUploadMallImage(dataUrl: string): Promise<string> {
-  const base = getApiBase();
-  const res = await fetch(`${base}/api/upload-image`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ dataUrl }),
-  });
-  if (!res.ok) {
-    const t = await res.text();
-    throw new Error(t || `${res.status} ${res.statusText}`);
-  }
-  const j = (await res.json()) as { ok?: boolean; url?: string };
-  if (!j?.url) throw new Error("网关未返回 url");
-  return j.url;
 }

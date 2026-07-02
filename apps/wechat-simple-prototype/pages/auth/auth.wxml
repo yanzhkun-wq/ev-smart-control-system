@@ -7,13 +7,6 @@
   </block>
 
   <block wx:else>
-    <view class="card vip-lock-card" wx:if="{{!vipOk}}">
-      <text class="vip-lock-t">授权管理</text>
-      <text class="vip-lock-s">需 VIP：电子围栏与多账号授权。请先查看权益与开通方式。</text>
-      <button class="vip-lock-btn" bindtap="goVipCenter">查看 VIP 权益</button>
-    </view>
-
-    <block wx:else>
       <view class="intro card">
         <text class="intro-t">授权管理</text>
         <view class="owner-chip-row">
@@ -78,6 +71,5 @@
           </view>
         </block>
       </view>
-    </block>
   </block>
 </scroll-view>

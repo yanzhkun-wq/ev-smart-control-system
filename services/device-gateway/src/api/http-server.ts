@@ -3,24 +3,9 @@ import { URL } from "node:url";
 import type { Jt808App } from "../core/jt808-app.js";
 import { ControlCmd } from "../core/jt808-app.js";
 import { jscode2session } from "../core/wechat-mp-client.js";
-import {
-  normalizePhoneDigits,
-  normalizeStoreShape,
-  defaultAdminSeed,
-  defaultMallCatalogSeed,
-  defaultMiniappEcologySeed,
-  defaultMiniappPages,
-  defaultPortalPermissionsSeed,
-  type AdminMerchantApplyRow,
-  type StoreShape,
-} from "../core/store.js";
+import { normalizePhoneDigits, defaultAdminSeed, defaultMiniappPages } from "../core/store.js";
 import { defaultMiniappFeatures } from "../core/miniapp-features-defaults.js";
 import { defaultMiniappHomeLayout, mergeMiniappHomeLayout } from "../core/miniapp-home-layout-defaults.js";
-import {
-  openMallUploadStream,
-  parseImageDataUrl,
-  saveMallUploadImage,
-} from "./mall-image-upload.js";
 
 function json(res: http.ServerResponse, code: number, body: unknown): void {
   if (code === 204) {
@@ -51,39 +36,6 @@ function readBody(req: http.IncomingMessage): Promise<string> {
   });
 }
 
-function safePhone11(input: unknown): string {
-  if (typeof input !== "string") return "";
-  const d = input.replace(/\D/g, "");
-  if (d.length === 11) return d;
-  if (d.length === 12 && d.startsWith("1")) return d.slice(1);
-  if (d.length > 11) return d.slice(-11);
-  return "";
-}
-
-function canPartnerReviewMerchantApply(
-  mem: StoreShape,
-  reviewerPhone: string,
-  appRow: AdminMerchantApplyRow,
-): boolean {
-  const rev = safePhone11(reviewerPhone);
-  const rt = safePhone11(appRow.partnerRootPhone);
-  if (!rev || !rt) return false;
-  if (rev === rt) return true;
-  if (rev === safePhone11(appRow.inviterStaffPhone)) return true;
-  const staff = mem.admin?.partnerChannel?.staffDetails ?? [];
-  for (const s of staff) {
-    if (safePhone11(s.staffPhone) === rev && safePhone11(s.rootPartnerPhone) === rt) return true;
-  }
-  return false;
-}
-
-function commitMerchantApplyQueue(app: Jt808App, queue: AdminMerchantApplyRow[]): void {
-  app.reloadStore();
-  const mem = app.getMem();
-  const admin = { ...(mem.admin ?? defaultAdminSeed()), merchantApplyReviewQueue: queue };
-  app.replaceMem(normalizeStoreShape({ ...mem, admin }, app.getBootstrapRegisterAuthCode()));
-}
-
 export function createApiServer(app: Jt808App, port: number): http.Server {
   const srv = http.createServer(async (req, res) => {
     if (req.method === "OPTIONS") {
@@ -96,58 +48,6 @@ export function createApiServer(app: Jt808App, port: number): http.Server {
     try {
       if (path === "/health" && req.method === "GET") {
         json(res, 200, { ok: true, service: "ev-device-gateway", ts: new Date().toISOString() });
-        return;
-      }
-
-      if (path === "/api/upload-image" && req.method === "POST") {
-        const raw = await readBody(req);
-        let body: { dataUrl?: string };
-        try {
-          body = JSON.parse(raw || "{}") as { dataUrl?: string };
-        } catch {
-          json(res, 400, { ok: false, reason: "请求体须为 JSON" });
-          return;
-        }
-        const dataUrl = typeof body.dataUrl === "string" ? body.dataUrl : "";
-        const parsed = parseImageDataUrl(dataUrl);
-        if (!parsed) {
-          json(res, 400, {
-            ok: false,
-            reason: "需要字段 dataUrl（data:image/jpeg;base64,...），支持 jpeg/png/gif/webp，单张不超过 5MB",
-          });
-          return;
-        }
-        const savedName = await saveMallUploadImage(parsed.buffer, parsed.mime);
-        const host = req.headers.host || `127.0.0.1:${port}`;
-        const publicUrl = `http://${host}/uploads/${encodeURIComponent(savedName)}`;
-        json(res, 200, { ok: true, url: publicUrl, filename: savedName });
-        return;
-      }
-
-      if (path.startsWith("/uploads/") && req.method === "GET") {
-        const seg = path.slice("/uploads/".length);
-        if (!seg) {
-          json(res, 404, { ok: false, reason: "not found" });
-          return;
-        }
-        const opened = await openMallUploadStream(decodeURIComponent(seg));
-        if (!opened) {
-          json(res, 404, { ok: false, reason: "not found" });
-          return;
-        }
-        res.writeHead(200, {
-          "Content-Type": opened.contentType,
-          "Access-Control-Allow-Origin": "*",
-          "Cache-Control": "public, max-age=86400",
-        });
-        opened.stream.on("error", () => {
-          try {
-            res.destroy();
-          } catch {
-            /* ignore */
-          }
-        });
-        opened.stream.pipe(res);
         return;
       }
 
@@ -170,10 +70,6 @@ export function createApiServer(app: Jt808App, port: number): http.Server {
         const alarmSubscribeTmplIds = mem.admin?.miniappAlarmSubscribeTmplIds?.map(String).filter(Boolean) ?? [];
         const miniappWxAppId =
           (process.env.WECHAT_MP_APPID ?? "").trim() || (mem.admin?.miniappWxAppId ?? "").trim();
-        const adminFull = mem.admin ?? defaultAdminSeed();
-        const mallCatalog = adminFull.mallCatalog ?? defaultMallCatalogSeed();
-        const portalPermissions = adminFull.portalPermissions ?? defaultPortalPermissionsSeed();
-        const miniappEcology = adminFull.miniappEcology ?? defaultMiniappEcologySeed();
         json(res, 200, {
           ok: true,
           pages: publicPages,
@@ -181,9 +77,6 @@ export function createApiServer(app: Jt808App, port: number): http.Server {
           homeLayout,
           alarmSubscribeTmplIds,
           miniappWxAppId,
-          mallCatalog,
-          portalPermissions,
-          miniappEcology,
           ts: new Date().toISOString(),
         });
         return;
@@ -224,139 +117,6 @@ export function createApiServer(app: Jt808App, port: number): http.Server {
         return;
       }
 
-      if (path === "/api/miniapp/merchant-apply" && req.method === "POST") {
-        const raw = await readBody(req);
-        let body: Record<string, unknown> = {};
-        try {
-          body = JSON.parse(raw || "{}") as Record<string, unknown>;
-        } catch {
-          json(res, 400, { ok: false, reason: "JSON 无效" });
-          return;
-        }
-        const merchantPhone = safePhone11(body.merchantPhone);
-        const partnerRootPhone = safePhone11(body.partnerRootPhone);
-        const inviterStaffPhone = safePhone11(body.inviterStaffPhone);
-        if (!merchantPhone || !partnerRootPhone || !inviterStaffPhone) {
-          json(res, 400, { ok: false, reason: "需要 merchantPhone、partnerRootPhone、inviterStaffPhone" });
-          return;
-        }
-        const id = typeof body.id === "string" ? body.id.trim() : "";
-        const shopDraft =
-          body.shopDraft && typeof body.shopDraft === "object"
-            ? (body.shopDraft as AdminMerchantApplyRow["shopDraft"])
-            : {};
-        const createdAt = typeof body.createdAt === "string" ? body.createdAt : new Date().toISOString();
-        app.reloadStore();
-        const mem = app.getMem();
-        const queue = [...(mem.admin?.merchantApplyReviewQueue ?? [])];
-        const pendPlat = queue.find(
-          (x) => safePhone11(x.merchantPhone) === merchantPhone && x.status === "pending_platform",
-        );
-        if (pendPlat) {
-          json(res, 409, { ok: false, reason: "已在平台审核中，请勿重复提交" });
-          return;
-        }
-        const activeIdx = queue.findIndex(
-          (x) => safePhone11(x.merchantPhone) === merchantPhone && x.status === "pending_partner",
-        );
-        const row: AdminMerchantApplyRow = {
-          id: activeIdx >= 0 ? queue[activeIdx]!.id : id || `mapp_${Date.now()}`,
-          merchantPhone,
-          partnerRootPhone,
-          inviterStaffPhone,
-          shopDraft,
-          status: "pending_partner",
-          createdAt: activeIdx >= 0 ? queue[activeIdx]!.createdAt : createdAt,
-        };
-        if (activeIdx >= 0) {
-          queue[activeIdx] = {
-            ...queue[activeIdx]!,
-            ...row,
-            status: "pending_partner",
-            partnerReviewedAt: undefined,
-            partnerReviewerPhone: undefined,
-            partnerRejectReason: undefined,
-            platformReviewedAt: undefined,
-            platformReviewer: undefined,
-            platformRejectReason: undefined,
-          };
-        } else {
-          queue.unshift(row);
-        }
-        commitMerchantApplyQueue(app, queue);
-        json(res, 200, { ok: true, id: row.id });
-        return;
-      }
-
-      if (path === "/api/miniapp/merchant-apply-status" && req.method === "GET") {
-        const phone = safePhone11(url.searchParams.get("phone") ?? "");
-        if (!phone) {
-          json(res, 400, { ok: false, reason: "需要 phone 查询参数" });
-          return;
-        }
-        app.reloadStore();
-        const queue = app.getMem().admin?.merchantApplyReviewQueue ?? [];
-        const rows = queue.filter((x) => safePhone11(x.merchantPhone) === phone);
-        rows.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-        json(res, 200, { ok: true, row: rows[0] ?? null });
-        return;
-      }
-
-      const mPart = /^\/api\/miniapp\/merchant-apply\/([^/]+)\/partner-review$/.exec(path);
-      if (mPart && req.method === "POST") {
-        const appId = decodeURIComponent(mPart[1]!);
-        const raw = await readBody(req);
-        const o = JSON.parse(raw || "{}") as {
-          reviewerPhone?: string;
-          approve?: boolean;
-          rejectReason?: string;
-        };
-        const reviewerPhone = typeof o.reviewerPhone === "string" ? o.reviewerPhone : "";
-        const approve = o.approve === true;
-        if (!safePhone11(reviewerPhone)) {
-          json(res, 400, { ok: false, reason: "需要 reviewerPhone" });
-          return;
-        }
-        app.reloadStore();
-        const mem = app.getMem();
-        const queue = [...(mem.admin?.merchantApplyReviewQueue ?? [])];
-        const idx = queue.findIndex((x) => x.id === appId);
-        if (idx < 0) {
-          json(res, 404, { ok: false, reason: "未找到申请" });
-          return;
-        }
-        const row = queue[idx]!;
-        if (row.status !== "pending_partner") {
-          json(res, 400, { ok: false, reason: "当前状态不可由合作商审核" });
-          return;
-        }
-        if (!canPartnerReviewMerchantApply(mem, reviewerPhone, row)) {
-          json(res, 403, { ok: false, reason: "无合作商审核权限" });
-          return;
-        }
-        const now = new Date().toISOString();
-        if (approve) {
-          queue[idx] = {
-            ...row,
-            status: "pending_platform",
-            partnerReviewedAt: now,
-            partnerReviewerPhone: safePhone11(reviewerPhone),
-            partnerRejectReason: undefined,
-          };
-        } else {
-          queue[idx] = {
-            ...row,
-            status: "partner_rejected",
-            partnerReviewedAt: now,
-            partnerReviewerPhone: safePhone11(reviewerPhone),
-            partnerRejectReason: typeof o.rejectReason === "string" ? o.rejectReason : "",
-          };
-        }
-        commitMerchantApplyQueue(app, queue);
-        json(res, 200, { ok: true });
-        return;
-      }
-
       if (path === "/api/store" && req.method === "GET") {
         app.reloadStore();
         json(res, 200, app.getMem());
@@ -384,8 +144,12 @@ export function createApiServer(app: Jt808App, port: number): http.Server {
               : cur.settings,
           admin: body.admin && typeof body.admin === "object" ? mergedAdmin : cur.admin ?? defaultAdminSeed(),
         };
-        const next = normalizeStoreShape(merged, app.getBootstrapRegisterAuthCode());
-        app.replaceMem(next);
+        const next = {
+          ...cur,
+          ...merged,
+          admin: merged.admin,
+        };
+        app.replaceMem(next as Parameters<typeof app.replaceMem>[0]);
         json(res, 200, { ok: true });
         return;
       }
