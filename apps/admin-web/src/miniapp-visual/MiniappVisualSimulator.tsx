@@ -5,11 +5,7 @@ import type { MiniappHomeLayout } from "../types/gatewayStore";
 import { VisualShell } from "./VisualShell";
 import { FallbackVisual } from "./screens/FallbackVisual";
 import { HomeVisual, R_HOME, type HomeScene } from "./screens/HomeVisual";
-import { MallVisual } from "./screens/MallVisual";
 import { ProfileVisual, R_PROFILE } from "./screens/ProfileVisual";
-import { ShareVisual } from "./screens/ShareVisual";
-import { ShopsVisual } from "./screens/ShopsVisual";
-import { VipVisual } from "./screens/VipVisual";
 
 export function MiniappVisualSimulator(props: {
   edits: PageEdit[];
@@ -52,22 +48,7 @@ export function MiniappVisualSimulator(props: {
         <ProfileVisual edits={edits} onEditsChange={onEditsChange} navigate={push} features={features} />
       );
   } else {
-    switch (topRoute) {
-      case "pages/mall/mall":
-        inner = <MallVisual edits={edits} onEditsChange={onEditsChange} />;
-        break;
-      case "pages/vip-center/vip-center":
-        inner = <VipVisual edits={edits} onEditsChange={onEditsChange} />;
-        break;
-      case "pages/shops/shops":
-        inner = <ShopsVisual edits={edits} onEditsChange={onEditsChange} />;
-        break;
-      case "pages/share-app/share-app":
-        inner = <ShareVisual edits={edits} onEditsChange={onEditsChange} />;
-        break;
-      default:
-        inner = <FallbackVisual route={topRoute} edits={edits} onEditsChange={onEditsChange} />;
-    }
+    inner = <FallbackVisual route={topRoute} edits={edits} onEditsChange={onEditsChange} />;
   }
 
   return (

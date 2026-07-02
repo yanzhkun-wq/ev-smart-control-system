@@ -89,7 +89,6 @@ Page({
     polygons: [],
     mapScale: 15,
     mapTip: "",
-    vipBlocked: false,
     /** 圆形：0 待选圆心 → 1 待选圆周点 → 2 已完成 */
     circleStep: 2,
     rimLat: null,

@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "智控商城",
+  "navigationBarTitleText": "兼容硬件参考",
   "enablePullDownRefresh": true,
   "behaviors": [
     "../../behaviors/remote-page-ui"

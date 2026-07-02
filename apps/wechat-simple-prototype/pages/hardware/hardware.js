@@ -3,14 +3,29 @@
  * 本软件免费开源，硬件需用户自行购买，我们不销售任何硬件
  */
 
-const store = require("../../utils/mall-store.js");
-
-function thumbClassForProduct(productId) {
-  if (productId === "p_gw") return "tw-gw";
-  if (productId === "p_ctrl") return "tw-ctrl";
-  if (productId === "p_kit") return "tw-kit";
-  return "tw-def";
-}
+const HARDWARE_LIST = [
+  {
+    id: "p_gw",
+    name: "4G 车载智能终端",
+    subtitle: "部标 808 · 远程锁车 · 官方推荐",
+    desc: "北斗/GPS 双模，远程锁车，含首年流量（仅供参考，以终端厂家为准）。",
+    tags: ["推荐"],
+  },
+  {
+    id: "p_ctrl",
+    name: "智能中控一体机",
+    subtitle: "仪表联动 · 支持 OTA",
+    desc: "状态采集与远程控制扩展，具体车型请咨询厂家。",
+    tags: ["扩展"],
+  },
+  {
+    id: "p_kit",
+    name: "智控改装套件",
+    subtitle: "线束 · 支架 · 防水组件",
+    desc: "标准化辅材包，建议与终端一并使用。",
+    tags: ["配件"],
+  },
+];
 
 Page({
   data: {
@@ -20,13 +35,8 @@ Page({
   },
 
   onShow() {
-    this.load();
-  },
-
-  load() {
-    const all = store.listHardware();
     this.setData({
-      hardwareList: all,
+      hardwareList: HARDWARE_LIST,
       hasMore: false,
       loading: false,
     });
