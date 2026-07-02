@@ -21,16 +21,8 @@ const d = {
   fenceName: "电子围栏",
   authIcon: "权",
   authName: "授权管理",
-  sectionMall: "智控商城与升级",
-  mallIcon: "商",
-  mallName: "智控商城",
   shopsIcon: "网",
   shopsName: "智控升级网点",
-  sectionPartner: "合作与拓展",
-  inviteIcon: "邀",
-  inviteName: "邀请好友",
-  applyIcon: "渠",
-  applyName: "合作商申请",
 };
 
 export function ProfileVisual(props: {
@@ -49,13 +41,7 @@ export function ProfileVisual(props: {
   ] as const;
   const svc = svcAll.filter((x) => miniappFeatureOn(features, x.feat));
 
-  const showMall = miniappFeatureOn(features, "profile_mall_module");
-  const showMallEntry = showMall && miniappFeatureOn(features, "profile_mall_entry");
-  const showShopsEntry = showMall && miniappFeatureOn(features, "profile_shops_entry");
-
-  const showPartner = miniappFeatureOn(features, "profile_partner_module");
-  const showShare = showPartner && miniappFeatureOn(features, "profile_share_invite");
-  const showApply = showPartner && miniappFeatureOn(features, "profile_partner_apply");
+  const showShopsEntry = miniappFeatureOn(features, "profile_shops_entry");
 
   return (
     <div className={pstyles.shell}>
@@ -69,24 +55,6 @@ export function ProfileVisual(props: {
                 className={pstyles.name}
               >
                 演示用户
-                {miniappFeatureOn(features, "profile_vip_entry") ? (
-                <span
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => navigate("pages/vip-center/vip-center")}
-                  style={{
-                    fontSize: 11,
-                    padding: "2px 8px",
-                    borderRadius: 999,
-                    background: "#fef3c7",
-                    color: "#92400e",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                  }}
-                >
-                  VIP
-                </span>
-                ) : null}
               </div>
               <div className={pstyles.sub}>账号 demo · 车主</div>
             </div>
@@ -155,59 +123,9 @@ export function ProfileVisual(props: {
       </div>
       ) : null}
 
-      {showMall && (showMallEntry || showShopsEntry) ? (
+      {showShopsEntry ? (
       <div className={pstyles.panel}>
-        <div className={pstyles.panelTitle}>
-          <EditableString
-            route={R_PROFILE}
-            stringKey="profileSectionMallTitle"
-            label="板块标题 · 商城与升级"
-            fallback={d.sectionMall}
-            edits={edits}
-            onEditsChange={onEditsChange}
-          />
-        </div>
         <div style={{ display: "flex", gap: 12 }}>
-          {showMallEntry ? (
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={(e) => skipEditNav(e, () => navigate("pages/mall/mall"))}
-            style={{
-              flex: 1,
-              padding: 12,
-              borderRadius: 10,
-              background: "#ecfdf5",
-              textAlign: "center",
-              cursor: "pointer",
-            }}
-          >
-            <div style={{ fontSize: 18, fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
-              <EditableString
-                route={R_PROFILE}
-                stringKey="profileMallEntryIcon"
-                label="智控商城 · 图标"
-                fallback={d.mallIcon}
-                edits={edits}
-                onEditsChange={onEditsChange}
-                multiline={false}
-                variant="icon"
-                style={{ color: "#065f46" }}
-              />
-            </div>
-            <div style={{ fontWeight: 800, color: "#065f46" }}>
-              <EditableString
-                route={R_PROFILE}
-                stringKey="profileMallEntryName"
-                label="智控商城 · 名称"
-                fallback={d.mallName}
-                edits={edits}
-                onEditsChange={onEditsChange}
-              />
-            </div>
-          </div>
-          ) : null}
-          {showShopsEntry ? (
           <div
             role="button"
             tabIndex={0}
@@ -245,92 +163,8 @@ export function ProfileVisual(props: {
               />
             </div>
           </div>
-          ) : null}
         </div>
       </div>
-      ) : null}
-
-      {showPartner && (showShare || showApply) ? (
-        <div className={pstyles.panel}>
-        <div className={pstyles.panelTitle}>
-          <EditableString
-            route={R_PROFILE}
-            stringKey="profileSectionPartnerTitle"
-            label="板块标题 · 合作与拓展"
-            fallback={d.sectionPartner}
-            edits={edits}
-            onEditsChange={onEditsChange}
-          />
-        </div>
-        <div className={pstyles.grid} style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
-          {showShare ? (
-          <div
-            className={pstyles.cell}
-            role="button"
-            tabIndex={0}
-            onClick={(e) => skipEditNav(e, () => navigate("pages/share-app/share-app"))}
-            style={{ cursor: "pointer" }}
-          >
-            <div className={pstyles.ico} style={{ background: "#8b5cf6" }}>
-              <EditableString
-                route={R_PROFILE}
-                stringKey="profilePartnerInviteIcon"
-                label="邀请好友 · 图标"
-                fallback={d.inviteIcon}
-                edits={edits}
-                onEditsChange={onEditsChange}
-                multiline={false}
-                variant="icon"
-                style={{ color: "#fff" }}
-              />
-            </div>
-            <div className={pstyles.cellName}>
-              <EditableString
-                route={R_PROFILE}
-                stringKey="profilePartnerInviteName"
-                label="邀请好友 · 名称"
-                fallback={d.inviteName}
-                edits={edits}
-                onEditsChange={onEditsChange}
-              />
-            </div>
-          </div>
-          ) : null}
-          {showApply ? (
-          <div
-            className={pstyles.cell}
-            role="button"
-            tabIndex={0}
-            onClick={(e) => skipEditNav(e, () => navigate("pages/partner-apply/partner-apply"))}
-            style={{ cursor: "pointer" }}
-          >
-            <div className={pstyles.ico} style={{ background: "#06b6d4" }}>
-              <EditableString
-                route={R_PROFILE}
-                stringKey="profilePartnerApplyIcon"
-                label="合作商申请 · 图标"
-                fallback={d.applyIcon}
-                edits={edits}
-                onEditsChange={onEditsChange}
-                multiline={false}
-                variant="icon"
-                style={{ color: "#fff" }}
-              />
-            </div>
-            <div className={pstyles.cellName}>
-              <EditableString
-                route={R_PROFILE}
-                stringKey="profilePartnerApplyName"
-                label="合作商申请 · 名称"
-                fallback={d.applyName}
-                edits={edits}
-                onEditsChange={onEditsChange}
-              />
-            </div>
-          </div>
-          ) : null}
-        </div>
-        </div>
       ) : null}
 
       {miniappFeatureOn(features, "profile_system_module") ? (
