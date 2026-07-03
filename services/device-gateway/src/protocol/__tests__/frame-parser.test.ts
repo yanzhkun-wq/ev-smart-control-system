@@ -167,4 +167,65 @@ describe("parseFrame", () => {
     expect(frame.header.bodyLength).toBe(1023);
     expect(frame.body.length).toBe(1023);
   });
+
+  it("should parse frame with encryption bit set in property field", () => {
+    // Manually build a frame with encryption bit (bit 10-12) set to 1
+    const msgId = 0x0200;
+    const body = Buffer.alloc(20);
+    const bodyLen = body.length & 0x3ff;
+    // props with encryption type=1 (bits 10-12 = 001)
+    const props = bodyLen | (1 << 10);
+    const phoneBcd = Buffer.from([0x01, 0x23, 0x45, 0x67, 0x89, 0x01]);
+    const serial = 1;
+
+    const header = Buffer.alloc(12);
+    header.writeUInt16BE(msgId, 0);
+    header.writeUInt16BE(props, 2);
+    phoneBcd.copy(header, 4);
+    header.writeUInt16BE(serial, 10);
+
+    const core = Buffer.concat([header, body]);
+    const checksum = xorRange(core, 0, core.length);
+    const data = Buffer.concat([core, Buffer.from([checksum])]);
+
+    const frame = parseFrame(data);
+    expect(frame.header.messageId).toBe(0x0200);
+    expect(frame.header.bodyLength).toBe(20);
+    expect(frame.body.length).toBe(20);
+  });
+
+  it("should parse frame with phone that has 0xFF fill bytes", () => {
+    // Some terminals pad remaining BCD nibbles with F; parser keeps raw BCD digits
+    const phoneBcd = Buffer.from([0x13, 0x80, 0x01, 0x38, 0x00, 0xff]);
+    const data = buildFrame({ phoneBcd });
+    const frame = parseFrame(data);
+    // BCD 0xFF becomes "FF" → digits "1515" in string form
+    expect(frame.header.phone).toBe("13800138001515");
+  });
+
+  it("should parse frame with phone ending in 0x0f fill nibble", () => {
+    const phoneBcd = Buffer.from([0x13, 0x80, 0x01, 0x38, 0x00, 0x0f]);
+    const data = buildFrame({ phoneBcd });
+    const frame = parseFrame(data);
+    expect(frame.header.phone).toBe("1380013800015");
+  });
+
+  it("should parse frame with body length at lower boundary (1 byte)", () => {
+    const body = Buffer.from([0x01]);
+    const data = buildFrame({ messageId: 0x0200, body });
+    const frame = parseFrame(data);
+    expect(frame.header.bodyLength).toBe(1);
+    expect(frame.body.length).toBe(1);
+    expect(frame.body[0]).toBe(0x01);
+  });
+
+  it("should parse frame with body length at upper boundary (1023 bytes)", () => {
+    const body = Buffer.alloc(1023, 0xab);
+    const data = buildFrame({ body });
+    const frame = parseFrame(data);
+    expect(frame.header.bodyLength).toBe(1023);
+    expect(frame.body.length).toBe(1023);
+    expect(frame.body[0]).toBe(0xab);
+    expect(frame.body[1022]).toBe(0xab);
+  });
 });
