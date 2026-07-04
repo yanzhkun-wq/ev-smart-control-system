@@ -16,7 +16,7 @@
   <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/stargazers"><img src="https://img.shields.io/github/stars/yanzhkun-wq/ev-smart-control-system?style=flat" alt="GitHub Stars"></a>
   <img src="https://img.shields.io/github/languages/code-size/yanzhkun-wq/ev-smart-control-system" alt="Code Size">
   <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/actions"><img src="https://img.shields.io/github/actions/workflow/status/yanzhkun-wq/ev-smart-control-system/ci.yml?branch=master&label=CI" alt="CI"></a>
-  <img src="https://img.shields.io/badge/tests-79%20passing-brightgreen" alt="Tests: 79 passing"></a>
+	  <img src="https://img.shields.io/badge/tests-137%20passing-brightgreen" alt="Tests: 137 passing"></a>
 </p>
 
 ---
@@ -56,6 +56,41 @@
 | **管理后台** | React + Ant Design + Leaflet |
 | **移动端** | 微信小程序（可扩展 uni-app）|
 | **部署** | Docker Compose |
+
+## 🏗️ 系统架构
+
+```
+┌─────────────────────────────────────────────────────┐
+│                   微信小程序                          │
+│        (GPS轨迹 / 远程控制 / 报警推送 / 围栏)          │
+└──────────────────────┬──────────────────────────────┘
+                       │ HTTP REST API
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│              管理后台 (React + Ant Design)            │
+│   Dashboard / 实时监控 / 轨迹回放 / 围栏 / 告警 / 车队  │
+└──────────────────────┬──────────────────────────────┘
+                       │ HTTP REST API
+                       ▼
+┌──────────────────────────────────────────────────────┐
+│              device-gateway (Node.js)                 │
+│  ┌──────────┐  ┌───────────┐  ┌───────────────────┐  │
+│  │ HTTP API │  │ JT/T808   │  │ Store (JSON 持久化)│  │
+│  │ :7612    │  │ App Layer │  │ + TrackLog        │  │
+│  └──────────┘  └─────┬─────┘  └───────────────────┘  │
+│                      │                                │
+│               ┌──────▼──────┐                         │
+│               │ TCP Gateway │                         │
+│               │ :7611       │                         │
+│               └──────┬──────┘                         │
+└──────────────────────┼────────────────────────────────┘
+                       │ JT/T808 Protocol (TCP)
+                       ▼
+┌──────────────────────────────────────────────────────┐
+│      🛵 电动车硬件终端 (GPS/北斗/4G/NB-IoT)           │
+│      支持 GB/T 32960 / JT/T808 兼容设备               │
+└──────────────────────────────────────────────────────┘
+```
 
 ## 📁 项目结构
 
@@ -105,6 +140,41 @@ npm run dev
 docker-compose up -d
 # 网关 :7611 | 管理端 :80
 ```
+
+### 无硬件演示模式
+
+项目内置 Mock 数据，无需硬件设备即可预览全部功能：
+
+```bash
+# 启动网关（自动加载演示数据）
+cd services/device-gateway
+npm install && npm run dev
+
+# 启动管理后台
+cd apps/admin-web
+npm install && npm run dev
+
+# 浏览器访问 http://localhost:5173
+# 在「系统设置」页面填写网关地址 http://localhost:7612
+```
+
+管理后台默认展示 5 辆演示车辆的实时位置、4 个电子围栏、6 条告警记录，支持完整的轨迹回放与远程控制操作演示。
+
+## 🧪 测试
+
+```bash
+cd services/device-gateway
+npm test        # 运行全部 137 个测试
+npm run test    # 监测模式
+```
+
+测试覆盖：JT/T808 协议解析/编码/转义、位置 TLV 解析、Store 持久化、HTTP API 接口、边界条件。
+
+## 📘 API 文档
+
+详细 API 参考：[docs/api-reference.md](docs/api-reference.md)
+
+包含全部 12 个 REST 接口说明、请求/响应示例、JT/T808 消息类型对照表。
 
 ## 📚 了解更多
 
