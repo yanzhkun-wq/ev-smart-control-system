@@ -1,1 +1,38 @@
-<view class="redirect" />
+<scroll-view scroll-y class="page safe-bottom">
+  <view class="filter-bar">
+    <view class="filter-item filter-on">全部</view>
+    <view class="filter-item">锁车</view>
+    <view class="filter-item">解锁</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <block wx:else>
+    <view
+      class="record card"
+      wx:for="{{records}}"
+      wx:key="id"
+    >
+      <view class="record-head">
+        <view class="action-tag {{item.action === 'lock' ? 'tag-lock' : 'tag-unlock'}}">
+          {{item.action === 'lock' ? '🔒 已锁' : '🔓 已解'}}
+        </view>
+        <text class="record-time">{{item.time}}</text>
+      </view>
+      <view class="record-meta">
+        <text class="meta-item">📋 {{item.plate}}</text>
+        <text class="meta-item">🔋 {{item.battery}}</text>
+      </view>
+      <view class="record-loc">
+        <text class="loc-icon">📍</text>
+        <text class="loc-text">{{item.location}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{records.length === 0}}" class="empty">
+      <text>暂无开关锁记录</text>
+    </view>
+  </block>
+</scroll-view>

@@ -1,4 +1,111 @@
-<view class="page card">
-  <text class="t">通知设置</text>
-  <text class="s">演示页：告警推送、订阅消息等后续配置。</text>
-</view>
+<scroll-view scroll-y class="page safe-bottom">
+  <!-- 推送开关 -->
+  <view class="card section">
+    <view class="sec-h">推送设置</view>
+    <view class="row">
+      <view class="row-l">
+        <text class="row-t">微信提醒</text>
+        <text class="row-s">重要报警同步推送到微信服务通知</text>
+      </view>
+      <switch checked="{{wechatNotify}}" bindchange="onWechatSwitch" color="#3b82f6" />
+    </view>
+    <view class="row">
+      <view class="row-l">
+        <text class="row-t">声音提醒</text>
+        <text class="row-s">收到报警时播放提示音</text>
+      </view>
+      <switch checked="{{soundEnabled}}" bindchange="onSoundSwitch" color="#3b82f6" />
+    </view>
+    <view class="row">
+      <view class="row-l">
+        <text class="row-t">震动提醒</text>
+        <text class="row-s">收到报警时震动</text>
+      </view>
+      <switch checked="{{vibrateEnabled}}" bindchange="onVibrateSwitch" color="#3b82f6" />
+    </view>
+  </view>
+
+  <!-- 免打扰时段 -->
+  <view class="card section">
+    <view class="sec-h">免打扰</view>
+    <view class="row" bindtap="showQuietPicker">
+      <view class="row-l">
+        <text class="row-t">免打扰时段</text>
+        <text class="row-s">{{quietMode || '未设置'}}</text>
+      </view>
+      <text class="arr">›</text>
+    </view>
+  </view>
+
+  <!-- 订阅消息 -->
+  <view class="card section" wx:if="{{!subscribeReady}}">
+    <view class="row" bindtap="openSubscribe">
+      <view class="row-l">
+        <text class="row-t">订阅微信提醒</text>
+        <text class="row-s">授权后重要报警将通过服务通知送达</text>
+      </view>
+      <text class="arr">›</text>
+    </view>
+  </view>
+  <view class="card section" wx:else>
+    <view class="row">
+      <view class="row-l">
+        <text class="row-t">订阅状态</text>
+        <text class="row-s success">已订阅，报警将通过微信通知您</text>
+      </view>
+      <text class="tag-ok">✓</text>
+    </view>
+  </view>
+
+  <!-- 报警类型 -->
+  <view class="card section">
+    <view class="sec-h">报警推送类型</view>
+    <view class="sub-h">选择需要接收推送的报警类型</view>
+    <view class="alarm-list">
+      <view
+        class="alarm-item {{item.checked ? 'alarm-on' : ''}}"
+        wx:for="{{alarmTypes}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="onAlarmType"
+      >
+        <view class="alarm-l">
+          <text class="alarm-t">{{item.label}}</text>
+          <text class="alarm-d">{{item.desc}}</text>
+        </view>
+        <text class="alarm-check {{item.checked ? 'alarm-check-on' : ''}}">
+          {{item.checked ? '✓' : ''}}
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 测试推送 -->
+  <view class="card section">
+    <view class="row" bindtap="testPush">
+      <view class="row-l">
+        <text class="row-t">发送测试推送</text>
+        <text class="row-s">向当前设备发送一条测试报警</text>
+      </view>
+      <text class="arr">›</text>
+    </view>
+  </view>
+
+  <!-- 最近告警 -->
+  <view class="card section">
+    <view class="sec-h">最近告警</view>
+    <view class="recent-item" wx:for="{{recentAlarms}}" wx:key="id">
+      <view class="recent-l">
+        <text class="recent-t">{{item.type}}</text>
+        <text class="recent-p">{{item.plate}} · {{item.time}}</text>
+      </view>
+      <text class="recent-level lv-{{item.level}}">{{item.level}}</text>
+    </view>
+    <view class="row" bindtap="navToAlarm">
+      <view class="row-l">
+        <text class="row-s">查看全部报警记录</text>
+      </view>
+      <text class="arr">›</text>
+    </view>
+  </view>
+</scroll-view>

@@ -1,15 +1,60 @@
-<scroll-view scroll-y class="page">
+<scroll-view scroll-y class="page safe-bottom">
+  <!-- 刷新 -->
+  <view class="refresh-bar" bindtap="onRefresh">
+    <text class="refresh-icon">🔄</text>
+    <text class="refresh-text">刷新车辆状态</text>
+  </view>
+
   <text class="hint">点击一辆车设为「当前车辆」，首页开关锁与围栏均针对当前车。</text>
 
-  <block wx:for="{{list}}" wx:key="id">
-    <view class="card item {{item.id === currentId ? 'on' : ''}}" data-id="{{item.id}}" bindtap="onPick">
-      <view class="row">
+  <!-- 车辆列表 -->
+  <view
+    class="card item {{item.id === currentId ? 'on' : ''}}"
+    wx:for="{{list}}"
+    wx:key="id"
+    data-id="{{item.id}}"
+    bindtap="onPick"
+  >
+    <view class="item-top">
+      <view class="item-l">
         <text class="plate">{{item.plate}}</text>
-        <text class="tag" wx:if="{{item.id === currentId}}">当前</text>
+        <text class="model-name">{{item.code || '电动车'}}</text>
       </view>
-      <text class="meta">{{item.code}}</text>
+      <view class="item-r">
+        <text class="tag" wx:if="{{item.id === currentId}}">当前</text>
+        <text class="status-dot {{item.online ? 'dot-on' : 'dot-off'}}">
+          {{item.online ? '在线' : '离线'}}
+        </text>
+      </view>
     </view>
-  </block>
+    <view class="item-meta">
+      <text class="meta-item">{{item.battery}}%</text>
+      <text class="meta-item" wx:if="{{item.note}}">{{item.note}}</text>
+    </view>
+    <view class="item-actions">
+      <text class="action-btn" data-id="{{item.id}}" bindtap="onEdit">✏️ 备注</text>
+      <text class="action-btn del" data-id="{{item.id}}" bindtap="onDeleteTap">🗑️ 删除</text>
+    </view>
+  </view>
 
+  <!-- 空状态 -->
+  <view wx:if="{{list.length === 0}}" class="empty">
+    <text class="empty-icon">🛵</text>
+    <text class="empty-t">还没有绑定车辆</text>
+    <text class="empty-s">点击下方按钮绑定您的第一辆车</text>
+  </view>
+
+  <!-- 新增按钮 -->
   <button class="add" bindtap="onAdd">+ 绑定新车辆</button>
+
+  <!-- 删除确认弹窗 -->
+  <view wx:if="{{showDeleteConfirm}}" class="overlay" bindtap="onDeleteCancel"></view>
+  <view wx:if="{{showDeleteConfirm}}" class="delete-modal">
+    <text class="modal-t">确认删除该车辆？</text>
+    <text class="modal-s">删除后需要重新绑定才能使用</text>
+    <view class="modal-actions">
+      <view class="modal-btn cancel" bindtap="onDeleteCancel">取消</view>
+      <view class="modal-btn confirm" bindtap="onDeleteConfirm">确认删除</view>
+    </view>
+  </view>
 </scroll-view>

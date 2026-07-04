@@ -1,14 +1,92 @@
-<scroll-view scroll-y class="page">
-  <view class="card box">
-    <text class="label">围栏半径（米）</text>
-    <slider min="100" max="2000" step="50" value="{{radius}}" show-value bindchange="onRadius" />
-    <text class="hint">演示：拖动滑块；正式环境对接地图圈选与下发。</text>
-  </view>
-  <view class="card box">
-    <view class="row">
-      <text>启用围栏告警</text>
-      <switch checked="{{enabled}}" bindchange="onSwitch" />
+<scroll-view scroll-y class="page safe-bottom">
+  <!-- 围栏列表 -->
+  <view
+    class="fence card"
+    wx:for="{{fences}}"
+    wx:key="id"
+    data-idx="{{index}}"
+    bindtap="onEdit"
+  >
+    <view class="fence-top">
+      <view class="fence-l">
+        <text class="fence-name {{!item.enabled ? 'fence-disabled' : ''}}">{{item.name}}</text>
+        <text class="fence-addr">{{item.addr}}</text>
+      </view>
+      <view class="fence-status {{item.enabled ? 'on' : 'off'}}">
+        {{item.enabled ? '启用' : '停用'}}
+      </view>
     </view>
+    <view class="fence-meta">
+      <text class="meta-tag">{{item.type === 'circle' ? '圆形' : item.type === 'polygon' ? '多边形' : '线路'}}</text>
+      <text class="meta-tag" wx:if="{{item.type === 'circle'}}">{{item.radius}}m</text>
+      <text class="meta-tag">{{item.alarmDir === 'both' ? '进出' : item.alarmDir === 'in' ? '进入' : '离开'}}</text>
+    </view>
+    <view class="fence-del" data-idx="{{index}}" bindtap="onDelete" hover-class="del-press">删除</view>
   </view>
-  <button class="save" bindtap="save">保存设置</button>
+
+  <!-- 空状态 -->
+  <view wx:if="{{fences.length === 0}}" class="empty">
+    <text class="empty-icon">📍</text>
+    <text class="empty-t">暂无围栏</text>
+    <text class="empty-s">点击下方按钮添加围栏</text>
+  </view>
+
+  <!-- 新增按钮 -->
+  <button class="add-btn" bindtap="onAdd">+ 添加围栏</button>
+
+  <!-- ====== 编辑器弹窗 ====== -->
+  <view wx:if="{{showEditor}}" class="overlay" bindtap="onCloseEditor"></view>
+  <view wx:if="{{showEditor}}" class="editor">
+    <view class="editor-head">
+      <text class="editor-cancel" bindtap="onCloseEditor">取消</text>
+      <text class="editor-title">{{editingIdx >= 0 ? '编辑围栏' : '新增围栏'}}</text>
+      <text class="editor-save" bindtap="onSaveFence">保存</text>
+    </view>
+
+    <scroll-view scroll-y class="editor-body">
+      <view class="field">
+        <text class="field-label">围栏名称</text>
+        <input class="field-input" placeholder="如：家、公司" value="{{editing.name}}" bindinput="onNameInput" />
+      </view>
+
+      <view class="field">
+        <text class="field-label">地址</text>
+        <input class="field-input" placeholder="输入地址" value="{{editing.addr}}" bindinput="onAddrInput" />
+      </view>
+
+      <view class="field">
+        <text class="field-label">围栏类型</text>
+        <picker value="{{editing.type}}" range="{{fenceTypes}}" range-key="label" bindchange="onTypeChange">
+          <view class="picker-value">
+            <text>{{fenceTypes.find(t => t.key === editing.type)?.label}}</text>
+            <text class="arr">›</text>
+          </view>
+        </picker>
+      </view>
+
+      <view wx:if="{{editing.type === 'circle'}}" class="field">
+        <text class="field-label">半径（米）</text>
+        <view class="slider-row">
+          <slider min="100" max="2000" step="50" value="{{editing.radius}}" show-value bindchange="onRadiusChange" color="#3b82f6" />
+        </view>
+      </view>
+
+      <view class="field">
+        <text class="field-label">告警方向</text>
+        <picker value="{{editing.alarmDir}}" range="{{alarmDirs}}" range-key="label" bindchange="onAlarmDirChange">
+          <view class="picker-value">
+            <text>{{alarmDirs.find(d => d.key === editing.alarmDir)?.label}}</text>
+            <text class="arr">›</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="field">
+        <view class="switch-row">
+          <text class="field-label">启用围栏</text>
+          <switch checked="{{editing.enabled}}" bindchange="onEnabledSwitch" color="#3b82f6" />
+        </view>
+      </view>
+    </scroll-view>
+  </view>
 </scroll-view>

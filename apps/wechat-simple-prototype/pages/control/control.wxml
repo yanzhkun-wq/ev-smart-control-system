@@ -1,35 +1,81 @@
-<scroll-view scroll-y class="page">
+<scroll-view scroll-y class="page safe-bottom">
+  <!-- 车辆信息 -->
   <view class="head card">
     <text class="model">{{model}}</text>
     <text class="plate">{{plate}}</text>
+    <view class="online-badge {{online ? 'online' : 'offline'}}">
+      {{online ? '● 在线' : '○ 离线'}}
+    </view>
   </view>
 
-  <view class="remote">
-    <view class="btn unlock" bindtap="unlock">
+  <!-- 锁车/解锁 -->
+  <view class="remote-row">
+    <view
+      class="remote-btn {{locked ? '' : 'active'}} {{cmdLoading === 'unlock' ? 'loading' : ''}}"
+      bindtap="unlock"
+    >
       <text class="ico">🔓</text>
-      <text class="txt">解锁</text>
+      <text class="txt">{{cmdLoading === 'unlock' ? '执行中...' : '解锁'}}</text>
     </view>
-    <view class="btn lock" bindtap="lock">
+    <view
+      class="remote-btn {{locked ? 'active' : ''}} {{cmdLoading === 'lock' ? 'loading' : ''}}"
+      bindtap="lock"
+    >
       <text class="ico">🔒</text>
-      <text class="txt">上锁</text>
+      <text class="txt">{{cmdLoading === 'lock' ? '执行中...' : '上锁'}}</text>
     </view>
   </view>
 
+  <!-- 第二行：断油电 / 寻车 -->
+  <view class="remote-row">
+    <view
+      wx:if="{{!powerCut}}"
+      class="remote-btn danger {{cmdLoading === 'cut' ? 'loading' : ''}}"
+      bindtap="cutPower"
+    >
+      <text class="ico">⛽</text>
+      <text class="txt">{{cmdLoading === 'cut' ? '执行中...' : '断油断电'}}</text>
+    </view>
+    <view
+      wx:else
+      class="remote-btn active {{cmdLoading === 'restore' ? 'loading' : ''}}"
+      bindtap="restorePower"
+    >
+      <text class="ico">🔋</text>
+      <text class="txt">{{cmdLoading === 'restore' ? '执行中...' : '恢复油电'}}</text>
+    </view>
+    <view
+      class="remote-btn secondary {{cmdLoading === 'find' ? 'loading' : ''}}"
+      bindtap="findVehicle"
+    >
+      <text class="ico">🔔</text>
+      <text class="txt">{{cmdLoading === 'find' ? '执行中...' : '寻车'}}</text>
+    </view>
+  </view>
+
+  <!-- 设备状态 -->
   <view class="card sec">
     <text class="st">设备状态</text>
     <view class="line">
       <text>在线状态</text>
-      <text class="ok">{{online ? '在线' : '离线'}}</text>
+      <text class="{{online ? 'ok' : 'err'}}">{{online ? '在线' : '离线'}}</text>
     </view>
     <view class="line">
       <text>电池电量</text>
-      <text>{{battery}}</text>
+      <text>
+        <text>{{batteryIcon()}}</text>
+        <text> {{battery}}%</text>
+      </text>
     </view>
     <view class="line">
       <text>锁车状态</text>
-      <text>{{locked ? '已锁' : '已解锁'}}</text>
+      <text class="{{locked ? 'ok' : ''}}">{{locked ? '已上锁' : '已解锁'}}</text>
+    </view>
+    <view class="line">
+      <text>油电状态</text>
+      <text class="{{powerCut ? 'err' : 'ok'}}">{{powerCut ? '已断油电' : '正常'}}</text>
     </view>
   </view>
 
-  <view class="hint">操作记录对接后端后展示。</view>
+  <view class="hint">远程控制指令通过 JT/T 808 协议下发给终端。</view>
 </scroll-view>

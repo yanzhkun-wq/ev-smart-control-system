@@ -47,6 +47,26 @@ function findByOwnerCodePlate(ownerPhone, code, plate) {
   );
 }
 
+/** 更新车辆备注 */
+function updateNote(id, note) {
+  const list = readAll();
+  const idx = list.findIndex((v) => v.id === id);
+  if (idx >= 0) {
+    list[idx].note = note;
+    writeAll(list);
+  }
+}
+
+/** 删除车辆 */
+function remove(id) {
+  const list = readAll();
+  writeAll(list.filter((v) => v.id !== id));
+  // 如果删除的是当前车辆，清除 current
+  if (wx.getStorageSync(STORAGE_CURRENT) === id) {
+    wx.removeStorageSync(STORAGE_CURRENT);
+  }
+}
+
 module.exports = {
   STORAGE_VEHICLES,
   STORAGE_CURRENT,
@@ -55,4 +75,6 @@ module.exports = {
   listForSession,
   getCurrentVehicleForSession,
   findByOwnerCodePlate,
+  updateNote,
+  remove,
 };
