@@ -11,11 +11,9 @@ import {
 } from "antd";
 import {
   CarOutlined,
-  LineChartOutlined,
   MobileOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdminGateway } from "../context/AdminGatewayContext";
 

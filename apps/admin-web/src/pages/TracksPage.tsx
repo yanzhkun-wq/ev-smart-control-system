@@ -12,7 +12,7 @@ export type TracksPageProps = { embedded?: boolean };
 
 export function TracksPage({ embedded = false }: TracksPageProps = {}) {
   const { message } = App.useApp();
-  const { deviceRows, store } = useAdminGateway();
+  const { deviceRows } = useAdminGateway();
   const [device, setDevice] = useState(deviceRows[0]?.terminalPhone ?? "");
   const [queryDay, setQueryDay] = useState<Dayjs>(() => dayjs());
   const [apiPath, setApiPath] = useState<[number, number][] | null>(null);

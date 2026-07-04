@@ -41,8 +41,7 @@ export function AppLayout() {
     return [key];
   }, [location.pathname]);
 
-  const brandingFromDraft = !store ? readOperationsDraft()?.branding : undefined;
-  const branding = store?.admin?.branding ?? brandingFromDraft;
+  const branding = store?.admin?.branding;
   const productTitle = branding?.title?.trim() || "电动车智控";
   const productSubtitle = branding?.subtitle?.trim() || "WZ808 · 管理端";
 
