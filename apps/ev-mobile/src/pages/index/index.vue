@@ -1,5 +1,13 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { mockVehicles } from "@/common/mock";
+
+const stats = computed(() => ({
+  total: mockVehicles.length,
+  online: mockVehicles.filter((v) => v.online).length,
+  alarm: mockVehicles.filter((v) => v.alarm && v.alarm > 0).length,
+  offline: mockVehicles.filter((v) => !v.online).length,
+}));
 
 function go(url: string) {
   uni.navigateTo({ url });
@@ -12,11 +20,33 @@ function openVehicle(id: string) {
 
 <template>
   <scroll-view scroll-y class="page">
+    <!-- 头部 -->
     <view class="hero">
       <text class="hero-title">电动车智控</text>
-      <text class="hero-sub">WZ808 · 小程序原型（后续接 API，可编译 App）</text>
+      <text class="hero-sub">EV Smart Control · 定位 · 告警 · 远程控制</text>
     </view>
 
+    <!-- 数据统计 -->
+    <view class="stats">
+      <view class="stat-item stat-blue">
+        <text class="stat-num">{{ stats.total }}</text>
+        <text class="stat-label">总车辆</text>
+      </view>
+      <view class="stat-item stat-green">
+        <text class="stat-num">{{ stats.online }}</text>
+        <text class="stat-label">在线</text>
+      </view>
+      <view class="stat-item stat-red">
+        <text class="stat-num">{{ stats.alarm }}</text>
+        <text class="stat-label">告警</text>
+      </view>
+      <view class="stat-item stat-gray">
+        <text class="stat-num">{{ stats.offline }}</text>
+        <text class="stat-label">离线</text>
+      </view>
+    </view>
+
+    <!-- 功能网格 -->
     <view class="grid">
       <view class="grid-item" @click="go('/pages/map/map')">
         <text class="grid-icon">🗺</text>
@@ -44,11 +74,18 @@ function openVehicle(id: string) {
       </view>
     </view>
 
+    <!-- 车辆列表 -->
     <view class="section-title">我的车辆</view>
     <view v-for="v in mockVehicles" :key="v.id" class="card" @click="openVehicle(v.id)">
       <view class="card-row">
         <text class="plate">{{ v.plate }}</text>
         <text :class="['badge', v.online ? 'on' : 'off']">{{ v.online ? "在线" : "离线" }}</text>
+      </view>
+      <view class="card-progress">
+        <view class="bar-track">
+          <view :class="['bar-fill', v.battery > 60 ? 'bar-green' : v.battery > 20 ? 'bar-yellow' : 'bar-red']" :style="{ width: v.battery + '%' }"></view>
+        </view>
+        <text class="bar-label">{{ v.battery }}%</text>
       </view>
       <view class="card-meta">
         <text>{{ v.locateMode }}</text>
@@ -59,7 +96,7 @@ function openVehicle(id: string) {
       </view>
       <view class="card-foot">
         <text class="muted">终端 {{ v.terminalId }}</text>
-        <text class="muted">更新 {{ v.lastSeen }}</text>
+        <text class="muted">{{ v.lastSeen }}</text>
       </view>
     </view>
   </scroll-view>
@@ -86,6 +123,38 @@ function openVehicle(id: string) {
   color: #6b7280;
   display: block;
 }
+
+/* stats */
+.stats {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+.stat-item {
+  flex: 1;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 8rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+.stat-num {
+  font-size: 36rpx;
+  font-weight: 800;
+  display: block;
+}
+.stat-label {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  display: block;
+}
+.stat-blue .stat-num { color: #3b82f6; }
+.stat-green .stat-num { color: #10b981; }
+.stat-red .stat-num { color: #ef4444; }
+.stat-gray .stat-num { color: #6b7280; }
+.stat-blue .stat-label, .stat-green .stat-label, .stat-red .stat-label, .stat-gray .stat-label { color: #6b7280; }
+
+/* grid */
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -111,12 +180,16 @@ function openVehicle(id: string) {
   color: #374151;
   display: block;
 }
+
+/* section */
 .section-title {
   margin: 24rpx 8rpx 16rpx;
   font-size: 28rpx;
   font-weight: 600;
   color: #111827;
 }
+
+/* card */
 .card {
   background: #fff;
   border-radius: 20rpx;
@@ -147,6 +220,36 @@ function openVehicle(id: string) {
   background: #f3f4f6;
   color: #6b7280;
 }
+
+/* battery bar */
+.card-progress {
+  margin-top: 12rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+.bar-track {
+  flex: 1;
+  height: 10rpx;
+  background: #f1f5f9;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 999rpx;
+  transition: width 0.3s;
+}
+.bar-green { background: #10b981; }
+.bar-yellow { background: #f59e0b; }
+.bar-red { background: #ef4444; }
+.bar-label {
+  font-size: 22rpx;
+  color: #6b7280;
+  min-width: 40rpx;
+  text-align: right;
+}
+
 .card-meta {
   margin-top: 12rpx;
   font-size: 24rpx;

@@ -8,8 +8,20 @@ export type Vehicle = {
   lat: number;
   lng: number;
   lastSeen: string;
+  battery: number;
   batteryPct: number;
   locateMode: string;
+  alarm: number;
+  mileage?: number;
+  csq?: number;
+  gpsSatellites?: number;
+  mainVoltageV?: number;
+  iccid?: string;
+  chargeStatus?: number;
+  accCumulativeSec?: number;
+  gsensorX?: number;
+  gsensorY?: number;
+  gsensorZ?: number;
 };
 
 export const mockVehicles: Vehicle[] = [
@@ -23,8 +35,20 @@ export const mockVehicles: Vehicle[] = [
     lat: 23.1291,
     lng: 113.2644,
     lastSeen: "14:32",
+    battery: 88,
     batteryPct: 88,
     locateMode: "GPS+北斗",
+    alarm: 2,
+    mileage: 1234.5,
+    csq: 28,
+    gpsSatellites: 12,
+    mainVoltageV: 48.2,
+    iccid: "89860831234567890123",
+    chargeStatus: 1,
+    accCumulativeSec: 28800,
+    gsensorX: 0,
+    gsensorY: 5,
+    gsensorZ: -2,
   },
   {
     id: "2",
@@ -36,8 +60,20 @@ export const mockVehicles: Vehicle[] = [
     lat: 22.5431,
     lng: 114.0579,
     lastSeen: "14:31",
+    battery: 72,
     batteryPct: 72,
     locateMode: "Wi‑Fi+LBS",
+    alarm: 0,
+    mileage: 2345.6,
+    csq: 22,
+    gpsSatellites: 8,
+    mainVoltageV: 47.5,
+    iccid: "89860831234567890124",
+    chargeStatus: 0,
+    accCumulativeSec: 14400,
+    gsensorX: 1,
+    gsensorY: -3,
+    gsensorZ: -1,
   },
 ];
 
