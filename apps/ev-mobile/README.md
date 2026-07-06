@@ -2,44 +2,41 @@
 
 **一套代码**可编译为：
 
-- **微信小程序**（当前主目标）
-- **Android / iOS App**（DCloud `app-plus`，云打包或离线打包）
-- **H5**（可选，便于浏览器调试）
+	- **Android / iOS App**（无微信依赖，独立运行）
+	- **H5**（浏览器直接访问）
+	- **微信小程序**（可选）
 
 技术栈：**Vue 3 + TypeScript + Vite + uni-app**，与《全量功能规格》中的车主/车队端能力对齐（地图、告警、轨迹、围栏、远程控制入口等）。数据当前为 **mock**，后续接你方业务 API。
 
 ## 环境要求
 
 - **Node.js 18+**、npm
-- **微信开发者工具**（[下载](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)）
-- 微信小程序 **AppID**（测试可用测试号；正式发布需注册小程序）
+- **HBuilderX**（编译 App 时需要，可选）
+- 微信开发者工具（编译微信小程序时需要，可选）
 
-## 安装与运行（微信小程序）
+## 安装与运行
 
 ```bash
 cd apps/ev-mobile
 npm install
-npm run dev:mp-weixin
+
+# 浏览器预览（不需要任何额外工具）
+npm run dev:h5
+
+# 编译 Android/iOS App（需 HBuilderX）
+npm run build:app
+
+# 编译微信小程序
+npm run build:mp-weixin
 ```
 
-控制台会输出编译结果目录，一般为：
+### 浏览器预览（推荐，最快上手）
 
-```text
-dist/dev/mp-weixin
+```bash
+npm run dev:h5
 ```
 
-### 用微信开发者工具打开
-
-1. 打开 **微信开发者工具** → **导入**（或 **+**）。
-2. **目录** 选择本机路径：  
-   `智控系统\apps\ev-mobile\dist\dev\mp-weixin`  
-   （注意：是 **dist** 里生成的目录，不是 `src`。）
-3. **AppID**：填你的小程序 AppID；没有可先选 **测试号**。
-4. 导入后即可在模拟器里预览；真机预览用工具栏 **预览** 扫码。
-
-### 配置小程序 AppID（可选）
-
-编辑 `src/manifest.json` → `mp-weixin` → `appid`，填入你的 AppID（与微信公众平台一致）。
+然后在浏览器打开控制台输出的地址（通常是 `http://localhost:5173`），即可直接预览完整移动端界面。App 端的地图、定位等功能与 H5 基本一致。
 
 ## 发行 App（简要）
 
