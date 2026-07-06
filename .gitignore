@@ -22,3 +22,9 @@ Thumbs.db
 services/device-gateway/data/hardware-uploads/
 services/device-gateway/data/mall-uploads/
 
+# Local preview files
+**/mobile-preview.html
+**/temp*
+
+# Windows desktop files
+*.zip
