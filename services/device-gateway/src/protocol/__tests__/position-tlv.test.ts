@@ -282,3 +282,101 @@ describe("readAuthCodeFrom0102Body", () => {
     expect(typeof r).toBe("string");
   });
 });
+
+/* ------------------------------------------------------------------ */
+/*  新增：更多 TLV 边界用例                                            */
+/* ------------------------------------------------------------------ */
+
+describe("parse0200TlvSlice additional TLVs", () => {
+  it("should parse RFID TLV (0xfa, var length)", () => {
+    const buf = Buffer.from([0xfa, 0x08, 0x52, 0x46, 0x49, 0x44, 0x5f, 0x30, 0x30, 0x31]);
+    const r = parse0200TlvSlice(buf);
+    expect(r.rfid).toBe("RFID_001");
+  });
+
+  it("should parse multiple TLVs in sequence", () => {
+    const buf = Buffer.from([
+      0x01, 0x04, 0x00, 0x00, 0x00, 0x64, // mileage
+      0x30, 0x01, 0x4b,                   // CSQ
+      0x31, 0x01, 0x0a,                   // GPS satellites
+    ]);
+    const r = parse0200TlvSlice(buf);
+    expect(r.mileageKm).toBe(10.0);
+    expect(r.csq).toBe(75);
+    expect(r.gpsSatellites).toBe(10);
+  });
+
+  it("should parse alarm extension TLV (0xf4) with various values", () => {
+    const buf = Buffer.from([0xf4, 0x02, 0x00, 0x10]);
+    const r = parse0200TlvSlice(buf);
+    expect(r.extendedAlarm).toBe(16);
+  });
+
+  it("should handle TLV with too-short body gracefully", () => {
+    // 0xf5 requires 6 bytes but only 2 provided
+    const buf = Buffer.from([0xf5, 0x06, 0x00, 0x01]);
+    const r = parse0200TlvSlice(buf);
+    expect(r).toEqual({});
+  });
+
+  it("should handle TLV with zero length field", () => {
+    const buf = Buffer.from([0xfa, 0x00, 0x01, 0x04, 0x00, 0x00, 0x00, 0x64]);
+    const r = parse0200TlvSlice(buf);
+    expect(r.rfid).toBeUndefined();
+    expect(r.mileageKm).toBe(10.0);
+  });
+
+  it("should handle battery percentage TLV with 0xff prefix", () => {
+    const buf = Buffer.from([0x56, 0x02, 0xff, 0x58]); // 88%
+    const r = parse0200TlvSlice(buf);
+    expect(r.batteryPct).toBe(88);
+  });
+
+  it("should handle battery percentage with 0x00 prefix", () => {
+    const buf = Buffer.from([0x56, 0x02, 0x00, 0x2d]); // 45%
+    const r = parse0200TlvSlice(buf);
+    expect(r.batteryPct).toBe(45);
+  });
+});
+
+describe("alarmBit edge cases", () => {
+  it("should handle all bits set", () => {
+    expect(alarmBit(0xffffffff, 0)).toBe(true);
+    expect(alarmBit(0xffffffff, 31)).toBe(true);
+  });
+
+  it("should handle no bits set", () => {
+    expect(alarmBit(0, 0)).toBe(false);
+    expect(alarmBit(0, 15)).toBe(false);
+  });
+
+  it("should handle bit beyond 32-bit range", () => {
+    expect(alarmBit(0, 33)).toBe(false);
+    expect(alarmBit(1 << 31, 31)).toBe(true);
+  });
+});
+
+describe("parse0200FullBody edge cases", () => {
+  it("should handle body with only basic fields (no TLV)", () => {
+    const body = Buffer.alloc(28);
+    body.writeUInt32BE(0, 0);
+    body.writeUInt32BE(1, 4); // ACC on
+    body.writeUInt32BE(22395000, 8);
+    body.writeUInt32BE(114065000, 12);
+    const r = parse0200FullBody(body);
+    expect(r).not.toBeNull();
+    expect(r!.lat).toBe(22395000);
+    expect(r!.tlv).toEqual({});
+  });
+
+  it("should handle body with maximum alarm bits", () => {
+    const body = Buffer.alloc(28);
+    body.writeUInt32BE(0xffffffff, 0); // all alarm bits set
+    body.writeUInt32BE(0, 4);
+    body.writeUInt32BE(22395000, 8);
+    body.writeUInt32BE(114065000, 12);
+    const r = parse0200FullBody(body);
+    expect(r).not.toBeNull();
+    expect(r!.alarm).toBe(0xffffffff);
+  });
+});

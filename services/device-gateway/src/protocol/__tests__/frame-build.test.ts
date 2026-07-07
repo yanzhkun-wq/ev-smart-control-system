@@ -9,6 +9,7 @@ import {
   bcd6TimeToIsoGuess,
 } from "../frame-build.js";
 import { unescape808 } from "../escape.js";
+import { parseFrame } from "../frame-parser.js";
 
 describe("phoneDigitsToBcd", () => {
   it("should convert 11-digit phone to 6-byte BCD", () => {
@@ -226,5 +227,138 @@ describe("bcd6TimeToIsoGuess", () => {
 
   it("should return empty string for buffer shorter than 6 bytes", () => {
     expect(bcd6TimeToIsoGuess(Buffer.alloc(3))).toBe("");
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/*  新增：边界用例                                                     */
+/* ------------------------------------------------------------------ */
+
+describe("buildWireFrame edge cases", () => {
+  it("should escape 0x7e in body correctly", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    // Body containing frame delimiter - must be escaped
+    const body = Buffer.from([0x01, 0x7e, 0x02]);
+    const wire = buildWireFrame(0x0200, phoneBcd, 1, body);
+    const inner = wire.subarray(1, wire.length - 1);
+    const unescaped = unescape808(inner);
+    // After unescaping, body should be intact (exclude checksum byte)
+    expect(unescaped.subarray(12, unescaped.length - 1)).toEqual(body);
+  });
+
+  it("should escape 0x7d in body correctly", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    const body = Buffer.from([0x7d, 0x01, 0x02]);
+    const wire = buildWireFrame(0x0200, phoneBcd, 1, body);
+    const inner = wire.subarray(1, wire.length - 1);
+    const unescaped = unescape808(inner);
+    expect(unescaped.subarray(12, unescaped.length - 1)).toEqual(body);
+  });
+
+  it("should escape mixed 0x7e and 0x7d in body", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    const body = Buffer.from([0x7e, 0x7d, 0x01, 0x7e, 0x02, 0x7d]);
+    const wire = buildWireFrame(0x0200, phoneBcd, 1, body);
+    const inner = wire.subarray(1, wire.length - 1);
+    const unescaped = unescape808(inner);
+    expect(unescaped.subarray(12, unescaped.length - 1)).toEqual(body);
+  });
+
+  it("should build frame with empty body", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    const wire = buildWireFrame(0x0002, phoneBcd, 1, Buffer.alloc(0)); // heartbeat
+    expect(wire[0]).toBe(0x7e);
+    expect(wire[wire.length - 1]).toBe(0x7e);
+    const inner = unescape808(wire.subarray(1, wire.length - 1));
+    expect(inner.readUInt16BE(2) & 0x3ff).toBe(0); // body length = 0
+  });
+
+  it("should build frame with 1023-byte max body", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    const body = Buffer.alloc(1023, 0xab);
+    const wire = buildWireFrame(0x0200, phoneBcd, 1, body);
+    const inner = unescape808(wire.subarray(1, wire.length - 1));
+    expect(inner.readUInt16BE(2) & 0x3ff).toBe(1023);
+    // Exclude checksum (last byte)
+    expect(inner.subarray(12, inner.length - 1).length).toBe(1023);
+  });
+
+  it("should build frame with valid checksum that passes parseFrame", () => {
+    const phoneBcd = phoneDigitsToBcd("13800138000");
+    const body = Buffer.from([0x10, 0x20, 0x30]);
+    const wire = buildWireFrame(0x0200, phoneBcd, 5, body);
+    // parseFrame should validate checksum and succeed
+    const inner = unescape808(wire.subarray(1, wire.length - 1));
+    const frame = parseFrame(inner);
+    expect(frame.header.messageId).toBe(0x0200);
+    expect(frame.body).toEqual(body);
+  });
+});
+
+describe("buildPlatformAck edge cases", () => {
+  it("should build ack with failure result (1)", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    const result = buildPlatformAck(phoneBcd, 10, 0x0200, 3, 1);
+    const inner = unescape808(result.subarray(1, result.length - 1));
+    expect(inner[16]).toBe(1); // failure
+  });
+
+  it("should build ack with max serial number", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    const result = buildPlatformAck(phoneBcd, 0xffff, 0x0200, 0xffff, 0);
+    const inner = unescape808(result.subarray(1, result.length - 1));
+    expect(inner.readUInt16BE(10)).toBe(0xffff);
+    expect(inner.readUInt16BE(12)).toBe(0xffff);
+  });
+});
+
+describe("buildRegisterResponse edge cases", () => {
+  it("should build 0x8100 with empty auth code", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    const result = buildRegisterResponse(phoneBcd, 22, 7, 0, "");
+    const inner = unescape808(result.subarray(1, result.length - 1));
+    const bodyLen = inner.readUInt16BE(2) & 0x3ff;
+    expect(bodyLen).toBe(3); // replyToSerial(2) + result(1) + empty auth
+  });
+
+  it("should build with long auth code", () => {
+    const phoneBcd = phoneDigitsToBcd("12345678901");
+    const longAuth = "AUTH_" + "x".repeat(30);
+    const result = buildRegisterResponse(phoneBcd, 23, 8, 0, longAuth);
+    const inner = unescape808(result.subarray(1, result.length - 1));
+    const bodyLen = inner.readUInt16BE(2) & 0x3ff;
+    const authSlice = inner.subarray(15, 15 + bodyLen - 3);
+    expect(authSlice.toString()).toBe(longAuth);
+  });
+});
+
+describe("phoneDigitsToBcd edge cases", () => {
+  it("should handle phone with leading 86 prefix", () => {
+    const result = phoneDigitsToBcd("8613800138000");
+    expect(result.length).toBe(6);
+  });
+
+  it("should handle all-zero phone", () => {
+    const result = phoneDigitsToBcd("00000000000");
+    expect(result).toEqual(Buffer.from([0x00, 0x00, 0x00, 0x00, 0x00, 0x00]));
+  });
+
+  it("should treat empty string as all zeros", () => {
+    const result = phoneDigitsToBcd("");
+    expect(result).toEqual(Buffer.from([0x00, 0x00, 0x00, 0x00, 0x00, 0x00]));
+  });
+});
+
+describe("bcd6TimeToIsoGuess edge cases", () => {
+  it("should handle leap year February 29", () => {
+    const bcd = Buffer.from([0x24, 0x02, 0x29, 0x12, 0x00, 0x00]);
+    const result = bcd6TimeToIsoGuess(bcd);
+    expect(result).toBe("2024-02-29T12:00:00+08:00");
+  });
+
+  it("should handle midnight 00:00:00", () => {
+    const bcd = Buffer.from([0x26, 0x06, 0x15, 0x00, 0x00, 0x00]);
+    const result = bcd6TimeToIsoGuess(bcd);
+    expect(result).toBe("2026-06-15T00:00:00+08:00");
   });
 });
