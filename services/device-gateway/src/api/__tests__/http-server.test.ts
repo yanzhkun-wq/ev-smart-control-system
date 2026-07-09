@@ -290,4 +290,74 @@ describe("HTTP API Server", () => {
       expect(status).toBe(404);
     });
   });
+
+  /* ---- Error handling ---- */
+  describe("error handling", () => {
+    it("should return 400 for bind with missing terminalPhone", async () => {
+      const { status, data } = await jsonReq(srv, "POST", "/api/bind", { plate: "粤A·T" });
+      expect(status).toBe(400);
+      expect(data).toMatchObject({ ok: false });
+    });
+
+    it("should return 400 for command with unknown action", async () => {
+      const { status, data } = await jsonReq(srv, "POST", "/api/terminal/13800138000/command", { action: "fly" });
+      expect(status).toBe(400);
+      expect(data).toMatchObject({ ok: false });
+    });
+
+    it("should return 400 for tracks without date parameter", async () => {
+      const { status, data } = await jsonReq(srv, "GET", "/api/terminal/13800138000/tracks");
+      expect(status).toBe(400);
+    });
+
+    it("should return 400 for tracks with bad date format", async () => {
+      const { status, data } = await jsonReq(srv, "GET", "/api/terminal/13800138000/tracks?date=not-a-date");
+      expect(status).toBe(400);
+    });
+
+    it("should return 503 for track-days when trackLog is undefined", async () => {
+      const { status, data } = await jsonReq(srv, "GET", "/api/terminal/13800138000/track-days");
+      expect(status).toBe(503);
+      expect(data).toMatchObject({ ok: false });
+    });
+  });
+
+  /* ---- Terminal status edge cases ---- */
+  describe("terminal status edge cases", () => {
+    it("should return status for terminal with last position", async () => {
+      const { status, data } = await jsonReq(srv, "GET", "/api/terminal/13800138000/status");
+      expect(status).toBe(200);
+      expect(data).toHaveProperty("last");
+      expect((data as any).last).not.toBeNull();
+    });
+
+    it("should return status for terminal without last position", async () => {
+      const { status, data } = await jsonReq(srv, "GET", "/api/terminal/13800138001/status");
+      expect(status).toBe(200);
+      expect((data as any).last).toBeNull();
+    });
+  });
+
+  /* ---- Bind edge cases ---- */
+  describe("bind edge cases", () => {
+    it("should update existing bind when same phone re-binds", async () => {
+      const { status } = await jsonReq(srv, "POST", "/api/bind", {
+        terminalPhone: "13800138000",
+        plate: "粤A·NEWPLATE",
+        note: "更新车牌",
+      });
+      expect(status).toBe(200);
+      expect(app.savedBinds).toHaveLength(1);
+      expect(app.savedBinds[0]!.plate).toBe("粤A·NEWPLATE");
+    });
+
+    it("should handle bind with special characters in phone", async () => {
+      const { status, data } = await jsonReq(srv, "POST", "/api/bind", {
+        terminalPhone: "138-0013-8000",
+        plate: "粤A·TEST",
+      });
+      expect(status).toBe(200);
+      expect((data as any).terminalPhone).toBe("13800138000");
+    });
+  });
 });
