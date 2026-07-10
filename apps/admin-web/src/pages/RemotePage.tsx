@@ -2,6 +2,7 @@ import { Alert, App, Button, Card, Col, Form, Input, Row, Select, Space, Typogra
 import { useAdminGateway } from "../context/AdminGatewayContext";
 import { gatewayFetch } from "../api/client";
 import { useEffect, useState } from "react";
+import { PageState } from "../components/EmptyState";
 
 export type RemotePageProps = { embedded?: boolean };
 
@@ -58,12 +59,18 @@ export function RemotePage({ embedded = false }: RemotePageProps = {}) {
         </>
       ) : null}
 
-      <Alert
-        type="info"
-        showIcon
-        message="终端离线时会返回 503；命令字以网关当前适配为准。"
-        style={{ marginBottom: 16 }}
-      />
+      <PageState
+        loading={false}
+        hasData={deviceRows.length > 0}
+        emptyText="暂无可用终端，请先在设备绑定中添加"
+        emptyIcon="🚗"
+      >
+        <Alert
+          type="info"
+          showIcon
+          message="终端离线时会返回 503；命令字以网关当前适配为准。"
+          style={{ marginBottom: 16 }}
+        />
 
       <Card size="small" style={{ marginBottom: 16 }}>
         <Form layout="inline">
@@ -147,6 +154,7 @@ export function RemotePage({ embedded = false }: RemotePageProps = {}) {
           </Card>
         </Col>
       </Row>
+      </PageState>
     </div>
   );
 }
