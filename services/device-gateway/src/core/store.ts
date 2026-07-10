@@ -21,12 +21,23 @@ export type {
 export type { MiniappPageConfig };
 export { defaultMiniappPages };
 
+/**
+ * 车辆与终端绑定关系
+ * @property terminalPhone - 终端 SIM 卡手机号（11位数字，BCD编码用）
+ * @property plate - 车牌号
+ * @property note - 备注说明
+ */
 export type VehicleBind = {
   terminalPhone: string;
   plate: string;
   note?: string;
 };
 
+/**
+ * 终端最后上报的位置信息（由 0x0200 / 0x0704 消息解析而来）
+ * 包含基本定位数据 + TLV 附加信息（电压、ICCID、Gsensor 等）
+ * @see parse0200FullBody - 消息体解析
+ */
 export type LastPosition = {
   terminalPhone: string;
   latDeg: number;
@@ -572,6 +583,19 @@ export function hydrateStoreFromDisk(raw: StoreShape, bootstrapAuthCode: string)
   };
 }
 
+/**
+ * JSON 文件持久化存储
+ *
+ * 以 JSON 格式将 StoreShape 写入磁盘文件，支持：
+ * - 防重复写入（200ms 去抖合并）
+ * - 原子写入（先写 .tmp 再 rename，防止写半截断电丢数据）
+ * - 优雅关闭（drain 等待最后一次写入完成）
+ *
+ * @example
+ * const storage = new JsonPersistence("/data");
+ * storage.save(shape);
+ * await storage.drain();
+ */
 export class JsonPersistence {
   readonly filePath: string;
   private writePending = false;
@@ -651,6 +675,17 @@ export class JsonPersistence {
   }
 }
 
+/**
+ * 规范化手机号：去除非数字字符，统一为 11 位数字
+ *
+ * @param input - 原始手机号（可包含 -、空格、86 前缀等）
+ * @returns 11 位纯数字手机号
+ * @throws 输入内容无法提取出 11 位数字时抛出异常
+ *
+ * @example
+ * normalizePhoneDigits("138-0013-8000") // "13800138000"
+ * normalizePhoneDigits("8613800138000") // "13800138000"
+ */
 export function normalizePhoneDigits(input: string): string {
   const d = input.replace(/\D/g, "");
   if (d.length === 11) return d;
@@ -664,7 +699,19 @@ type SessionEntry = {
   remote: string;
 };
 
-/** 终端在线会话 + 平台侧下行流水号 */
+/**
+ * 终端在线会话管理 + 平台侧下行流水号
+ *
+ * 维护每个终端（以 phoneKey 索引）的 TCP Socket 映射。
+ * 同一终端重复连接时自动销毁旧连接，保证只有一条有效会话。
+ * 下行流水号用于平台→终端消息的序列号，每个终端独立计数并限制在 16 位。
+ *
+ * @example
+ * const reg = new TerminalRegistry();
+ * reg.setSocket("13800138000", socket, "192.168.1.1:45231");
+ * reg.isOnline("13800138000"); // true
+ * reg.nextDownSerial("13800138000"); // 1
+ */
 export class TerminalRegistry {
   private readonly sessions = new Map<string, SessionEntry>();
   private downSerial = new Map<string, number>();

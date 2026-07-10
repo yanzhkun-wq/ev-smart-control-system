@@ -1,6 +1,19 @@
 import { escape808ForWire } from "./escape.js";
 
-/** 将 11～12 位数字的手机号转为协议头 6 字节 BCD（左补 0 到 12 位） */
+/**
+ * 将 11～12 位数字的手机号转为协议头 6 字节 BCD（左补 0 到 12 位）
+ *
+ * JT/T808 协议头中终端手机号以 BCD 编码存储，占用 6 字节（12 位数字）。
+ * 不足 12 位时左补 0，超过 12 位时取后 12 位。
+ *
+ * @param phoneDigits - 手机号字符串（自动去除非数字字符）
+ * @returns 6 字节 BCD 编码 Buffer
+ * @throws 当去除非数字字符后包含非数字字符时抛出
+ *
+ * @example
+ * phoneDigitsToBcd("12345678901") // → Buffer<01 23 45 67 89 01>
+ * phoneDigitsToBcd("1380013800")  // → Buffer<00 13 80 01 38 00>
+ */
 export function phoneDigitsToBcd(phoneDigits: string): Buffer {
   const d = phoneDigits.replace(/\D/g, "");
   const pad = d.length >= 12 ? d.slice(-12) : d.padStart(12, "0");
@@ -21,7 +34,21 @@ function xorRange(data: Buffer, start: number, end: number): number {
 }
 
 /**
- * 组帧：消息头(12) + 体 + 校验码(1)，再转义，外包 0x7e。
+ * 组帧：构建完整的 JT/T808 线缆帧
+ *
+ * 组装 12 字节消息头 + 消息体 + 1 字节校验码（XOR），
+ * 对整个内容做 0x7e/0x7d 转义，最后包上 0x7e 定界符。
+ *
+ * @param messageId - 消息 ID（如 0x0200、0x8100）
+ * @param phoneBcd - 6 字节 BCD 手机号
+ * @param serial - 消息流水号（16 位）
+ * @param body - 消息体 Buffer
+ * @returns 完整线缆帧（含 0x7e 定界符 + 转义）
+ * @throws phoneBcd 长度不为 6 时抛出
+ *
+ * @example
+ * const bcd = phoneDigitsToBcd("13800138000");
+ * const wire = buildWireFrame(0x0200, bcd, 1, bodyBuffer);
  */
 export function buildWireFrame(
   messageId: number,

@@ -9,6 +9,7 @@
  * 5. 交由 Jt808App 处理业务逻辑与应答
  *
  * 每个 socket 独立维护接收缓冲区，支持粘包/半包处理。
+ * 缓冲区超过 64KB 时自动清空（防内存泄漏）。
  */
 
 import net from "node:net";
@@ -17,11 +18,23 @@ import { parseFrame } from "../protocol/frame-parser.js";
 import type { Jt808App } from "../core/jt808-app.js";
 
 export type GatewayOptions = {
+  /** TCP 监听端口（默认 7611） */
   port: number;
+  /** 监听地址（默认 0.0.0.0） */
   host?: string;
+  /** 业务逻辑处理器 */
   app: Jt808App;
 };
 
+/**
+ * 创建 JT/T808 TCP 网关服务器
+ *
+ * @param options - 网关配置
+ * @returns Promise，服务器启动后 resolve
+ *
+ * @example
+ * await createGateway({ port: 7611, app: jtApp });
+ */
 export async function createGateway(options: GatewayOptions): Promise<void> {
   const { port, host = "0.0.0.0", app } = options;
 
