@@ -1,0 +1,38 @@
+# 自动依赖更新配置
+# 详见 https://docs.github.com/code-security/dependabot
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/services/device-gateway"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/admin-web"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/ev-mobile"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "docker"
+    directory: "/services/device-gateway"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "docker"
