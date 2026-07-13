@@ -1,0 +1,22 @@
+# 自动关闭 stale issue/PR
+# 详见 https://github.com/actions/stale
+
+name: Mark stale issues
+
+on:
+  schedule:
+    - cron: "0 10 * * 1" # 每周一 10:00 UTC
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: "此 Issue 已 30 天无活动，将被标记为 stale。如果还有需要请回复，否则将在 7 天后自动关闭。"
+          close-issue-message: "此 Issue 因 30 天无活动已自动关闭。如仍有需要请重新打开。"
+          stale-issue-label: "stale"
+          days-before-stale: 30
+          days-before-close: 7
+          exempt-issue-labels: "bug,enhancement,讨论"
