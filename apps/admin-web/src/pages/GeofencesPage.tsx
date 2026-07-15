@@ -1,5 +1,5 @@
-import { App, Button, Card, Form, Input, InputNumber, Select, Space, Switch, Table, Tag, Typography } from "antd";
-import { useEffect, useState } from "react";
+import { App, Button, Card, Col, Form, Input, InputNumber, Row, Select, Space, Statistic, Switch, Table, Tag, Typography } from "antd";
+import { useEffect, useMemo, useState } from "react";
 import { MapContainer, Circle, Polygon, TileLayer } from "react-leaflet";
 import { useAdminGateway } from "../context/AdminGatewayContext";
 import type { AdminGeofenceRow, StoreShape } from "../types/gatewayStore";
@@ -16,6 +16,22 @@ export function GeofencesPage({ embedded = false }: GeofencesPageProps = {}) {
   const [form] = Form.useForm();
 
   const geofences = store?.admin?.geofences ?? [];
+  const [search, setSearch] = useState("");
+
+  const filtered = useMemo(() => {
+    if (!search.trim()) return geofences;
+    const q = search.toLowerCase();
+    return geofences.filter((g) => g.name.toLowerCase().includes(q) || g.bindPlates.toLowerCase().includes(q));
+  }, [geofences, search]);
+
+  const stats = useMemo(() => ({
+    total: geofences.length,
+    enabled: geofences.filter((g) => g.enabled).length,
+    circles: geofences.filter((g) => g.type === "圆形").length,
+    polygons: geofences.filter((g) => g.type === "多边形").length,
+  }), [geofences]);
+
+  const mapCenter: [number, number] = [23.1291, 113.2644];
 
   useEffect(() => {
     if (!open) return;
@@ -90,14 +106,6 @@ export function GeofencesPage({ embedded = false }: GeofencesPageProps = {}) {
     message.success("已删除");
   };
 
-  const center: [number, number] = [23.1291, 113.2644];
-  const demoPoly: [number, number][] = [
-    [23.131, 113.262],
-    [23.131, 113.268],
-    [23.126, 113.268],
-    [23.126, 113.262],
-  ];
-
   return (
     <div>
       {!embedded ? (
@@ -113,38 +121,60 @@ export function GeofencesPage({ embedded = false }: GeofencesPageProps = {}) {
       ) : null}
 
       <Space style={{ marginBottom: 16 }}>
-        <Button
-          type="primary"
-          onClick={() => {
-            setEditing(null);
-            setOpen(true);
-          }}
-        >
+        <Button type="primary" onClick={() => { setEditing(null); setOpen(true); }}>
           新建围栏
         </Button>
+        <Input
+          placeholder="搜索围栏名称或车牌"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{ width: 240 }}
+          allowClear
+        />
       </Space>
+
+      {/* 统计 */}
+      <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
+        <Col xs={12} sm={6}>
+          <Card size="small"><Statistic title="总计" value={stats.total} suffix={`启用 ${stats.enabled}`} valueStyle={{ fontSize: 20 }} /></Card>
+        </Col>
+        <Col xs={12} sm={6}>
+          <Card size="small"><Statistic title="启用" value={stats.enabled} valueStyle={{ color: "#10b981", fontSize: 20 }} /></Card>
+        </Col>
+        <Col xs={12} sm={6}>
+          <Card size="small"><Statistic title="圆形" value={stats.circles} valueStyle={{ fontSize: 20 }} /></Card>
+        </Col>
+        <Col xs={12} sm={6}>
+          <Card size="small"><Statistic title="多边形" value={stats.polygons} valueStyle={{ fontSize: 20 }} /></Card>
+        </Col>
+      </Row>
 
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
         <div style={{ flex: "1 1 360px", minWidth: 320 }}>
           <Table
             rowKey="key"
-            dataSource={geofences}
+            dataSource={filtered}
             pagination={false}
             columns={[
               { title: "名称", dataIndex: "name" },
-              {
-                title: "类型",
-                dataIndex: "type",
-                width: 88,
-                render: (t: string) => <Tag>{t}</Tag>,
-              },
+              { title: "类型", dataIndex: "type", width: 72, render: (t: string) => <Tag>{t}</Tag> },
               { title: "绑定车辆", dataIndex: "bindPlates", ellipsis: true },
               { title: "告警策略", dataIndex: "alarm", width: 100 },
               {
                 title: "启用",
                 dataIndex: "enabled",
                 width: 72,
-                render: (v: boolean) => (v ? <Tag color="green">是</Tag> : <Tag>否</Tag>),
+                render: (v: boolean, r) => (
+                  <Switch
+                    size="small"
+                    checked={v}
+                    onChange={async (checked) => {
+                      const list = geofences.map((g) => g.key === r.key ? { ...g, enabled: checked } : g);
+                      await persist(list);
+                      message.success(checked ? "已启用" : "已停用");
+                    }}
+                  />
+                ),
               },
               {
                 title: "操作",
@@ -152,63 +182,39 @@ export function GeofencesPage({ embedded = false }: GeofencesPageProps = {}) {
                 width: 160,
                 render: (_, r) => (
                   <Space>
-                    <Button
-                      type="link"
-                      size="small"
-                      onClick={() => {
-                        setEditing(r);
-                        setOpen(true);
-                      }}
-                    >
-                      编辑
-                    </Button>
-                    <Button
-                      type="link"
-                      size="small"
-                      danger
-                      onClick={() =>
-                        void doubleConfirmDelete({
-                          firstTitle: `删除围栏「${r.name}」？`,
-                          firstContent: "删除后立即写入网关，绑定车辆的围栏策略将失效。",
-                          onDelete: () => remove(r.key),
-                        })
-                      }
-                    >
-                      删除
-                    </Button>
+                    <Button type="link" size="small" onClick={() => { setEditing(r); setOpen(true); }}>编辑</Button>
+                    <Button type="link" size="small" danger
+                      onClick={() => void doubleConfirmDelete({
+                        firstTitle: `删除围栏「${r.name}」？`,
+                        firstContent: "删除后立即写入网关，绑定车辆的围栏策略将失效。",
+                        onDelete: () => remove(r.key),
+                      })}
+                    >删除</Button>
                   </Space>
                 ),
               },
             ]}
           />
         </div>
-        <Card size="small" title="地图预览（首条围栏几何）" style={{ flex: "1 1 420px", minWidth: 320 }}>
+        <Card size="small" title="围栏地图" style={{ flex: "1 1 420px", minWidth: 320 }}>
           <div style={{ height: 360 }}>
-            <MapContainer center={center} zoom={14} scrollWheelZoom style={{ height: "100%" }}>
+            <MapContainer center={mapCenter} zoom={13} scrollWheelZoom style={{ height: "100%" }}>
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              {geofences.length === 0 && (
-                <>
-                  <Circle center={center} radius={420} pathOptions={{ color: "#0d9488", fillOpacity: 0.12 }} />
-                  <Polygon positions={demoPoly} pathOptions={{ color: "#ea580c", fillOpacity: 0.1 }} />
-                </>
-              )}
-              {geofences[0]?.type === "圆形" &&
-                geofences[0].centerLat != null &&
-                geofences[0].centerLng != null &&
-                geofences[0].radiusM != null && (
-                  <Circle
-                    center={[geofences[0].centerLat, geofences[0].centerLng]}
-                    radius={geofences[0].radiusM}
-                    pathOptions={{ color: "#0d9488", fillOpacity: 0.12 }}
+              {geofences.map((f) =>
+                f.type === "圆形" && f.centerLat != null && f.centerLng != null && f.radiusM != null ? (
+                  <Circle key={f.key} center={[f.centerLat, f.centerLng]} radius={f.radiusM}
+                    pathOptions={{ color: f.enabled ? "#0d9488" : "#94a3b8", fillOpacity: 0.1 }}
                   />
-                )}
-              {geofences[0]?.type === "多边形" && geofences[0].polygon && geofences[0].polygon.length > 2 && (
-                <Polygon positions={geofences[0].polygon} pathOptions={{ color: "#ea580c", fillOpacity: 0.1 }} />
+                ) : f.type === "多边形" && f.polygon && f.polygon.length > 2 ? (
+                  <Polygon key={f.key} positions={f.polygon}
+                    pathOptions={{ color: f.enabled ? "#ea580c" : "#94a3b8", fillOpacity: 0.08 }}
+                  />
+                ) : null
               )}
             </MapContainer>
           </div>
           <Typography.Paragraph type="secondary" style={{ marginTop: 8, marginBottom: 0, fontSize: 12 }}>
-            预览优先取列表第一条；无数据时显示示例圆/多边形。
+            地图展示全部围栏几何，绿色=圆形，橙色=多边形，灰色=停用。
           </Typography.Paragraph>
         </Card>
       </div>
