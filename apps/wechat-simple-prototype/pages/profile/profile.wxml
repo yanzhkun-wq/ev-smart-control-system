@@ -35,6 +35,21 @@
 
   </view>
 
+  <!-- 数据统计 -->
+  <view class="stats-row" wx:if="{{isLoggedIn}}">
+    <view class="stats-item">
+      <text class="stats-num">{{vehicleCount || 0}}</text>
+      <text class="stats-lbl">绑定车辆</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-num">{{alarmPending}}</text>
+      <text class="stats-lbl">待处理告警</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-num">{{user.name !== '游客' ? '1' : '0'}}</text>
+      <text class="stats-lbl">车队</text>
+    </view>
+  </view>
 
   <view class="panel panel-compact">
     <view class="panel-head panel-head-min">

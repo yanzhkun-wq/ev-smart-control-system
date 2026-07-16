@@ -1,5 +1,6 @@
 const auth = require("../../utils/auth-store.js");
 const org = require("../../utils/org-store.js");
+const vehicleStore = require("../../utils/vehicle-store.js");
 
 const STORAGE_ALARMS = "ev_alarms";
 const PROFILE_ROUTE = "pages/profile/profile";
@@ -142,6 +143,11 @@ Page({
     if (org.isSuperAdmin(p)) bits.push("管理员");
 
     let bindLine = "";
+    let vehicleCount = 0;
+    if (isLoggedIn) {
+      const list = vehicleStore.listForSession(session);
+      vehicleCount = list.length;
+    }
 
     this.setData({
       isLoggedIn: true,
@@ -152,6 +158,7 @@ Page({
         role: bits.join(" · "),
       },
       bindLine,
+      vehicleCount,
       alarmPending,
       showSuper: org.isSuperAdmin(p),
     });

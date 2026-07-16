@@ -437,3 +437,30 @@
   color: #94a3b8;
   font-weight: 500;
 }
+
+/* 统计栏 */
+.stats-row {
+  display: flex;
+  gap: 16rpx;
+  padding: 16rpx 24rpx 12rpx;
+}
+.stats-item {
+  flex: 1;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 12rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 12rpx rgba(15, 23, 42, 0.05);
+}
+.stats-num {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #0f172a;
+  display: block;
+}
+.stats-lbl {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #64748b;
+  display: block;
+}
