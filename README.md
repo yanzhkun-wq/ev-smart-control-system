@@ -16,7 +16,7 @@
   <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/stargazers"><img src="https://img.shields.io/github/stars/yanzhkun-wq/ev-smart-control-system?style=flat" alt="GitHub Stars"></a>
   <img src="https://img.shields.io/github/languages/code-size/yanzhkun-wq/ev-smart-control-system" alt="Code Size">
   <a href="https://github.com/yanzhkun-wq/ev-smart-control-system/actions"><img src="https://img.shields.io/github/actions/workflow/status/yanzhkun-wq/ev-smart-control-system/ci.yml?branch=master&label=CI" alt="CI"></a>
-	  <img src="https://img.shields.io/badge/tests-137%20passing-brightgreen" alt="Tests: 137 passing"></a>
+	  <img src="https://img.shields.io/badge/tests-176%20passing-brightgreen" alt="Tests: 176 passing"></a>
 </p>
 
 ---
