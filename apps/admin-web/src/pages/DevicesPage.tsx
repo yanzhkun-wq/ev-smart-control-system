@@ -12,7 +12,8 @@ import {
   Tag,
   Typography,
 } from "antd";
-import { useState } from "react";
+import { SearchOutlined, ReloadOutlined } from "@ant-design/icons";
+import { useMemo, useState } from "react";
 import { useAdminGateway } from "../context/AdminGatewayContext";
 import { gatewayFetch } from "../api/client";
 import type { DevicePresentation, LastPosition, StoreShape } from "../types/gatewayStore";
@@ -23,13 +24,29 @@ export type DevicesPageProps = { embedded?: boolean };
 
 export function DevicesPage({ embedded = false }: DevicesPageProps = {}) {
   const { message } = App.useApp();
-  const { deviceRows, store, saveStore, refresh } = useAdminGateway();
+  const { deviceRows, store, saveStore, refresh, loading } = useAdminGateway();
   const [open, setOpen] = useState(false);
   const [drawerMode, setDrawerMode] = useState<"detail" | "pres" | "pos" | "add">("detail");
   const [current, setCurrent] = useState<UiDeviceRow | null>(null);
+  const [search, setSearch] = useState("");
   const [presForm] = Form.useForm();
   const [posForm] = Form.useForm();
   const [addForm] = Form.useForm();
+
+  const filtered = useMemo(() => {
+    if (!search.trim()) return deviceRows;
+    const q = search.toLowerCase();
+    return deviceRows.filter(
+      (d) => d.plate?.toLowerCase().includes(q) || d.terminalPhone?.toLowerCase().includes(q)
+    );
+  }, [deviceRows, search]);
+
+  const stats = useMemo(() => ({
+    total: deviceRows.length,
+    online: deviceRows.filter((d) => d.online).length,
+    armed: deviceRows.filter((d) => d.armed).length,
+    lowBattery: deviceRows.filter((d) => (d.batteryPct ?? 100) < 20).length,
+  }), [deviceRows]);
 
   const openDetail = (r: UiDeviceRow) => {
     setCurrent(r);
@@ -160,23 +177,27 @@ export function DevicesPage({ embedded = false }: DevicesPageProps = {}) {
         </>
       ) : null}
 
-      <Space style={{ marginBottom: 16 }}>
-        <Button
-          type="primary"
-          onClick={() => {
-            setCurrent(null);
-            setDrawerMode("add");
-            addForm.resetFields();
-            setOpen(true);
-          }}
-        >
+      <Space style={{ marginBottom: 16 }} wrap>
+        <Button type="primary" onClick={() => { setCurrent(null); setDrawerMode("add"); addForm.resetFields(); setOpen(true); }}>
           新增绑定
         </Button>
+        <Input
+          placeholder="搜索车牌或终端号"
+          prefix={<SearchOutlined />}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{ width: 240 }}
+          allowClear
+        />
+        <Button icon={<ReloadOutlined />} loading={loading} onClick={() => void refresh()}>刷新</Button>
+        <Typography.Text type="secondary" style={{ fontSize: 13 }}>
+          {stats.total} 设备 · 在线 {stats.online} · 设防 {stats.armed} · 低电 {stats.lowBattery}
+        </Typography.Text>
       </Space>
 
       <Table
         rowKey="key"
-        dataSource={deviceRows}
+        dataSource={filtered}
         pagination={false}
         columns={[
           { title: "车牌", dataIndex: "plate" },
