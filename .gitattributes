@@ -1,0 +1,14 @@
+# 统一 LF 换行符（跨平台一致性）
+* text=auto eol=lf
+
+# 二进制文件不进行换行符转换
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary
+*.zip binary
+
+# Git 生成的 diff 友好设置
+*.ts    diff=typescript
+*.tsx   diff=typescript
+*.vue   diff=vue
