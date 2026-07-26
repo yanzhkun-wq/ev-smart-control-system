@@ -9,8 +9,10 @@ import {
   Space,
   Switch,
   Tabs,
+  Tag,
   Typography,
 } from "antd";
+import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
 import { useAdminGateway } from "../context/AdminGatewayContext";
 import type { StoreShape } from "../types/gatewayStore";
@@ -19,10 +21,35 @@ export function SettingsPage() {
   const { message } = App.useApp();
   const { apiBase, setApiBase, store, terminals, connected, loading, saveStore, refresh } = useAdminGateway();
   const [gwInput, setGwInput] = useState(apiBase);
+  const [testingConn, setTestingConn] = useState(false);
+  const [testResult, setTestResult] = useState<{ ok: boolean; text: string } | null>(null);
 
   useEffect(() => {
     setGwInput(apiBase);
   }, [apiBase]);
+
+  const testConnection = async () => {
+    const url = gwInput.trim();
+    if (!url) {
+      setTestResult({ ok: false, text: "请先输入网关地址" });
+      return;
+    }
+    setTestingConn(true);
+    setTestResult(null);
+    try {
+      const res = await fetch(`${url.replace(/\/$/, "")}/health`, { signal: AbortSignal.timeout(5000) });
+      const data = await res.json();
+      if (res.ok && data?.ok) {
+        setTestResult({ ok: true, text: `✓ 连接成功 · 服务: ${data.service}` });
+      } else {
+        setTestResult({ ok: false, text: `网关返回异常: HTTP ${res.status}` });
+      }
+    } catch (e: any) {
+      setTestResult({ ok: false, text: `连接失败: ${e?.message || String(e)}` });
+    } finally {
+      setTestingConn(false);
+    }
+  };
 
   const [apiForm] = Form.useForm();
   const [gwForm] = Form.useForm();
@@ -120,7 +147,17 @@ export function SettingsPage() {
               >
                 应用并刷新
               </Button>
+              <Button onClick={testConnection} loading={testingConn}>
+                测试连接
+              </Button>
             </Space.Compact>
+            {testResult ? (
+              <div style={{ marginTop: 8 }}>
+                <Tag color={testResult.ok ? "success" : "error"} icon={testResult.ok ? <CheckCircleOutlined /> : <CloseCircleOutlined />}>
+                  {testResult.text}
+                </Tag>
+              </div>
+            ) : null}
           </div>
           <div>
             <Typography.Text type={connected ? "success" : "secondary"}>
